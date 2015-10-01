@@ -1,0 +1,6 @@
+# Internal
+github "automatic/AUTLogKit"
+
+# External
+github "ReactiveCocoa/ReactiveCocoa" ~> 2.5
+github "Mantle/Mantle" ~> 2.0

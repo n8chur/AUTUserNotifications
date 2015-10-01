@@ -1,0 +1,660 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		3A2D7AC81BBAFC2600302833 /* AUTUserNotificationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AC71BBAFC2600302833 /* AUTUserNotificationHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2D7ACA1BBAFC7C00302833 /* AUTUserNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AC91BBAFC7C00302833 /* AUTUserNotifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2D7ACD1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2D7ACE1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2D7ACC1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m */; settings = {ASSET_TAGS = (); }; };
+		3A2D7AD01BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7ACF1BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2D7AD21BBAFE9000302833 /* AUTUserNotificationActionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AD11BBAFE9000302833 /* AUTUserNotificationActionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2D7AD41BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AD31BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2F60E81BBB019100BE420C /* AUTUserNotificationViewModelSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */; settings = {ASSET_TAGS = (); }; };
+		3A2F60EB1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */; settings = {ASSET_TAGS = (); }; };
+		3A2F60FF1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60EE1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m */; settings = {ASSET_TAGS = (); }; };
+		3A2F61001BBB01A700BE420C /* AUTStubRemoteNotificationRegistrar.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60F01BBB01A700BE420C /* AUTStubRemoteNotificationRegistrar.m */; settings = {ASSET_TAGS = (); }; };
+		3A2F61011BBB01A700BE420C /* AUTStubUserNotificationActionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60F21BBB01A700BE420C /* AUTStubUserNotificationActionHandler.m */; settings = {ASSET_TAGS = (); }; };
+		3A2F61041BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60F81BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m */; settings = {ASSET_TAGS = (); }; };
+		3A2F61051BBB01A700BE420C /* AUTTestLocalUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60FA1BBB01A700BE420C /* AUTTestLocalUserNotification.m */; settings = {ASSET_TAGS = (); }; };
+		3A2F61061BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60FC1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m */; settings = {ASSET_TAGS = (); }; };
+		3A2F61071BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60FE1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m */; settings = {ASSET_TAGS = (); }; };
+		3A2F610B1BBB096800BE420C /* AUTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2F61091BBB096800BE420C /* AUTLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2F610C1BBB096800BE420C /* AUTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F610A1BBB096800BE420C /* AUTLog.m */; settings = {ASSET_TAGS = (); }; };
+		3A9E540E1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A9E540F1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */; settings = {ASSET_TAGS = (); }; };
+		3AA686ED1BBB686A00FF3C3A /* AUTSubclassesOf.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AA686E91BBB686A00FF3C3A /* AUTSubclassesOf.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3AA686EE1BBB686A00FF3C3A /* AUTSubclassesOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA686EA1BBB686A00FF3C3A /* AUTSubclassesOf.m */; settings = {ASSET_TAGS = (); }; };
+		3AA686F31BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3AA686F41BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */; settings = {ASSET_TAGS = (); }; };
+		3ADDAE3B1BBAEA63002870D9 /* AUTUserNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE3A1BBAEA63002870D9 /* AUTUserNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3ADDAE421BBAEA63002870D9 /* AUTUserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE371BBAEA63002870D9 /* AUTUserNotifications.framework */; settings = {ASSET_TAGS = (); }; };
+		3ADDAE681BBAED45002870D9 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE661BBAED45002870D9 /* ReactiveCocoa.framework */; settings = {ASSET_TAGS = (); }; };
+		3ADDAE6C1BBAED57002870D9 /* AUTLogKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE691BBAED56002870D9 /* AUTLogKit.framework */; settings = {ASSET_TAGS = (); }; };
+		3ADDAE6F1BBAED69002870D9 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE6B1BBAED57002870D9 /* CocoaLumberjack.framework */; };
+		3ADDAE741BBAED88002870D9 /* AUTTestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE701BBAED88002870D9 /* AUTTestKit.framework */; settings = {ASSET_TAGS = (); }; };
+		3ADDAE821BBAEE59002870D9 /* AUTLogKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE691BBAED56002870D9 /* AUTLogKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ADDAE831BBAEE59002870D9 /* AUTTestKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE701BBAED88002870D9 /* AUTTestKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ADDAE841BBAEE59002870D9 /* CocoaLumberjack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE6B1BBAED57002870D9 /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ADDAE851BBAEE59002870D9 /* Expecta.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE711BBAED88002870D9 /* Expecta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ADDAE861BBAEE59002870D9 /* Nocilla.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE721BBAED88002870D9 /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ADDAE871BBAEE59002870D9 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE661BBAED45002870D9 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ADDAE881BBAEE59002870D9 /* Specta.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE731BBAED88002870D9 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3ADDAE981BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE8E1BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3ADDAE991BBAF6B1002870D9 /* AUTRemoteUserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE8F1BBAF6B1002870D9 /* AUTRemoteUserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3ADDAE9A1BBAF6B1002870D9 /* AUTRemoteUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDAE901BBAF6B1002870D9 /* AUTRemoteUserNotification.m */; settings = {ASSET_TAGS = (); }; };
+		3ADDAE9B1BBAF6B1002870D9 /* AUTUserNotification_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE911BBAF6B1002870D9 /* AUTUserNotification_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3ADDAE9C1BBAF6B1002870D9 /* AUTUserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE921BBAF6B1002870D9 /* AUTUserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3ADDAE9D1BBAF6B1002870D9 /* AUTUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDAE931BBAF6B1002870D9 /* AUTUserNotification.m */; settings = {ASSET_TAGS = (); }; };
+		3ADDAE9E1BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE941BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3ADDAEA01BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDAE9F1BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m */; settings = {ASSET_TAGS = (); }; };
+		3ADDAEA41BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAEA11BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3ADDAEA51BBAF6F9002870D9 /* AUTLocalUserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAEA21BBAF6F9002870D9 /* AUTLocalUserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3ADDAEA61BBAF6F9002870D9 /* AUTLocalUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDAEA31BBAF6F9002870D9 /* AUTLocalUserNotification.m */; settings = {ASSET_TAGS = (); }; };
+		3ADDAEA81BBAF80F002870D9 /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAEA71BBAF80F002870D9 /* Mantle.framework */; settings = {ASSET_TAGS = (); }; };
+		3ADDAEAA1BBAF85E002870D9 /* Mantle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAEA71BBAF80F002870D9 /* Mantle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		3AEB33D11BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AEB33CD1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3AEB33D21BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB33CE1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m */; settings = {ASSET_TAGS = (); }; };
+		3AEB33D31BBCBD6A0088AE62 /* AUTStubUserNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotifier.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3AEB33D41BBCBD6A0088AE62 /* AUTStubUserNotifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotifier.m */; settings = {ASSET_TAGS = (); }; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		3ADDAE431BBAEA63002870D9 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 3ADDAE2E1BBAEA63002870D9 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3ADDAE361BBAEA63002870D9;
+			remoteInfo = AUTUserNotifications;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		3ADDAE811BBAEE4D002870D9 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				3ADDAEAA1BBAF85E002870D9 /* Mantle.framework in Embed Frameworks */,
+				3ADDAE821BBAEE59002870D9 /* AUTLogKit.framework in Embed Frameworks */,
+				3ADDAE831BBAEE59002870D9 /* AUTTestKit.framework in Embed Frameworks */,
+				3ADDAE841BBAEE59002870D9 /* CocoaLumberjack.framework in Embed Frameworks */,
+				3ADDAE851BBAEE59002870D9 /* Expecta.framework in Embed Frameworks */,
+				3ADDAE861BBAEE59002870D9 /* Nocilla.framework in Embed Frameworks */,
+				3ADDAE871BBAEE59002870D9 /* ReactiveCocoa.framework in Embed Frameworks */,
+				3ADDAE881BBAEE59002870D9 /* Specta.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		3A2D7AC71BBAFC2600302833 /* AUTUserNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationHandler.h; sourceTree = "<group>"; };
+		3A2D7AC91BBAFC7C00302833 /* AUTUserNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotifier.h; sourceTree = "<group>"; };
+		3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AUTUserNotifier.h"; sourceTree = "<group>"; };
+		3A2D7ACC1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+AUTUserNotifier.m"; sourceTree = "<group>"; };
+		3A2D7ACF1BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotificationTokenRegistrar.h; sourceTree = "<group>"; };
+		3A2D7AD11BBAFE9000302833 /* AUTUserNotificationActionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationActionHandler.h; sourceTree = "<group>"; };
+		3A2D7AD31BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotificationFetchHandler.h; sourceTree = "<group>"; };
+		3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotificationViewModelSpec.m; sourceTree = "<group>"; };
+		3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTRemoteUserNotificationSpec.m; sourceTree = "<group>"; };
+		3A2F60ED1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubRemoteNotificationFetchHandler.h; sourceTree = "<group>"; };
+		3A2F60EE1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubRemoteNotificationFetchHandler.m; sourceTree = "<group>"; };
+		3A2F60EF1BBB01A700BE420C /* AUTStubRemoteNotificationRegistrar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubRemoteNotificationRegistrar.h; sourceTree = "<group>"; };
+		3A2F60F01BBB01A700BE420C /* AUTStubRemoteNotificationRegistrar.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubRemoteNotificationRegistrar.m; sourceTree = "<group>"; };
+		3A2F60F11BBB01A700BE420C /* AUTStubUserNotificationActionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubUserNotificationActionHandler.h; sourceTree = "<group>"; };
+		3A2F60F21BBB01A700BE420C /* AUTStubUserNotificationActionHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubUserNotificationActionHandler.m; sourceTree = "<group>"; };
+		3A2F60F71BBB01A700BE420C /* AUTTestChildRemoteUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTTestChildRemoteUserNotification.h; sourceTree = "<group>"; };
+		3A2F60F81BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTTestChildRemoteUserNotification.m; sourceTree = "<group>"; };
+		3A2F60F91BBB01A700BE420C /* AUTTestLocalUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTTestLocalUserNotification.h; sourceTree = "<group>"; };
+		3A2F60FA1BBB01A700BE420C /* AUTTestLocalUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTTestLocalUserNotification.m; sourceTree = "<group>"; };
+		3A2F60FB1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTTestLocalUserNotificationSubclass.h; sourceTree = "<group>"; };
+		3A2F60FC1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTTestLocalUserNotificationSubclass.m; sourceTree = "<group>"; };
+		3A2F60FD1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTTestRootRemoteUserNotification.h; sourceTree = "<group>"; };
+		3A2F60FE1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTTestRootRemoteUserNotification.m; sourceTree = "<group>"; };
+		3A2F61091BBB096800BE420C /* AUTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTLog.h; sourceTree = "<group>"; };
+		3A2F610A1BBB096800BE420C /* AUTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTLog.m; sourceTree = "<group>"; };
+		3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AUTUserNotificationHandler.h"; sourceTree = "<group>"; };
+		3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+AUTUserNotificationHandler.m"; sourceTree = "<group>"; };
+		3AA686E91BBB686A00FF3C3A /* AUTSubclassesOf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTSubclassesOf.h; sourceTree = "<group>"; };
+		3AA686EA1BBB686A00FF3C3A /* AUTSubclassesOf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTSubclassesOf.m; sourceTree = "<group>"; };
+		3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIUserNotificationSettings+AUTSynthesizedSettings.h"; sourceTree = "<group>"; };
+		3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIUserNotificationSettings+AUTSynthesizedSettings.m"; sourceTree = "<group>"; };
+		3ADDAE371BBAEA63002870D9 /* AUTUserNotifications.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AUTUserNotifications.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		3ADDAE3A1BBAEA63002870D9 /* AUTUserNotifications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AUTUserNotifications.h; sourceTree = "<group>"; };
+		3ADDAE3C1BBAEA63002870D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3ADDAE411BBAEA63002870D9 /* AUTUserNotificationsTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AUTUserNotificationsTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		3ADDAE481BBAEA63002870D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3ADDAE521BBAEC87002870D9 /* Common.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Common.xcconfig; sourceTree = "<group>"; };
+		3ADDAE541BBAEC87002870D9 /* Debug.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Debug.xcconfig; sourceTree = "<group>"; };
+		3ADDAE551BBAEC87002870D9 /* Profile.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Profile.xcconfig; sourceTree = "<group>"; };
+		3ADDAE561BBAEC87002870D9 /* Release.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Release.xcconfig; sourceTree = "<group>"; };
+		3ADDAE571BBAEC87002870D9 /* Test.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Test.xcconfig; sourceTree = "<group>"; };
+		3ADDAE591BBAEC87002870D9 /* Application.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Application.xcconfig; sourceTree = "<group>"; };
+		3ADDAE5A1BBAEC87002870D9 /* Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Framework.xcconfig; sourceTree = "<group>"; };
+		3ADDAE5B1BBAEC87002870D9 /* StaticLibrary.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = StaticLibrary.xcconfig; sourceTree = "<group>"; };
+		3ADDAE5D1BBAEC87002870D9 /* iOS-Application.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-Application.xcconfig"; sourceTree = "<group>"; };
+		3ADDAE5E1BBAEC87002870D9 /* iOS-Base.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-Base.xcconfig"; sourceTree = "<group>"; };
+		3ADDAE5F1BBAEC87002870D9 /* iOS-Framework.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-Framework.xcconfig"; sourceTree = "<group>"; };
+		3ADDAE601BBAEC87002870D9 /* iOS-StaticLibrary.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-StaticLibrary.xcconfig"; sourceTree = "<group>"; };
+		3ADDAE621BBAECC4002870D9 /* AUTUserNotifications.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = AUTUserNotifications.xcconfig; path = AUTUserNotifications/AUTUserNotifications.xcconfig; sourceTree = "<group>"; };
+		3ADDAE631BBAECE3002870D9 /* AUTUserNotificationTests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = AUTUserNotificationTests.xcconfig; path = AUTUserNotificationsTests/AUTUserNotificationTests.xcconfig; sourceTree = "<group>"; };
+		3ADDAE661BBAED45002870D9 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
+		3ADDAE691BBAED56002870D9 /* AUTLogKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AUTLogKit.framework; path = Carthage/Build/iOS/AUTLogKit.framework; sourceTree = "<group>"; };
+		3ADDAE6B1BBAED57002870D9 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjack.framework; path = Carthage/Build/iOS/CocoaLumberjack.framework; sourceTree = "<group>"; };
+		3ADDAE701BBAED88002870D9 /* AUTTestKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AUTTestKit.framework; path = Carthage/Build/iOS/AUTTestKit.framework; sourceTree = "<group>"; };
+		3ADDAE711BBAED88002870D9 /* Expecta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Expecta.framework; path = Carthage/Build/iOS/Expecta.framework; sourceTree = "<group>"; };
+		3ADDAE721BBAED88002870D9 /* Nocilla.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nocilla.framework; path = Carthage/Build/iOS/Nocilla.framework; sourceTree = "<group>"; };
+		3ADDAE731BBAED88002870D9 /* Specta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Specta.framework; path = Carthage/Build/iOS/Specta.framework; sourceTree = "<group>"; };
+		3ADDAE8E1BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotification_Private.h; sourceTree = "<group>"; };
+		3ADDAE8F1BBAF6B1002870D9 /* AUTRemoteUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotification.h; sourceTree = "<group>"; };
+		3ADDAE901BBAF6B1002870D9 /* AUTRemoteUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTRemoteUserNotification.m; sourceTree = "<group>"; };
+		3ADDAE911BBAF6B1002870D9 /* AUTUserNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotification_Private.h; sourceTree = "<group>"; };
+		3ADDAE921BBAF6B1002870D9 /* AUTUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotification.h; sourceTree = "<group>"; };
+		3ADDAE931BBAF6B1002870D9 /* AUTUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotification.m; sourceTree = "<group>"; };
+		3ADDAE941BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationsViewModel.h; sourceTree = "<group>"; };
+		3ADDAE9F1BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotificationsViewModel.m; sourceTree = "<group>"; };
+		3ADDAEA11BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTLocalUserNotification_Private.h; sourceTree = "<group>"; };
+		3ADDAEA21BBAF6F9002870D9 /* AUTLocalUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTLocalUserNotification.h; sourceTree = "<group>"; };
+		3ADDAEA31BBAF6F9002870D9 /* AUTLocalUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTLocalUserNotification.m; sourceTree = "<group>"; };
+		3ADDAEA71BBAF80F002870D9 /* Mantle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mantle.framework; path = Carthage/Build/iOS/Mantle.framework; sourceTree = "<group>"; };
+		3AEB33CD1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubUserNotificationHandler.h; sourceTree = "<group>"; };
+		3AEB33CE1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubUserNotificationHandler.m; sourceTree = "<group>"; };
+		3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubUserNotifier.h; sourceTree = "<group>"; };
+		3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubUserNotifier.m; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		3ADDAE331BBAEA63002870D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3ADDAE6C1BBAED57002870D9 /* AUTLogKit.framework in Frameworks */,
+				3ADDAEA81BBAF80F002870D9 /* Mantle.framework in Frameworks */,
+				3ADDAE6F1BBAED69002870D9 /* CocoaLumberjack.framework in Frameworks */,
+				3ADDAE681BBAED45002870D9 /* ReactiveCocoa.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3ADDAE3E1BBAEA63002870D9 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3ADDAE741BBAED88002870D9 /* AUTTestKit.framework in Frameworks */,
+				3ADDAE421BBAEA63002870D9 /* AUTUserNotifications.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		3A2F60E91BBB019400BE420C /* Specs */ = {
+			isa = PBXGroup;
+			children = (
+				3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */,
+				3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */,
+			);
+			name = Specs;
+			sourceTree = "<group>";
+		};
+		3A2F60EC1BBB01A000BE420C /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				3A2F60ED1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.h */,
+				3A2F60EE1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m */,
+				3A2F60EF1BBB01A700BE420C /* AUTStubRemoteNotificationRegistrar.h */,
+				3A2F60F01BBB01A700BE420C /* AUTStubRemoteNotificationRegistrar.m */,
+				3A2F60F11BBB01A700BE420C /* AUTStubUserNotificationActionHandler.h */,
+				3A2F60F21BBB01A700BE420C /* AUTStubUserNotificationActionHandler.m */,
+				3A2F60F71BBB01A700BE420C /* AUTTestChildRemoteUserNotification.h */,
+				3A2F60F81BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m */,
+				3A2F60F91BBB01A700BE420C /* AUTTestLocalUserNotification.h */,
+				3A2F60FA1BBB01A700BE420C /* AUTTestLocalUserNotification.m */,
+				3A2F60FB1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.h */,
+				3A2F60FC1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m */,
+				3A2F60FD1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.h */,
+				3A2F60FE1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		3A2F61081BBB094F00BE420C /* Logging */ = {
+			isa = PBXGroup;
+			children = (
+				3A2F61091BBB096800BE420C /* AUTLog.h */,
+				3A2F610A1BBB096800BE420C /* AUTLog.m */,
+			);
+			name = Logging;
+			sourceTree = "<group>";
+		};
+		3ADDAE2D1BBAEA63002870D9 = {
+			isa = PBXGroup;
+			children = (
+				3ADDAE391BBAEA63002870D9 /* AUTUserNotifications */,
+				3ADDAE451BBAEA63002870D9 /* AUTUserNotificationsTests */,
+				3ADDAE611BBAEC8E002870D9 /* Configuration */,
+				3ADDAE641BBAED00002870D9 /* Frameworks */,
+				3ADDAE381BBAEA63002870D9 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		3ADDAE381BBAEA63002870D9 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				3ADDAE371BBAEA63002870D9 /* AUTUserNotifications.framework */,
+				3ADDAE411BBAEA63002870D9 /* AUTUserNotificationsTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		3ADDAE391BBAEA63002870D9 /* AUTUserNotifications */ = {
+			isa = PBXGroup;
+			children = (
+				3ADDAE3A1BBAEA63002870D9 /* AUTUserNotifications.h */,
+				3A2F61081BBB094F00BE420C /* Logging */,
+				3ADDAEA91BBAF83E002870D9 /* Notifications */,
+				3ADDAEAB1BBAF87A002870D9 /* View Models */,
+				3AEB33CC1BBCBD3B0088AE62 /* Stubs */,
+				3ADDAE3C1BBAEA63002870D9 /* Info.plist */,
+			);
+			path = AUTUserNotifications;
+			sourceTree = "<group>";
+		};
+		3ADDAE451BBAEA63002870D9 /* AUTUserNotificationsTests */ = {
+			isa = PBXGroup;
+			children = (
+				3A2F60EC1BBB01A000BE420C /* Helpers */,
+				3A2F60E91BBB019400BE420C /* Specs */,
+				3ADDAE481BBAEA63002870D9 /* Info.plist */,
+			);
+			path = AUTUserNotificationsTests;
+			sourceTree = "<group>";
+		};
+		3ADDAE511BBAEC87002870D9 /* Base */ = {
+			isa = PBXGroup;
+			children = (
+				3ADDAE521BBAEC87002870D9 /* Common.xcconfig */,
+				3ADDAE531BBAEC87002870D9 /* Configurations */,
+				3ADDAE581BBAEC87002870D9 /* Targets */,
+			);
+			name = Base;
+			path = Carthage/Checkouts/xcconfigs/Base;
+			sourceTree = "<group>";
+		};
+		3ADDAE531BBAEC87002870D9 /* Configurations */ = {
+			isa = PBXGroup;
+			children = (
+				3ADDAE541BBAEC87002870D9 /* Debug.xcconfig */,
+				3ADDAE551BBAEC87002870D9 /* Profile.xcconfig */,
+				3ADDAE561BBAEC87002870D9 /* Release.xcconfig */,
+				3ADDAE571BBAEC87002870D9 /* Test.xcconfig */,
+			);
+			path = Configurations;
+			sourceTree = "<group>";
+		};
+		3ADDAE581BBAEC87002870D9 /* Targets */ = {
+			isa = PBXGroup;
+			children = (
+				3ADDAE591BBAEC87002870D9 /* Application.xcconfig */,
+				3ADDAE5A1BBAEC87002870D9 /* Framework.xcconfig */,
+				3ADDAE5B1BBAEC87002870D9 /* StaticLibrary.xcconfig */,
+			);
+			path = Targets;
+			sourceTree = "<group>";
+		};
+		3ADDAE5C1BBAEC87002870D9 /* iOS */ = {
+			isa = PBXGroup;
+			children = (
+				3ADDAE5D1BBAEC87002870D9 /* iOS-Application.xcconfig */,
+				3ADDAE5E1BBAEC87002870D9 /* iOS-Base.xcconfig */,
+				3ADDAE5F1BBAEC87002870D9 /* iOS-Framework.xcconfig */,
+				3ADDAE601BBAEC87002870D9 /* iOS-StaticLibrary.xcconfig */,
+			);
+			name = iOS;
+			path = Carthage/Checkouts/xcconfigs/iOS;
+			sourceTree = "<group>";
+		};
+		3ADDAE611BBAEC8E002870D9 /* Configuration */ = {
+			isa = PBXGroup;
+			children = (
+				3ADDAE621BBAECC4002870D9 /* AUTUserNotifications.xcconfig */,
+				3ADDAE631BBAECE3002870D9 /* AUTUserNotificationTests.xcconfig */,
+				3ADDAE511BBAEC87002870D9 /* Base */,
+				3ADDAE5C1BBAEC87002870D9 /* iOS */,
+			);
+			name = Configuration;
+			sourceTree = "<group>";
+		};
+		3ADDAE641BBAED00002870D9 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				3ADDAE691BBAED56002870D9 /* AUTLogKit.framework */,
+				3ADDAE701BBAED88002870D9 /* AUTTestKit.framework */,
+				3ADDAE6B1BBAED57002870D9 /* CocoaLumberjack.framework */,
+				3ADDAE711BBAED88002870D9 /* Expecta.framework */,
+				3ADDAEA71BBAF80F002870D9 /* Mantle.framework */,
+				3ADDAE721BBAED88002870D9 /* Nocilla.framework */,
+				3ADDAE661BBAED45002870D9 /* ReactiveCocoa.framework */,
+				3ADDAE731BBAED88002870D9 /* Specta.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3ADDAEA91BBAF83E002870D9 /* Notifications */ = {
+			isa = PBXGroup;
+			children = (
+				3ADDAEA21BBAF6F9002870D9 /* AUTLocalUserNotification.h */,
+				3ADDAEA11BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h */,
+				3ADDAEA31BBAF6F9002870D9 /* AUTLocalUserNotification.m */,
+				3ADDAE8F1BBAF6B1002870D9 /* AUTRemoteUserNotification.h */,
+				3ADDAE8E1BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h */,
+				3ADDAE901BBAF6B1002870D9 /* AUTRemoteUserNotification.m */,
+				3ADDAE921BBAF6B1002870D9 /* AUTUserNotification.h */,
+				3ADDAE911BBAF6B1002870D9 /* AUTUserNotification_Private.h */,
+				3ADDAE931BBAF6B1002870D9 /* AUTUserNotification.m */,
+			);
+			name = Notifications;
+			sourceTree = "<group>";
+		};
+		3ADDAEAB1BBAF87A002870D9 /* View Models */ = {
+			isa = PBXGroup;
+			children = (
+				3A2D7AD31BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h */,
+				3A2D7ACF1BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h */,
+				3AA686E91BBB686A00FF3C3A /* AUTSubclassesOf.h */,
+				3AA686EA1BBB686A00FF3C3A /* AUTSubclassesOf.m */,
+				3A2D7AD11BBAFE9000302833 /* AUTUserNotificationActionHandler.h */,
+				3A2D7AC71BBAFC2600302833 /* AUTUserNotificationHandler.h */,
+				3ADDAE941BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h */,
+				3ADDAE9F1BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m */,
+				3A2D7AC91BBAFC7C00302833 /* AUTUserNotifier.h */,
+				3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */,
+				3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */,
+				3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */,
+				3A2D7ACC1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m */,
+				3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */,
+				3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */,
+			);
+			name = "View Models";
+			sourceTree = "<group>";
+		};
+		3AEB33CC1BBCBD3B0088AE62 /* Stubs */ = {
+			isa = PBXGroup;
+			children = (
+				3AEB33CD1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h */,
+				3AEB33CE1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m */,
+				3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotifier.h */,
+				3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotifier.m */,
+			);
+			name = Stubs;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXHeadersBuildPhase section */
+		3ADDAE341BBAEA63002870D9 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A2D7ACA1BBAFC7C00302833 /* AUTUserNotifier.h in Headers */,
+				3A2D7ACD1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h in Headers */,
+				3AEB33D31BBCBD6A0088AE62 /* AUTStubUserNotifier.h in Headers */,
+				3AA686ED1BBB686A00FF3C3A /* AUTSubclassesOf.h in Headers */,
+				3AA686F31BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h in Headers */,
+				3ADDAE9E1BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h in Headers */,
+				3A2D7AD41BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h in Headers */,
+				3A2D7AD01BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h in Headers */,
+				3AEB33D11BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h in Headers */,
+				3ADDAEA41BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h in Headers */,
+				3A2F610B1BBB096800BE420C /* AUTLog.h in Headers */,
+				3ADDAE3B1BBAEA63002870D9 /* AUTUserNotifications.h in Headers */,
+				3ADDAEA51BBAF6F9002870D9 /* AUTLocalUserNotification.h in Headers */,
+				3ADDAE9C1BBAF6B1002870D9 /* AUTUserNotification.h in Headers */,
+				3ADDAE991BBAF6B1002870D9 /* AUTRemoteUserNotification.h in Headers */,
+				3A9E540E1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h in Headers */,
+				3A2D7AD21BBAFE9000302833 /* AUTUserNotificationActionHandler.h in Headers */,
+				3ADDAE981BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h in Headers */,
+				3ADDAE9B1BBAF6B1002870D9 /* AUTUserNotification_Private.h in Headers */,
+				3A2D7AC81BBAFC2600302833 /* AUTUserNotificationHandler.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
+/* Begin PBXNativeTarget section */
+		3ADDAE361BBAEA63002870D9 /* AUTUserNotifications */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3ADDAE4B1BBAEA63002870D9 /* Build configuration list for PBXNativeTarget "AUTUserNotifications" */;
+			buildPhases = (
+				3ADDAE321BBAEA63002870D9 /* Sources */,
+				3ADDAE331BBAEA63002870D9 /* Frameworks */,
+				3ADDAE341BBAEA63002870D9 /* Headers */,
+				3ADDAE351BBAEA63002870D9 /* Resources */,
+				3ADDAE8A1BBAF4B1002870D9 /* Copy Products to Carthage/Build/iOS */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = AUTUserNotifications;
+			productName = AUTUserNotifications;
+			productReference = 3ADDAE371BBAEA63002870D9 /* AUTUserNotifications.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		3ADDAE401BBAEA63002870D9 /* AUTUserNotificationsTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3ADDAE4E1BBAEA63002870D9 /* Build configuration list for PBXNativeTarget "AUTUserNotificationsTests" */;
+			buildPhases = (
+				3ADDAE3D1BBAEA63002870D9 /* Sources */,
+				3ADDAE3E1BBAEA63002870D9 /* Frameworks */,
+				3ADDAE801BBAEE49002870D9 /* Resources */,
+				3ADDAE811BBAEE4D002870D9 /* Embed Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				3ADDAE441BBAEA63002870D9 /* PBXTargetDependency */,
+			);
+			name = AUTUserNotificationsTests;
+			productName = AUTUserNotificationsTests;
+			productReference = 3ADDAE411BBAEA63002870D9 /* AUTUserNotificationsTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		3ADDAE2E1BBAEA63002870D9 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				CLASSPREFIX = AUT;
+				LastUpgradeCheck = 0700;
+				ORGANIZATIONNAME = "Automatic Labs";
+				TargetAttributes = {
+					3ADDAE361BBAEA63002870D9 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+					3ADDAE401BBAEA63002870D9 = {
+						CreatedOnToolsVersion = 7.0;
+					};
+				};
+			};
+			buildConfigurationList = 3ADDAE311BBAEA63002870D9 /* Build configuration list for PBXProject "AUTUserNotifications" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 3ADDAE2D1BBAEA63002870D9;
+			productRefGroup = 3ADDAE381BBAEA63002870D9 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				3ADDAE361BBAEA63002870D9 /* AUTUserNotifications */,
+				3ADDAE401BBAEA63002870D9 /* AUTUserNotificationsTests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		3ADDAE351BBAEA63002870D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3ADDAE801BBAEE49002870D9 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		3ADDAE8A1BBAF4B1002870D9 /* Copy Products to Carthage/Build/iOS */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Products to Carthage/Build/iOS";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "build_dir=\"$SRCROOT/Carthage/Build\"\n\n# Only copy when the Carthage/Build directory is a symlink\nif ! [ -L \"$build_dir\" ]; then exit 0; fi\n\nrsync --delete -av \"$BUILT_PRODUCTS_DIR/$PRODUCT_NAME\"* \"$build_dir/iOS\"";
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		3ADDAE321BBAEA63002870D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A2D7ACE1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m in Sources */,
+				3A2F610C1BBB096800BE420C /* AUTLog.m in Sources */,
+				3ADDAEA61BBAF6F9002870D9 /* AUTLocalUserNotification.m in Sources */,
+				3AA686EE1BBB686A00FF3C3A /* AUTSubclassesOf.m in Sources */,
+				3AEB33D21BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m in Sources */,
+				3AA686F41BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m in Sources */,
+				3ADDAE9A1BBAF6B1002870D9 /* AUTRemoteUserNotification.m in Sources */,
+				3ADDAEA01BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m in Sources */,
+				3ADDAE9D1BBAF6B1002870D9 /* AUTUserNotification.m in Sources */,
+				3AEB33D41BBCBD6A0088AE62 /* AUTStubUserNotifier.m in Sources */,
+				3A9E540F1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		3ADDAE3D1BBAEA63002870D9 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				3A2F60E81BBB019100BE420C /* AUTUserNotificationViewModelSpec.m in Sources */,
+				3A2F61001BBB01A700BE420C /* AUTStubRemoteNotificationRegistrar.m in Sources */,
+				3A2F60FF1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m in Sources */,
+				3A2F60EB1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m in Sources */,
+				3A2F61011BBB01A700BE420C /* AUTStubUserNotificationActionHandler.m in Sources */,
+				3A2F61041BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m in Sources */,
+				3A2F61061BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m in Sources */,
+				3A2F61071BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m in Sources */,
+				3A2F61051BBB01A700BE420C /* AUTTestLocalUserNotification.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		3ADDAE441BBAEA63002870D9 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 3ADDAE361BBAEA63002870D9 /* AUTUserNotifications */;
+			targetProxy = 3ADDAE431BBAEA63002870D9 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		3ADDAE491BBAEA63002870D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ADDAE541BBAEC87002870D9 /* Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		3ADDAE4A1BBAEA63002870D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ADDAE561BBAEC87002870D9 /* Release.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		3ADDAE4C1BBAEA63002870D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ADDAE621BBAECC4002870D9 /* AUTUserNotifications.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		3ADDAE4D1BBAEA63002870D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ADDAE621BBAECC4002870D9 /* AUTUserNotifications.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+		3ADDAE4F1BBAEA63002870D9 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ADDAE631BBAECE3002870D9 /* AUTUserNotificationTests.xcconfig */;
+			buildSettings = {
+			};
+			name = Debug;
+		};
+		3ADDAE501BBAEA63002870D9 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ADDAE631BBAECE3002870D9 /* AUTUserNotificationTests.xcconfig */;
+			buildSettings = {
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		3ADDAE311BBAEA63002870D9 /* Build configuration list for PBXProject "AUTUserNotifications" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3ADDAE491BBAEA63002870D9 /* Debug */,
+				3ADDAE4A1BBAEA63002870D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3ADDAE4B1BBAEA63002870D9 /* Build configuration list for PBXNativeTarget "AUTUserNotifications" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3ADDAE4C1BBAEA63002870D9 /* Debug */,
+				3ADDAE4D1BBAEA63002870D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		3ADDAE4E1BBAEA63002870D9 /* Build configuration list for PBXNativeTarget "AUTUserNotificationsTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				3ADDAE4F1BBAEA63002870D9 /* Debug */,
+				3ADDAE501BBAEA63002870D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 3ADDAE2E1BBAEA63002870D9 /* Project object */;
+}

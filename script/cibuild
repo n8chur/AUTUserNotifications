@@ -1,0 +1,14 @@
+#!/bin/bash -ex
+
+if [ -z "$BUILD_TYPE" ]; then echo 'The BUILD_TYPE variable is unset, you must set it to continue.'; exit 1; fi
+
+eval "$(rbenv init -)"
+
+export LC_CTYPE=en_US.UTF-8
+
+provisioning() { export PROVISIONING_TYPE=$1; arc paste P119 | bash -ex; }
+provisioning setup
+cleanup() { provisioning cleanup; }
+trap cleanup EXIT
+
+rake "$BUILD_TYPE"
