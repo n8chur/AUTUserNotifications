@@ -9,6 +9,9 @@
 @import Mantle;
 @import ReactiveCocoa;
 
+#import "UIApplication+AUTUserNotificationHandler.h"
+#import "UIApplication+AUTUserNotifier.h"
+
 #import "AUTLog.h"
 #import "AUTUserNotifier.h"
 #import "AUTUserNotificationHandler.h"
@@ -68,7 +71,23 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation AUTUserNotificationsViewModel
 
+- (instancetype)init {
+    return [self initWithRootRemoteNotificationClass:AUTRemoteUserNotification.class];
+}
+
+- (instancetype)initWithRootRemoteNotificationClass:(Class)rootRemoteNotificationClass {
+    NSParameterAssert(rootRemoteNotificationClass != Nil);
+
+    id<AUTUserNotificationHandler> handler = UIApplication.sharedApplication.aut_userNotificationHandler;
+    NSAssert(handler != nil, @"You must confrom your UIApplicationDelegate to AUTUserNotificationHandler to initialize a AUTUserNotificationsViewModel with it as the notification handler.");
+
+    return [self initWithNotifier:UIApplication.sharedApplication handler:handler rootRemoteNotificationClass:rootRemoteNotificationClass];
+}
+
 - (instancetype)initWithNotifier:(id<AUTUserNotifier>)notifier handler:(id<AUTUserNotificationHandler>)handler {
+    NSParameterAssert(notifier != nil);
+    NSParameterAssert(handler != nil);
+
     return [self initWithNotifier:notifier handler:handler rootRemoteNotificationClass:AUTRemoteUserNotification.class];
 }
 

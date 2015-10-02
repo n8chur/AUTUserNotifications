@@ -25,8 +25,19 @@ NS_ASSUME_NONNULL_BEGIN
 /// performed on them to interested consumers.
 @interface AUTUserNotificationsViewModel : NSObject
 
-- (instancetype)init NS_UNAVAILABLE;
+/// Invokes initWithRootRemoteNotificationClass: with AUTRemoteUserNotification
+/// as the rootRemoteNotificationClass.
+- (instancetype)init;
 
+/// Invokes the designated initializer with UIApplication.sharedApplication as
+/// the notifier and UIApplication.sharedApplication.delegate as the handler.
+///
+/// Throws an exception if your UIApplication.sharedApplication.delegate does
+/// not conform to AUTUserNotificationHandler.
+- (instancetype)initWithRootRemoteNotificationClass:(Class)rootRemoteNotificationClass;
+
+/// Invokes the designated initializer with AUTRemoteUserNotification as the
+/// rootRemoteNotificationClass.
 - (instancetype)initWithNotifier:(id<AUTUserNotifier>)notifier handler:(id<AUTUserNotificationHandler>)handler;
 
 /// @param notifier The object that should be used to send system notifications.
