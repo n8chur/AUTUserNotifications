@@ -4,7 +4,7 @@ Handle your local and remote notifications using ReactiveCocoa.
 
 ## Getting Started:
 
-- Confrom your `UIApplicationDelegate` to the `AUTUserNotificationHandler` protocol.
+- Conform your `UIApplicationDelegate` to the `AUTUserNotificationHandler` protocol.
 
 - Create a class to represent each of your notifications.
 
@@ -12,7 +12,7 @@ Handle your local and remote notifications using ReactiveCocoa.
 @objc class TimerLocalNotification: AUTLocalUserNotification {
     var timer: MyTimer?
 
-    // Cofigure notifications
+    // Configure notifications
     override func createSystemNotification() -> UILocalNotification? {
         guard let notification = super.createSystemNotification() else { return nil }
         guard let timer = timer else { return nil }
