@@ -67,7 +67,7 @@ timerCreatedSignal
 ```swift
 let viewModel = AUTUserNotificationsViewModel()
 
-viewModel.receivedNotificationsOfClass(AUTDeveloperLocalNotification.self).subscribeNext { notification in
+viewModel.receivedNotificationsOfClass(TimerLocalNotification.self).subscribeNext { notification in
     guard let notification = notification as? TimerLocalNotification else { return }
     
     // Show the timer
