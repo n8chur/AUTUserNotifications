@@ -39,16 +39,16 @@ Handle your local and remote notifications using ReactiveCocoa.
 ### Register notification settings
 
 ```swift
-let userNotificationsViewModel = AUTUserNotificationsViewModel()
+let viewModel = AUTUserNotificationsViewModel()
 
 let settings = UIUserNotificationSettings.aut_synthesizedSettingsForTypes([.Alert, .Badge, .Sound])
-userNotificationsViewModel.registerSettingsCommand.execute(settings)
+viewModel.registerSettingsCommand.execute(settings)
 ```
 
 ### Schedule notifications
 
 ```swift
-let userNotificationsViewModel = AUTUserNotificationsViewModel()
+let viewModel = AUTUserNotificationsViewModel()
 
 let didCreateTimer: RACSignal = ...
 
@@ -57,7 +57,7 @@ timerCreatedSignal
         let notification = TimerLocalNotification()
         notification.timer = timer
 
-        return userNotificationsViewModel.scheduleLocalNotification(notification)
+        return viewModel.scheduleLocalNotification(notification)
     }
     .subscribeCompleted {}
 ```
@@ -65,9 +65,9 @@ timerCreatedSignal
 ### Subscribe to notifications
 
 ```swift
-let userNotificationsViewModel = AUTUserNotificationsViewModel()
+let viewModel = AUTUserNotificationsViewModel()
 
-userNotificationsViewModel.receivedNotificationsOfClass(AUTDeveloperLocalNotification.self).subscribeNext { notification in
+viewModel.receivedNotificationsOfClass(AUTDeveloperLocalNotification.self).subscribeNext { notification in
     guard let notification = notification as? TimerLocalNotification else { return }
     
     // Show the timer
@@ -77,9 +77,9 @@ userNotificationsViewModel.receivedNotificationsOfClass(AUTDeveloperLocalNotific
 ### Receive action callbacks
 
 ```swift
-let userNotificationsViewModel = AUTUserNotificationsViewModel()
+let viewModel = AUTUserNotificationsViewModel()
 
-userNotificationsViewModel.registerActionHandler(self, forNotificationsOfClass: TimerLocalNotification.self)
+viewModel.registerActionHandler(self, forNotificationsOfClass: TimerLocalNotification.self)
 
 func performActionForNotification(notification: AUTUserNotification) -> RACSignal {
     guard let notification = notification as? TimerLocalNotification else { return RACSignal.empty() }
