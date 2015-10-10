@@ -16,6 +16,12 @@ NS_ASSUME_NONNULL_BEGIN
 /// Conforms to MTLJSONSerializing to allow deserialization from the userInfo
 /// JSON dictionary sent by the server in the payload of the notification.
 ///
+/// By default, returns self for classForParsingJSONDictionary:. If consumers
+/// wish to map remote notifications onto custom subclasses, they should create
+/// a base class that all subclasses of this class inherit from, and override
+/// classForParsingJSONDictionary: accordingly to specify the correct class to
+/// map to for a given JSON dictionary.
+///
 /// The properties on this class are mapped from the payload of a remote
 /// notification, as specified in:
 /// https://developer.apple.com/library/prerelease/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html#//apple_ref/doc/uid/TP40008194-CH100-SW1
