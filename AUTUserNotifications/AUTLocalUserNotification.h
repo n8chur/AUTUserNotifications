@@ -7,12 +7,13 @@
 //
 
 #import <AUTUserNotifications/AUTUserNotification.h>
+#import <AUTUserNotifications/AUTUserNotificationAlertDisplayable.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
 /// An abstract base class representing a notification that is presented to the
 /// user locally via an AUTUserNotificationsViewModel.
-@interface AUTLocalUserNotification : AUTUserNotification
+@interface AUTLocalUserNotification : AUTUserNotification <AUTUserNotificationAlertDisplayable>
 
 /// Creates a local notification from a received system notification.
 ///

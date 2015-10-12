@@ -12,7 +12,29 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@interface AUTRemoteUserNotification ()
+
+/// Mapped from "aps.badge"
+@property (readwrite, nonatomic, copy, nullable) NSNumber *badgeCount;
+
+/// Mapped from "aps.sound"
+@property (readwrite, nonatomic, copy, nullable) NSString *sound;
+
+/// Mapped from "aps.category"
+@property (readwrite, nonatomic, copy, nullable) NSString *category;
+
+/// Mapped from "aps.alert.launch-image"
+@property (readwrite, nonatomic, copy, nullable) NSString *launchImageFilename;
+
+@end
+
 @implementation AUTRemoteUserNotification
+
+@synthesize badgeCount = _badgeCount;
+@synthesize sound = _sound;
+@synthesize category = _category;
+@dynamic localizedTitle, localizedBody, localizedAction;
+@synthesize launchImageFilename = _launchImageFilename;
 
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
@@ -33,6 +55,59 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (Class)classForParsingJSONDictionary:(NSDictionary *)JSONDictionary {
     return self;
+}
+
+#pragma mark - AUTUserNotificationAlertDisplayable
+
+- (nullable NSString *)localizedBody {
+    if (self.bodyLocalizationKey != nil) {
+        NSString *localizedBodyFormat = NSLocalizedString(self.bodyLocalizationKey, nil);
+        
+        if (self.bodyLocalizationArguments != nil) {
+            localizedBodyFormat = [self _localizedStringWithFormat:localizedBodyFormat arguments:self.bodyLocalizationArguments];
+        }
+        
+        return localizedBodyFormat;
+    }
+    
+    return self.body;
+}
+
+- (nullable NSString *)localizedTitle {
+    if (self.titleLocalizationKey != nil) {
+        NSString *localizedTitleFormat = NSLocalizedString(self.titleLocalizationKey, nil);
+        
+        if (self.titleLocalizationArguments != nil) {
+            localizedTitleFormat = [self _localizedStringWithFormat:localizedTitleFormat arguments:self.titleLocalizationArguments];
+        }
+        
+        return localizedTitleFormat;
+    }
+    
+    return self.title;
+}
+
+- (nullable NSString *)localizedAction {
+    if (self.actionLocalizationKey != nil) {
+        return NSLocalizedString(self.actionLocalizationKey, nil);
+    }
+    
+    return nil;
+}
+
+#pragma mark Private
+
+// taken from https://github.com/ParsePlatform/Parse-SDK-iOS-OSX/blob/e2bed4df96566febcc80d11f340c15475623cbef/Parse/Internal/PFInternalUtils.m#L259
+- (nullable NSString *)_localizedStringWithFormat:(NSString *)format arguments:(NSArray *)arguments {
+    // We cannot reliably construct a va_list for 64-bit, so hard code up to N args.
+    const int maxNumArgs = 10;
+    NSAssert(arguments.count <= maxNumArgs, @"Maximum of %d format args allowed", maxNumArgs);
+    NSMutableArray *args = [arguments mutableCopy];
+    for (NSUInteger i = arguments.count; i < maxNumArgs; i++) {
+        [args addObject:@""];
+    }
+    return [NSString stringWithFormat:format,
+            args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]];
 }
 
 @end

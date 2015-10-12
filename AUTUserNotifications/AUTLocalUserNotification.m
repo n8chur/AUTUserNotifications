@@ -20,6 +20,8 @@ static NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification
 
 @implementation AUTLocalUserNotification
 
+@dynamic badgeCount, sound, category, localizedTitle, localizedBody, localizedAction, launchImageFilename;
+
 #pragma mark - Lifecycle
 
 + (nullable instancetype)notificationFromSystemNotification:(UILocalNotification *)systemNotification {
@@ -81,6 +83,36 @@ static NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification
     notification.category = [self.class systemCategoryIdentifier];
 
     return notification;
+}
+
+#pragma mark - AUTUserNotificationAlertDisplayable
+
+- (nullable NSString *)localizedBody {
+    return self.systemNotification.alertBody;
+}
+
+- (nullable NSString *)localizedTitle {
+    return self.systemNotification.alertTitle;
+}
+
+- (nullable NSString *)localizedAction {
+    return self.systemNotification.alertAction;
+}
+
+- (nullable NSString *)sound {
+    return self.systemNotification.soundName;
+}
+
+- (nullable NSString *)launchImageFilename {
+    return self.systemNotification.alertLaunchImage;
+}
+
+- (nullable NSString *)category {
+    return self.systemNotification.category;
+}
+
+- (nullable NSNumber *)badgeCount {
+    return @(self.systemNotification.applicationIconBadgeNumber);
 }
 
 @end

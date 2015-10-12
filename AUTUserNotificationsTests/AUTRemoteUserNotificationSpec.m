@@ -68,6 +68,12 @@ it(@"should map from a remote notification dictionary", ^{
     expect(notification.bodyLocalizationKey).to.equal(bodyLocalizationKey);
     expect(notification.bodyLocalizationArguments).to.equal(bodyLocalizationArguments);
     expect(notification.launchImageFilename).to.equal(launchImageFilename);
+    
+#pragma mark - AUTUserNotificationAlertDisplayable
+
+    expect(notification.localizedBody).to.equal(bodyLocalizationKey);
+    expect(notification.localizedTitle).to.equal(titleLocalizationKey);
+    expect(notification.localizedAction).to.equal(actionLocalizationKey);
 });
 
 SpecEnd

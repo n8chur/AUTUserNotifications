@@ -28,3 +28,4 @@ FOUNDATION_EXPORT const unsigned char AUTUserNotificationsVersionString[];
 #import <AUTUserNotifications/UIApplication+AUTUserNotificationHandler.h>
 #import <AUTUserNotifications/AUTUserNotificationActionHandler.h>
 #import <AUTUserNotifications/AUTUserNotificationHandler.h>
+#import <AUTUserNotifications/AUTUserNotificationAlertDisplayable.h>
