@@ -10,7 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// AUTUserNotificationAlertDisplayable defines several basic properties which
 /// can be used to populate the UI when presenting a notification to the user.
-/// Both AUTLocalUserNotification or AUTRemoteNotification conform to this
+/// Both AUTLocalUserNotification or AUTRemoteUserNotification conform to this
 /// protocol.
 @protocol AUTUserNotificationAlertDisplayable <NSObject>
 

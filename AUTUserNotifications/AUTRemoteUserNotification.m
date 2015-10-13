@@ -57,6 +57,16 @@ NS_ASSUME_NONNULL_BEGIN
     return self;
 }
 
++ (nullable NSString *)categoryForJSONDictionary:(NSDictionary *)JSONDictionary {
+    NSDictionary *aps = JSONDictionary[@"aps"];
+    if (aps == nil || ![aps isKindOfClass:NSDictionary.class]) return nil;
+    
+    NSString *category = aps[@"category"];
+    if (category == nil || ![category isKindOfClass:NSString.class]) return nil;
+    
+    return category;
+}
+
 #pragma mark - AUTUserNotificationAlertDisplayable
 
 - (nullable NSString *)localizedBody {
@@ -64,7 +74,7 @@ NS_ASSUME_NONNULL_BEGIN
         NSString *localizedBodyFormat = NSLocalizedString(self.bodyLocalizationKey, nil);
         
         if (self.bodyLocalizationArguments != nil) {
-            localizedBodyFormat = [self _localizedStringWithFormat:localizedBodyFormat arguments:self.bodyLocalizationArguments];
+            localizedBodyFormat = [self localizedStringWithFormat:localizedBodyFormat arguments:self.bodyLocalizationArguments];
         }
         
         return localizedBodyFormat;
@@ -78,7 +88,7 @@ NS_ASSUME_NONNULL_BEGIN
         NSString *localizedTitleFormat = NSLocalizedString(self.titleLocalizationKey, nil);
         
         if (self.titleLocalizationArguments != nil) {
-            localizedTitleFormat = [self _localizedStringWithFormat:localizedTitleFormat arguments:self.titleLocalizationArguments];
+            localizedTitleFormat = [self localizedStringWithFormat:localizedTitleFormat arguments:self.titleLocalizationArguments];
         }
         
         return localizedTitleFormat;
@@ -98,7 +108,7 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark Private
 
 // taken from https://github.com/ParsePlatform/Parse-SDK-iOS-OSX/blob/e2bed4df96566febcc80d11f340c15475623cbef/Parse/Internal/PFInternalUtils.m#L259
-- (nullable NSString *)_localizedStringWithFormat:(NSString *)format arguments:(NSArray *)arguments {
+- (nullable NSString *)localizedStringWithFormat:(NSString *)format arguments:(NSArray *)arguments {
     // We cannot reliably construct a va_list for 64-bit, so hard code up to N args.
     const int maxNumArgs = 10;
     NSAssert(arguments.count <= maxNumArgs, @"Maximum of %d format args allowed", maxNumArgs);

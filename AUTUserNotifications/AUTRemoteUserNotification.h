@@ -55,6 +55,13 @@ NS_ASSUME_NONNULL_BEGIN
 /// Mapped from "aps.alert.loc-args"
 @property (readonly, nonatomic, copy, nullable) NSArray<NSString *> *bodyLocalizationArguments;
 
+/// A class method to return the category from the notification dictionary as
+/// delivered by the system. This method can be helpful when deciding which
+/// class to return in your classForParsingJSONDictionary: for a class cluster.
+/// @return the category as a string or nil if the aps dictionary is nil or it
+/// does not contain a category key.
++ (nullable NSString *)categoryForJSONDictionary:(NSDictionary *)dictionary;
+
 @end
 
 NS_ASSUME_NONNULL_END
