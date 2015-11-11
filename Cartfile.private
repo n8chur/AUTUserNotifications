@@ -1,2 +1,2 @@
 github "jspahrsummers/xcconfigs"
-github "Automatic/AUTTestKit" ~> 0.5
+github "Automatic/AUTTestKit" ~> 1.0
