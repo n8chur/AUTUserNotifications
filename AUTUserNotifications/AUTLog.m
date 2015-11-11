@@ -8,6 +8,6 @@
 
 #import "AUTLog.h"
 
-AUTLogContext AUTLogContextRemoteUserNotifications = { .level = AUTLogLevelError };
-AUTLogContext AUTLogContextLocalUserNotifications = { .level = AUTLogLevelError };
-AUTLogContext AUTLogContextUserNotificationRegistration = { .level = AUTLogLevelError };
+AUTLOGKIT_CONTEXT_INIT(AUTLogContextRemoteUserNotifications, AUTLogLevelError, "RemoteUserNotifications");
+AUTLOGKIT_CONTEXT_INIT(AUTLogContextLocalUserNotifications, AUTLogLevelError, "LocalUserNotifications");
+AUTLOGKIT_CONTEXT_INIT(AUTLogContextUserNotificationRegistration, AUTLogLevelError, "UserNotificationRegistration");
