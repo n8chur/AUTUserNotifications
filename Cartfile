@@ -1,5 +1,5 @@
 # Internal
-github "automatic/AUTLogKit" ~> 4.0.0
+github "automatic/AUTLogKit" ~> 4.0
 
 # External
 github "ReactiveCocoa/ReactiveCocoa" ~> 2.5
