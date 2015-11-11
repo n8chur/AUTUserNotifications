@@ -7,9 +7,6 @@ task :clean do
 end
 
 task :bootstrap do
-    sh('brew update')
-    sh('brew upgrade carthage || brew install carthage || true')
-
     sh('carthage checkout')
     sh("carthage build #{CARTHAGE_BUILD_FLAGS} | #{PRETTIFY}")
 end
