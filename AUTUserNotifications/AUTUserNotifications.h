@@ -21,7 +21,6 @@ FOUNDATION_EXPORT const unsigned char AUTUserNotificationsVersionString[];
 #import <AUTUserNotifications/AUTRemoteUserNotificationFetchHandler.h>
 #import <AUTUserNotifications/AUTRemoteUserNotificationTokenRegistrar.h>
 #import <AUTUserNotifications/AUTLog.h>
-#import <AUTUserNotifications/AUTUserNotifications.h>
 #import <AUTUserNotifications/AUTLocalUserNotification.h>
 #import <AUTUserNotifications/AUTUserNotification.h>
 #import <AUTUserNotifications/AUTRemoteUserNotification.h>
