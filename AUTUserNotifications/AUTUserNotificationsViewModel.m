@@ -752,6 +752,7 @@ NS_ASSUME_NONNULL_BEGIN
 
     return [RACSignal defer:^{
         UILocalNotification *systemNotification = [notification createSystemNotification];
+        if (systemNotification == nil) return [RACSignal empty];
 
         AUTLogLocalUserNotificationInfo(@"%@ scheduling local notification: %@ ", self, notification);
 
