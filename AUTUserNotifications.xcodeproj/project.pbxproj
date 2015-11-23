@@ -477,7 +477,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = AUT;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0710;
 				ORGANIZATIONNAME = "Automatic Labs";
 				TargetAttributes = {
 					3ADDAE361BBAEA63002870D9 = {

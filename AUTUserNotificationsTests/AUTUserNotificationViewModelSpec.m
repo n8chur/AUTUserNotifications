@@ -540,4 +540,47 @@ describe(@"-cancelLocalNotificationsOfClass:", ^{
     });
 });
 
+describe(@"-cancelScheduledLocalNotificationsOfClass:passingTest:", ^{
+    it(@"should only cancel scheduled notifications of the specified class", ^{
+        AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
+        notification.fireDate = [NSDate distantFuture];
+
+        AUTTestLocalUserNotificationSubclass *distantFutureNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
+        distantFutureNotification.fireDate = [NSDate distantFuture];
+
+        AUTTestLocalUserNotificationSubclass *nearFutureNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
+        nearFutureNotification.fireDate = [[NSDate date] dateByAddingTimeInterval:10.0];
+
+        expect([[viewModel scheduleLocalNotification:notification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect(error).to.beNil();
+
+        expect([[viewModel scheduleLocalNotification:distantFutureNotification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect(error).to.beNil();
+
+        expect([[viewModel scheduleLocalNotification:nearFutureNotification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect(error).to.beNil();
+
+        RACSignal *cancelNearFutureNotifications = [viewModel
+            cancelLocalNotificationsOfClass:AUTTestLocalUserNotificationSubclass.class
+            passingTest:^ BOOL (AUTTestLocalUserNotificationSubclass * notification) {
+                return notification.fireDate.timeIntervalSinceNow < 100.0;
+            }];
+
+        expect([cancelNearFutureNotifications asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect(error).to.beNil();
+
+        NSArray *scheduledNotifications = [[[viewModel scheduledLocalNotifications]
+            collect]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+        expect(scheduledNotifications).to.haveACountOf(2);
+        expect(scheduledNotifications).to.contain(notification);
+        expect(scheduledNotifications).to.contain(distantFutureNotification);
+        expect(scheduledNotifications).notTo.contain(nearFutureNotification);
+    });
+});
+
+
 SpecEnd

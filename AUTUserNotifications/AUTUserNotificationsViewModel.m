@@ -728,19 +728,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - Local Notification Management
 
-- (RACSignal *)cancelLocalNotificationsOfClass:(Class)notificationClass {
-    NSParameterAssert([notificationClass isSubclassOfClass:AUTLocalUserNotification.class]);
-
-    return [[[[self scheduledLocalNotificationsOfClass:notificationClass]
-        doNext:^(AUTLocalUserNotification *notification) {
-            AUTLogLocalUserNotificationInfo(@"%@ canceling local notification: %@ ", self, notification);
-        }]
-        doNext:^(AUTLocalUserNotification *notification) {
-            [self.notifier cancelLocalNotification:notification.systemNotification];
-        }]
-        ignoreValues];
-}
-
 - (RACSignal *)scheduledLocalNotifications {
     return [[RACSignal
         defer:^{
@@ -776,6 +763,33 @@ NS_ASSUME_NONNULL_BEGIN
 
         return [RACSignal empty];
     }];
+}
+
+- (RACSignal *)cancelLocalNotificationsOfClass:(Class)notificationClass {
+    NSParameterAssert([notificationClass isSubclassOfClass:AUTLocalUserNotification.class]);
+
+    return [[[[self scheduledLocalNotificationsOfClass:notificationClass]
+        doNext:^(AUTLocalUserNotification *notification) {
+            AUTLogLocalUserNotificationInfo(@"%@ canceling local notification: %@ ", self, notification);
+        }]
+        doNext:^(AUTLocalUserNotification *notification) {
+            [self.notifier cancelLocalNotification:notification.systemNotification];
+        }]
+        ignoreValues];
+}
+
+- (RACSignal *)cancelLocalNotificationsOfClass:(Class)notificationClass passingTest:(BOOL (^)(__kindof AUTLocalUserNotification *notification))testBlock {
+    NSParameterAssert([notificationClass isSubclassOfClass:AUTLocalUserNotification.class]);
+
+    return [[[[[self scheduledLocalNotificationsOfClass:notificationClass]
+        filter:testBlock]
+        doNext:^(AUTLocalUserNotification *notification) {
+            AUTLogLocalUserNotificationInfo(@"%@ canceling local notification: %@ ", self, notification);
+        }]
+        doNext:^(AUTLocalUserNotification *notification) {
+            [self.notifier cancelLocalNotification:notification.systemNotification];
+        }]
+        ignoreValues];
 }
 
 @end

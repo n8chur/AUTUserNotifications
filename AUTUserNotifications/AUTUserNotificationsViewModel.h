@@ -130,16 +130,21 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// If user notifications have not yet been scheduled with the system, this
 /// signal will immediately error with the TODO: specify error.
-- (RACSignal *)scheduleLocalNotification:(AUTLocalUserNotification *)notification;
+- (RACSignal *)scheduleLocalNotification:(__kindof AUTLocalUserNotification *)notification;
 
 /// Cancels all local notifications of the specified class upon subscription,
 /// completing when cancellation has finished.
 ///
-/// The specified class must be kind of AUTLocalNotification.
-///
 /// The specified class must be kind of AUTLocalUserNotification (local only,
 /// not remote). An exception is thrown if it is not.
 - (RACSignal *)cancelLocalNotificationsOfClass:(Class)notificationClass;
+
+/// Cancels all local notifications of the specified class upon subscription
+/// that pass the given test, completing when cancellation has finished.
+///
+/// The specified class must be kind of AUTLocalUserNotification (local only,
+/// not remote). An exception is thrown if it is not.
+- (RACSignal *)cancelLocalNotificationsOfClass:(Class)notificationClass passingTest:(BOOL (^)(__kindof AUTLocalUserNotification *notification))testBlock;
 
 @end
 
