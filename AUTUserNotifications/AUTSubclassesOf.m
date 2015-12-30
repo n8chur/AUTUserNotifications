@@ -142,12 +142,7 @@ NSArray *aut_subclassesOf(Class targetClass) {
         free(subclasses);
     };
 
-    NSMutableArray *subclassesArray = [NSMutableArray array];
-    for (unsigned classIndex = 0; classIndex < subclassCount; classIndex++) {
-        [subclassesArray addObject:subclasses[classIndex]];
-    }
-
-    return [subclassesArray copy];
+    return [NSArray arrayWithObjects:subclasses count:subclassCount];
 }
 
 NS_ASSUME_NONNULL_END
