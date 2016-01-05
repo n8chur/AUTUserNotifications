@@ -24,3 +24,10 @@ DerivedData
 
 # Carthage
 Carthage/
+
+# Cobertura
+cobertura.xml
+
+# Bundler
+Gemfile
+Gemfile.lock

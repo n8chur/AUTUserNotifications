@@ -15,6 +15,12 @@ task :test do
     sh("#{BUILD_TOOL} test #{BUILD_FLAGS_TEST} | #{PRETTIFY}")
 end
 
+task :coverage do
+    ENV['BUILD_SETTINGS'] = `#{BUILD_TOOL} test #{BUILD_FLAGS_TEST} -showBuildSettings`
+
+    eval(`arc paste P226`)
+end
+
 task :archive do
     sh("carthage build #{CARTHAGE_ARCHIVE_FLAGS} | #{PRETTIFY}")
     sh("carthage archive #{LIBRARY_NAME} --output #{ARCHIVE_PATH}")
@@ -36,6 +42,7 @@ task :diff => [
     :clean,
     :bootstrap,
     :test,
+    :coverage,
     :archive
 ]
 
@@ -43,6 +50,7 @@ task :ci => [
     :clean,
     :bootstrap,
     :test,
+    :coverage,
     :archive,
     :increment_version,
     :upload_archive
@@ -60,6 +68,9 @@ BUILD_TOOL = 'xcodebuild'
 
 BUILD_FLAGS_TEST =
     "-scheme #{LIBRARY_NAME} "\
+    "-destination 'platform=iOS Simulator,name=iPhone 5' "\
+    "-destination 'platform=iOS Simulator,name=iPhone 6' "\
+    "-enableCodeCoverage YES "\
     "-sdk #{TEST_SDK}"
 
 PRETTIFY = "xcpretty; exit ${PIPESTATUS[0]}"
