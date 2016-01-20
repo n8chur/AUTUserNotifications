@@ -128,6 +128,27 @@ describe(@"-receivedNotificationsOfClass:", ^{
             expect(receivedNotifications.firstObject).to.equal(notificationSubclass);
             expect(receivedNotifications.firstObject).notTo.beIdenticalTo(notificationSubclass);
         });
+
+        it(@"should receive notifications from an application launch", ^{
+            AUTLocalUserNotification *notification = [[AUTLocalUserNotification alloc] init];
+
+            RACSignal *receivedNotifications = [[viewModel receivedNotificationsOfClass:AUTLocalUserNotification.class]
+                replay];
+
+            UILocalNotification *systemNotification = [notification createSystemNotification];
+            expect(systemNotification).to.beKindOf(UILocalNotification.class);
+
+            [NSNotificationCenter.defaultCenter postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil userInfo:@{
+                UIApplicationLaunchOptionsLocalNotificationKey: systemNotification,
+            }];
+
+            AUTLocalUserNotification *receivedNotification = [receivedNotifications asynchronousFirstOrDefault:nil success:&success error:&error];
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
+            expect(receivedNotification).to.beAnInstanceOf(AUTLocalUserNotification.class);
+            expect(receivedNotification).to.equal(notification);
+            expect(receivedNotification).notTo.beIdenticalTo(notification);
+        });
     });
 
     describe(@"remote notifications", ^{
@@ -152,6 +173,20 @@ describe(@"-receivedNotificationsOfClass:", ^{
             expect(receivedNotifications).to.beKindOf(NSArray.class);
             expect(receivedNotifications).to.haveACountOf(1);
             expect(receivedNotifications.firstObject).to.beAnInstanceOf(notificationSubclass.class);
+        });
+
+        it(@"should receive notifications from an application launch", ^{
+            RACSignal *receivedNotifications = [[viewModel receivedNotificationsOfClass:AUTTestRootRemoteUserNotification.class]
+                replay];
+
+            [NSNotificationCenter.defaultCenter postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil userInfo:@{
+                UIApplicationLaunchOptionsRemoteNotificationKey: [AUTTestRootRemoteUserNotification asJSONDictionary],
+            }];
+
+            AUTTestRootRemoteUserNotification *receivedNotification = [receivedNotifications asynchronousFirstOrDefault:nil success:&success error:&error];
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
+            expect(receivedNotification).to.beAnInstanceOf(AUTTestRootRemoteUserNotification.class);
         });
     });
 });

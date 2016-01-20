@@ -287,9 +287,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)createReceivedLocalNotifications {
     @weakify(self);
 
-    return [[[[self.handler
-        rac_signalForSelector:@selector(application:didReceiveLocalNotification:) fromProtocol:@protocol(AUTUserNotificationHandler)]
+    RACSignal *launchNotification = [[[NSNotificationCenter.defaultCenter rac_addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil]
+        map:^(NSNotification *notification) {
+            return notification.userInfo[UIApplicationLaunchOptionsLocalNotificationKey];
+        }]
+        ignore:nil];
+
+    RACSignal *postLaunchNotifications = [[self.handler rac_signalForSelector:@selector(application:didReceiveLocalNotification:) fromProtocol:@protocol(AUTUserNotificationHandler)]
         reduceEach:^(id _, UILocalNotification *systemNotification){
+            return systemNotification;
+        }];
+
+    return [[[[RACSignal merge:@[ launchNotification, postLaunchNotifications ]]
+        map:^(UILocalNotification *systemNotification){
             return [AUTLocalUserNotification notificationFromSystemNotification:systemNotification];
         }]
         // Ignore notifications that do not contain an encoded local user
@@ -305,9 +315,19 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)createReceivedRemoteNotifications {
     @weakify(self);
 
-    return [[[[self.handler
-        rac_signalForSelector:@selector(application:didReceiveRemoteNotification:) fromProtocol:@protocol(AUTUserNotificationHandler)]
-        reduceEach:^ AUTRemoteUserNotification * (id _, NSDictionary *JSONDictionary){
+    RACSignal *launchNotification = [[[NSNotificationCenter.defaultCenter rac_addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil]
+        map:^(NSNotification *notification) {
+            return notification.userInfo[UIApplicationLaunchOptionsRemoteNotificationKey];
+        }]
+        ignore:nil];
+
+    RACSignal *postLaunchNotifications = [[self.handler rac_signalForSelector:@selector(application:didReceiveRemoteNotification:) fromProtocol:@protocol(AUTUserNotificationHandler)]
+        reduceEach:^(id _, NSDictionary *JSONDictionary){
+            return JSONDictionary;
+        }];
+
+    return [[[[RACSignal merge:@[ launchNotification, postLaunchNotifications ]]
+        map:^ AUTRemoteUserNotification * (NSDictionary *JSONDictionary){
             @strongify(self);
             if (self == nil) return nil;
 
