@@ -299,8 +299,8 @@ NS_ASSUME_NONNULL_BEGIN
         }];
 
     return [[[[RACSignal merge:@[ launchNotification, postLaunchNotifications ]]
-        map:^(UILocalNotification *systemNotification){
-            return [AUTLocalUserNotification notificationFromSystemNotification:systemNotification];
+        map:^(UILocalNotification *notification){
+            return [AUTLocalUserNotification notificationRestoredFromSystemNotification:notification withActionIdentifier:nil systemActionCompletionHandler:nil];
         }]
         // Ignore notifications that do not contain an encoded local user
         // notification in their user info.
@@ -589,10 +589,10 @@ NS_ASSUME_NONNULL_BEGIN
             @strongify(self);
             if (self == nil) return nil;
 
-            AUTLocalUserNotification *notification = [AUTLocalUserNotification notificationFromSystemNotification:systemNotification];
-            notification.actionIdentifier = actionIdentifier;
-            notification.systemActionCompletionHandler = completionHandler;
-            return notification;
+            return [AUTLocalUserNotification
+                notificationRestoredFromSystemNotification:systemNotification
+                withActionIdentifier:actionIdentifier
+                systemActionCompletionHandler:completionHandler];
         }]
         // Ignore notifications that do not contain an encoded local user
         // notification in their user info.
@@ -754,7 +754,7 @@ NS_ASSUME_NONNULL_BEGIN
             return [self.notifier.scheduledLocalNotifications.rac_sequence signalWithScheduler:RACScheduler.immediateScheduler];
         }]
         map:^(UILocalNotification *notification) {
-            return [AUTLocalUserNotification notificationFromSystemNotification:notification];
+            return [AUTLocalUserNotification notificationRestoredFromSystemNotification:notification withActionIdentifier:nil systemActionCompletionHandler:nil];
         }];
 }
 

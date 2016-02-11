@@ -24,7 +24,7 @@ static NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification
 
 #pragma mark - Lifecycle
 
-+ (nullable instancetype)notificationFromSystemNotification:(UILocalNotification *)systemNotification {
++ (nullable instancetype)notificationRestoredFromSystemNotification:(UILocalNotification *)systemNotification withActionIdentifier:(nullable NSString *)actionIdentifier systemActionCompletionHandler:(nullable void (^)())systemActionCompletionHandler {
     NSParameterAssert(systemNotification != nil);
 
     if (systemNotification.userInfo == nil) {
@@ -47,6 +47,10 @@ static NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification
     }
 
     notification.systemNotification = systemNotification;
+    notification.actionIdentifier = actionIdentifier;
+    notification.systemActionCompletionHandler = systemActionCompletionHandler;
+
+    if (![notification restoreFromSystemNotification:systemNotification]) return nil;
 
     return notification;
 }
@@ -83,6 +87,10 @@ static NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification
     notification.category = [self.class systemCategoryIdentifier];
 
     return notification;
+}
+
+- (BOOL)restoreFromSystemNotification:(UILocalNotification *)notification {
+    return YES;
 }
 
 #pragma mark - AUTUserNotificationAlertDisplayable

@@ -15,23 +15,18 @@ NS_ASSUME_NONNULL_BEGIN
 /// user locally via an AUTUserNotificationsViewModel.
 @interface AUTLocalUserNotification : AUTUserNotification <AUTUserNotificationAlertDisplayable>
 
-/// Creates a local notification from a received system notification.
+/// Restores attributes on the receiver from a received system notification.
 ///
 /// Subclasses are encouraged to override this method if they desire to
-/// customize the notification that is restored from a system
-/// UILocalNotification.
+/// customize the notification that is restored from a system notification.
 ///
-/// @return nil if a notification should not be created from the specified
+/// If the notification was received with an action identifier, it will be
+/// populated as the actionIdentifier property on the receiver prior to invoking
+/// this method.
+///
+/// @return NO if the receiver could should not be restored from the specified
 ///         system local notification.
-+ (nullable instancetype)notificationFromSystemNotification:(UILocalNotification *)systemNotification;
-
-/// The notification that the receiver was created from, if there was one.
-///
-/// Typically populated in the case of the receiver being restored from a
-/// received or enqueued notification.
-///
-/// Nil if the receiver was not created from a system notification.
-@property (readonly, atomic, strong, nullable) UILocalNotification *systemNotification;
+- (BOOL)restoreFromSystemNotification:(UILocalNotification *)notification;
 
 /// Creates a local notification representing the receiver to be sent to the
 /// system.
