@@ -36,6 +36,8 @@ NS_ASSUME_NONNULL_BEGIN
 @dynamic localizedTitle, localizedBody, localizedAction;
 @synthesize launchImageFilename = _launchImageFilename;
 
+#pragma mark - AUTRemoteUserNotification <MTLJSONSerializing>
+
 + (NSDictionary *)JSONKeyPathsByPropertyKey {
     return @{
         @keypath(AUTRemoteUserNotification.new, silent): @"aps.content-available",
@@ -107,7 +109,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark Private
 
-// taken from https://github.com/ParsePlatform/Parse-SDK-iOS-OSX/blob/e2bed4df96566febcc80d11f340c15475623cbef/Parse/Internal/PFInternalUtils.m#L259
+// Adapted from https://github.com/ParsePlatform/Parse-SDK-iOS-OSX/blob/e2bed4df96566febcc80d11f340c15475623cbef/Parse/Internal/PFInternalUtils.m#L259
 - (nullable NSString *)localizedStringWithFormat:(NSString *)format arguments:(NSArray *)arguments {
     // We cannot reliably construct a va_list for 64-bit, so hard code up to N args.
     const int maxNumArgs = 10;
@@ -118,6 +120,16 @@ NS_ASSUME_NONNULL_BEGIN
     }
     return [NSString stringWithFormat:format,
             args[0], args[1], args[2], args[3], args[4], args[5], args[6], args[7], args[8], args[9]];
+}
+
+#pragma mark - MTLModel
+
++ (MTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
+    if ([propertyKey isEqualToString:@keypath(AUTRemoteUserNotification.new, systemFetchCompletionHandler)]) {
+        return MTLPropertyStorageNone;
+    }
+
+    return [super storageBehaviorForPropertyWithKey:propertyKey];
 }
 
 @end

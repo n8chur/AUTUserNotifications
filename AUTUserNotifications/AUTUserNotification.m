@@ -6,6 +6,8 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
+@import ReactiveCocoa;
+
 #import "AUTUserNotification_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -44,6 +46,16 @@ NS_ASSUME_NONNULL_BEGIN
 + (nullable NSArray<UIUserNotificationAction *> *)systemActionsForContext:(UIUserNotificationActionContext)context {
     // Subclases override this method.
     return nil;
+}
+
+#pragma mark - MTLModel
+
++ (MTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
+    if ([propertyKey isEqualToString:@keypath(AUTUserNotification.new, systemActionCompletionHandler)]) {
+        return MTLPropertyStorageNone;
+    }
+
+    return [super storageBehaviorForPropertyWithKey:propertyKey];
 }
 
 @end
