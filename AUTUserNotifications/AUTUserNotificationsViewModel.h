@@ -100,6 +100,8 @@ NS_ASSUME_NONNULL_BEGIN
 /// The specified notification class must be kind of AUTUserNotification (either
 /// remote or local). An exception is thrown if it is not.
 ///
+/// The actionHandler is not retained.
+///
 /// Returns a disposable that represents the action registration. Consumers
 /// should dispose of it to unregister the action handler.
 - (RACDisposable *)registerActionHandler:(id<AUTUserNotificationActionHandler>)actionHandler forNotificationsOfClass:(Class)notificationClass;
@@ -109,6 +111,8 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// The specified notification class must be kind of AUTRemoteUserNotification
 /// (remote only, not local). An exception is thrown if it is not.
+///
+/// The fetchHandler is not retained.
 ///
 /// Returns a disposable that represents the action registration. Consumers
 /// should dispose of it to unregister the action handler.

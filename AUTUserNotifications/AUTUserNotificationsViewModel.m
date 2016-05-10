@@ -18,6 +18,7 @@
 #import "AUTRemoteUserNotificationTokenRegistrar.h"
 #import "AUTUserNotificationActionHandler.h"
 #import "AUTRemoteUserNotificationFetchHandler.h"
+#import "AUTUserNotificationsWeakBox.h"
 
 #import "AUTUserNotification_Private.h"
 #import "AUTLocalUserNotification_Private.h"
@@ -36,24 +37,21 @@ NS_ASSUME_NONNULL_BEGIN
     /// A mutable version of the `fetchHandlers` property.
     ///
     /// This should only be used while synchronized on `self`.
-    NSMutableDictionary *_fetchHandlers;
+    NSMutableDictionary<AUTUserNotificationsWeakBox<id<AUTRemoteUserNotificationFetchHandler>> *, Class> *_fetchHandlers;
 
     /// A mutable version of the `actionHandlers` property.
     ///
     /// This should only be used while synchronized on `self`.
-    NSMutableDictionary *_actionHandlers;
+    NSMutableDictionary<AUTUserNotificationsWeakBox<id<AUTUserNotificationActionHandler>> *, Class> *_actionHandlers;
 }
 
-/// A dictionary of [NSValue<id<AUTRemoteUserNotificationFetchHandler>>: Class],
-/// with keys of weak NSValue-wrapped references to registered fetch handlers,
-/// and values of the notification class that the fetch handler is registered
-/// for.
-@property (readonly, nonatomic, copy) NSDictionary *fetchHandlers;
+/// A dictionary with keys of references to registered fetch handlers and values
+/// of the notification class that the fetch handler is registered for.
+@property (readonly, nonatomic, copy) NSDictionary<AUTUserNotificationsWeakBox<id<AUTRemoteUserNotificationFetchHandler>> *, Class> *fetchHandlers;
 
-/// A dictionary of [NSValue<id<AUTUserNotificationActionHandler>>: Class], with
-/// keys of weak NSValue-wrapped references to registered action handlers, and
+/// A dictionary with key of references to registered action handlers, and
 /// values of the notification class that the action handler is registered for.
-@property (readonly, nonatomic, copy) NSDictionary *actionHandlers;
+@property (readonly, nonatomic, copy) NSDictionary<AUTUserNotificationsWeakBox<id<AUTUserNotificationActionHandler>> *, Class> *actionHandlers;
 
 @property (readonly, nonatomic, strong) RACSignal *receivedLocalNotifications;
 @property (readonly, nonatomic, strong) RACSignal *receivedRemoteNotifications;
@@ -518,15 +516,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray <id<AUTRemoteUserNotificationFetchHandler>> *)fetchHandlersForSilentRemoteNotification:(AUTRemoteUserNotification *)notification {
     NSParameterAssert(notification != nil);
 
-    return [[[[self.fetchHandlers
-        keysOfEntriesPassingTest:^(NSValue *handler, Class notificationClass, BOOL *_) {
+    return [[[[[self.fetchHandlers
+        keysOfEntriesPassingTest:^(AUTUserNotificationsWeakBox<id<AUTRemoteUserNotificationFetchHandler>> *handlerBox, Class notificationClass, BOOL *_) {
             return [notification isKindOfClass:notificationClass];
         }]
         rac_sequence]
-        // Unwrap the object from the nonretained value.
-        map:^(NSValue *fetchHandler) {
-            return fetchHandler.nonretainedObjectValue;
+        // Unwrap the object from the box.
+        map:^(AUTUserNotificationsWeakBox<id<AUTRemoteUserNotificationFetchHandler>> *handlerBox) {
+            return handlerBox.value;
         }]
+        // If the box's value was auto-nilled by ARC, do not include it.
+        ignore:nil]
         array];
 }
 
@@ -541,7 +541,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (strongFetchHandler == nil) return;
 
     @synchronized (self) {
-        _fetchHandlers[[NSValue valueWithNonretainedObject:strongFetchHandler]] = notificationClass;
+        _fetchHandlers[[AUTUserNotificationsWeakBox box:strongFetchHandler]] = notificationClass;
     }
 }
 
@@ -550,7 +550,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (strongFetchHandler == nil) return;
 
     @synchronized (self) {
-        [_fetchHandlers removeObjectForKey:[NSValue valueWithNonretainedObject:fetchHandler]];
+        [_fetchHandlers removeObjectForKey:[AUTUserNotificationsWeakBox box:fetchHandler]];
     }
 }
 
@@ -710,15 +710,17 @@ NS_ASSUME_NONNULL_BEGIN
 - (NSArray <id<AUTUserNotificationActionHandler>> *)actionHandlersForNotification:(AUTUserNotification *)notification {
     NSParameterAssert(notification != nil);
 
-    return [[[[self.actionHandlers
-        keysOfEntriesPassingTest:^(NSValue *handler, Class notificationClass, BOOL *_) {
+    return [[[[[self.actionHandlers
+        keysOfEntriesPassingTest:^(AUTUserNotificationsWeakBox<id<AUTUserNotificationActionHandler>> *handlerBox, Class notificationClass, BOOL *_) {
             return [notification isKindOfClass:notificationClass];
         }]
         rac_sequence]
         // Unwrap the object from the nonretained value.
-        map:^(NSValue *actionHandler) {
-            return actionHandler.nonretainedObjectValue;
+        map:^(AUTUserNotificationsWeakBox<id<AUTUserNotificationActionHandler>> *handlerBox) {
+            return handlerBox.value;
         }]
+        // If the box's value was auto-nilled by ARC, do not include it.
+        ignore:nil]
         array];
 }
 
@@ -733,7 +735,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (strongActionHandler == nil) return;
 
     @synchronized (self) {
-        _actionHandlers[[NSValue valueWithNonretainedObject:strongActionHandler]] = notificationClass;
+        _actionHandlers[[AUTUserNotificationsWeakBox box:strongActionHandler]] = notificationClass;
     }
 }
 
@@ -742,7 +744,7 @@ NS_ASSUME_NONNULL_BEGIN
     if (strongActionHandler == nil) return;
 
     @synchronized (self) {
-        [_actionHandlers removeObjectForKey:[NSValue valueWithNonretainedObject:actionHandler]];
+        [_actionHandlers removeObjectForKey:[AUTUserNotificationsWeakBox box:actionHandler]];
     }
 }
 

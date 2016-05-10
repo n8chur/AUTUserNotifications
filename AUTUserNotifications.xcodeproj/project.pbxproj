@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3A156FEB1CE1543200BC99A6 /* AUTUserNotificationsWeakBox.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A156FE91CE1543200BC99A6 /* AUTUserNotificationsWeakBox.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3A156FEC1CE1543200BC99A6 /* AUTUserNotificationsWeakBox.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A156FEA1CE1543200BC99A6 /* AUTUserNotificationsWeakBox.m */; };
 		3A2D7AC81BBAFC2600302833 /* AUTUserNotificationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AC71BBAFC2600302833 /* AUTUserNotificationHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A2D7ACA1BBAFC7C00302833 /* AUTUserNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AC91BBAFC7C00302833 /* AUTUserNotifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A2D7ACD1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -96,6 +98,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		3A156FE91CE1543200BC99A6 /* AUTUserNotificationsWeakBox.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationsWeakBox.h; sourceTree = "<group>"; };
+		3A156FEA1CE1543200BC99A6 /* AUTUserNotificationsWeakBox.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotificationsWeakBox.m; sourceTree = "<group>"; };
 		3A2D7AC71BBAFC2600302833 /* AUTUserNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationHandler.h; sourceTree = "<group>"; };
 		3A2D7AC91BBAFC7C00302833 /* AUTUserNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotifier.h; sourceTree = "<group>"; };
 		3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AUTUserNotifier.h"; sourceTree = "<group>"; };
@@ -383,6 +387,8 @@
 				3A2D7ACC1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m */,
 				3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */,
 				3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */,
+				3A156FE91CE1543200BC99A6 /* AUTUserNotificationsWeakBox.h */,
+				3A156FEA1CE1543200BC99A6 /* AUTUserNotificationsWeakBox.m */,
 			);
 			name = "View Models";
 			sourceTree = "<group>";
@@ -414,6 +420,7 @@
 				3A2D7AD41BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h in Headers */,
 				8760C08B1BC7BCC3003624BF /* AUTUserNotificationAlertDisplayable.h in Headers */,
 				3A2D7AD01BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h in Headers */,
+				3A156FEB1CE1543200BC99A6 /* AUTUserNotificationsWeakBox.h in Headers */,
 				3AEB33D11BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h in Headers */,
 				3ADDAEA41BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h in Headers */,
 				3A2F610B1BBB096800BE420C /* AUTLog.h in Headers */,
@@ -477,7 +484,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = AUT;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "Automatic Labs";
 				TargetAttributes = {
 					3ADDAE361BBAEA63002870D9 = {
@@ -553,6 +560,7 @@
 				3AA686F41BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m in Sources */,
 				3ADDAE9A1BBAF6B1002870D9 /* AUTRemoteUserNotification.m in Sources */,
 				3ADDAEA01BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m in Sources */,
+				3A156FEC1CE1543200BC99A6 /* AUTUserNotificationsWeakBox.m in Sources */,
 				3ADDAE9D1BBAF6B1002870D9 /* AUTUserNotification.m in Sources */,
 				3AEB33D41BBCBD6A0088AE62 /* AUTStubUserNotifier.m in Sources */,
 				3A9E540F1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m in Sources */,

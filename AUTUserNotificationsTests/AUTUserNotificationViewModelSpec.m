@@ -250,6 +250,29 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
         expect(error).to.beNil();
     });
 
+    it(@"should gracefully fail when receiving notifications with handlers that have been deallocated", ^{
+        RACSignal *willDealloc;
+        @autoreleasepool {
+            AUTStubRemoteNotificationFetchHandler *stubFetchHandler = [[AUTStubRemoteNotificationFetchHandler alloc] init];
+            [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
+            willDealloc = stubFetchHandler.rac_willDeallocSignal;
+        }
+        success = [willDealloc asynchronouslyWaitUntilCompleted:&error];
+        expect(success).to.beTruthy();
+        expect(error).to.beNil();
+
+        RACSignal *replayedFetchResult = [fetchResult replay];
+
+        NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+        [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
+
+        NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+        expect(systemResult).notTo.beNil();
+        expect(systemResult).to.equal(@(UIBackgroundFetchResultNoData));
+    });
+
     it(@"should remove the handler upon disposal", ^{
         __block NSInteger invocations = 0;
         stubFetchHandler.fetchHandler = [[RACSignal return:@(UIBackgroundFetchResultNoData)] doNext:^(id _) {
@@ -413,6 +436,29 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
         }
         success = [willDealloc asynchronouslyWaitUntilCompleted:&error];
         expect(success).to.beTruthy();
+        expect(error).to.beNil();
+    });
+
+    it(@"should gracefully fail when receiving notifications with handlers that have been deallocated", ^{
+        Class notificationClass = AUTTestLocalUserNotification.class;
+
+        RACSignal *willDealloc;
+        @autoreleasepool {
+            AUTStubUserNotificationActionHandler *stubActionHandler = [[AUTStubUserNotificationActionHandler alloc] init];
+            [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:notificationClass];
+            willDealloc = stubActionHandler.rac_willDeallocSignal;
+        }
+        success = [willDealloc asynchronouslyWaitUntilCompleted:&error];
+        expect(success).to.beTruthy();
+        expect(error).to.beNil();
+
+        RACSignal *replayedActionCompleted = [actionCompleted replay];
+
+        AUTTestLocalUserNotification *notification = [[notificationClass alloc] init];
+        UILocalNotification *systemNotification = [notification createSystemNotification];
+        [stubNotifier performActionWithIdentifier:actionIdentifier forLocalNotification:systemNotification completionHandler:completionHandler];
+
+        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
     });
 
