@@ -23,10 +23,10 @@
 		3A2F61011BBB01A700BE420C /* AUTStubUserNotificationActionHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60F21BBB01A700BE420C /* AUTStubUserNotificationActionHandler.m */; };
 		3A2F61041BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60F81BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m */; };
 		3A2F61051BBB01A700BE420C /* AUTTestLocalUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60FA1BBB01A700BE420C /* AUTTestLocalUserNotification.m */; };
-		3A2F61061BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60FC1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m */; };
 		3A2F61071BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60FE1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m */; };
 		3A2F610B1BBB096800BE420C /* AUTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2F61091BBB096800BE420C /* AUTLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A2F610C1BBB096800BE420C /* AUTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F610A1BBB096800BE420C /* AUTLog.m */; };
+		3A4261321D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4261311D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m */; };
 		3A9E540E1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A9E540F1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */; };
 		3AA686ED1BBB686A00FF3C3A /* AUTSubclassesOf.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AA686E91BBB686A00FF3C3A /* AUTSubclassesOf.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -119,12 +119,11 @@
 		3A2F60F81BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTTestChildRemoteUserNotification.m; sourceTree = "<group>"; };
 		3A2F60F91BBB01A700BE420C /* AUTTestLocalUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTTestLocalUserNotification.h; sourceTree = "<group>"; };
 		3A2F60FA1BBB01A700BE420C /* AUTTestLocalUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTTestLocalUserNotification.m; sourceTree = "<group>"; };
-		3A2F60FB1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTTestLocalUserNotificationSubclass.h; sourceTree = "<group>"; };
-		3A2F60FC1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTTestLocalUserNotificationSubclass.m; sourceTree = "<group>"; };
 		3A2F60FD1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTTestRootRemoteUserNotification.h; sourceTree = "<group>"; };
 		3A2F60FE1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTTestRootRemoteUserNotification.m; sourceTree = "<group>"; };
 		3A2F61091BBB096800BE420C /* AUTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTLog.h; sourceTree = "<group>"; };
 		3A2F610A1BBB096800BE420C /* AUTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTLog.m; sourceTree = "<group>"; };
+		3A4261311D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTLocalUserNotificationSpec.m; sourceTree = "<group>"; };
 		3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AUTUserNotificationHandler.h"; sourceTree = "<group>"; };
 		3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+AUTUserNotificationHandler.m"; sourceTree = "<group>"; };
 		3AA686E91BBB686A00FF3C3A /* AUTSubclassesOf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTSubclassesOf.h; sourceTree = "<group>"; };
@@ -205,6 +204,7 @@
 			children = (
 				3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */,
 				3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */,
+				3A4261311D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m */,
 			);
 			name = Specs;
 			sourceTree = "<group>";
@@ -222,8 +222,6 @@
 				3A2F60F81BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m */,
 				3A2F60F91BBB01A700BE420C /* AUTTestLocalUserNotification.h */,
 				3A2F60FA1BBB01A700BE420C /* AUTTestLocalUserNotification.m */,
-				3A2F60FB1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.h */,
-				3A2F60FC1BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m */,
 				3A2F60FD1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.h */,
 				3A2F60FE1BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m */,
 			);
@@ -572,12 +570,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				3A2F60E81BBB019100BE420C /* AUTUserNotificationViewModelSpec.m in Sources */,
+				3A4261321D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m in Sources */,
 				3A2F61001BBB01A700BE420C /* AUTStubRemoteNotificationRegistrar.m in Sources */,
 				3A2F60FF1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m in Sources */,
 				3A2F60EB1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m in Sources */,
 				3A2F61011BBB01A700BE420C /* AUTStubUserNotificationActionHandler.m in Sources */,
 				3A2F61041BBB01A700BE420C /* AUTTestChildRemoteUserNotification.m in Sources */,
-				3A2F61061BBB01A700BE420C /* AUTTestLocalUserNotificationSubclass.m in Sources */,
 				3A2F61071BBB01A700BE420C /* AUTTestRootRemoteUserNotification.m in Sources */,
 				3A2F61051BBB01A700BE420C /* AUTTestLocalUserNotification.m in Sources */,
 			);

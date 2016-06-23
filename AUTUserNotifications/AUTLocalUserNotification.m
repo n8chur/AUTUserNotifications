@@ -16,7 +16,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-static NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification";
+NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification";
 
 @implementation AUTLocalUserNotification
 
@@ -39,7 +39,13 @@ static NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification
     }
 
     // Unarchive self from the local notification.
-    AUTLocalUserNotification *notification = [NSKeyedUnarchiver unarchiveObjectWithData:encodedSelf];
+    AUTLocalUserNotification *notification;
+    @try {
+        notification = [NSKeyedUnarchiver unarchiveObjectWithData:encodedSelf];
+    } @catch (NSException* exception) {
+        AUTLogLocalUserNotificationError(@"Caught exception while attempting to unarchive an AUTLocalUserNotification encoded within system notification: %@, exception: %@", systemNotification, exception);
+        return nil;
+    }
 
     if (notification == nil || ![notification isKindOfClass:AUTLocalUserNotification.class]) {
         AUTLogLocalUserNotificationError(@"Failed to unarchive an AUTLocalUserNotification encoded within system notification: %@", systemNotification);

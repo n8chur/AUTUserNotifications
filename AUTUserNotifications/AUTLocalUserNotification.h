@@ -11,6 +11,10 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// The key used to store an NSKeyedArchiver NSData representation of an
+/// AUTLocalUserNotification within the userInfo of a UILocalNotification.
+extern NSString * const AUTLocalUserNotificationKey;
+
 /// An abstract base class representing a notification that is presented to the
 /// user locally via an AUTUserNotificationsViewModel.
 @interface AUTLocalUserNotification : AUTUserNotification <AUTUserNotificationAlertDisplayable>

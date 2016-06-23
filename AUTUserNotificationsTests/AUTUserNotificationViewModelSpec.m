@@ -16,7 +16,6 @@
 #import "AUTStubRemoteNotificationFetchHandler.h"
 #import "AUTStubUserNotificationActionHandler.h"
 #import "AUTTestLocalUserNotification.h"
-#import "AUTTestLocalUserNotificationSubclass.h"
 #import "AUTTestRootRemoteUserNotification.h"
 #import "AUTTestChildRemoteUserNotification.h"
 

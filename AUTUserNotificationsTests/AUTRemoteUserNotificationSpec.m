@@ -10,8 +10,6 @@
 @import Expecta;
 #import <AUTUserNotifications/AUTUserNotifications.h>
 
-#import "AUTRemoteUserNotification.h"
-
 SpecBegin(AUTRemoteUserNotification)
 
 it(@"should map from a remote notification dictionary", ^{

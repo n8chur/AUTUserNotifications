@@ -20,4 +20,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@interface AUTTestLocalUserNotificationSubclass : AUTTestLocalUserNotification
+
+@end
+
+@interface AUTTestLocalRestorationFailureUserNotification : AUTLocalUserNotification
+
+@end
+
 NS_ASSUME_NONNULL_END

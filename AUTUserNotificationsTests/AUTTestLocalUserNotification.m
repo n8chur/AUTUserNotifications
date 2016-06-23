@@ -22,4 +22,16 @@ NS_ASSUME_NONNULL_BEGIN
 
 @end
 
+@implementation AUTTestLocalUserNotificationSubclass
+
+@end
+
+@implementation AUTTestLocalRestorationFailureUserNotification
+
+- (BOOL)restoreFromSystemNotification:(UILocalNotification *)notification {
+    return NO;
+}
+
+@end
+
 NS_ASSUME_NONNULL_END
