@@ -7,6 +7,7 @@
 //
 
 #import "AUTTestChildRemoteUserNotification.h"
+#import "AUTAnotherTestChildRemoteUserNotification.h"
 
 #import "AUTTestRootRemoteUserNotification.h"
 
@@ -23,6 +24,10 @@ NS_ASSUME_NONNULL_BEGIN
 
     if ([category isEqualToString:AUTTestChildRemoteUserNotification.systemCategoryIdentifier]) {
         return AUTTestChildRemoteUserNotification.class;
+    }
+
+    if ([category isEqualToString:AUTAnotherTestChildRemoteUserNotification.systemCategoryIdentifier]) {
+        return AUTAnotherTestChildRemoteUserNotification.class;
     }
 
     return self;

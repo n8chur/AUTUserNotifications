@@ -18,7 +18,6 @@
 #import "AUTRemoteUserNotificationTokenRegistrar.h"
 #import "AUTUserNotificationActionHandler.h"
 #import "AUTRemoteUserNotificationFetchHandler.h"
-#import "AUTUserNotificationsWeakBox.h"
 
 #import "AUTUserNotification_Private.h"
 #import "AUTLocalUserNotification_Private.h"
@@ -33,37 +32,32 @@ NS_ASSUME_NONNULL_BEGIN
     RACSubject *_receivedRemoteNotifications;
     RACSubject *_receivedSilentRemoteNotifications;
     RACSubject *_actedUponNotifications;
-
-    /// A mutable version of the `fetchHandlers` property.
-    ///
-    /// This should only be used while synchronized on `self`.
-    NSMutableDictionary<AUTUserNotificationsWeakBox<id<AUTRemoteUserNotificationFetchHandler>> *, Class> *_fetchHandlers;
-
-    /// A mutable version of the `actionHandlers` property.
-    ///
-    /// This should only be used while synchronized on `self`.
-    NSMutableDictionary<AUTUserNotificationsWeakBox<id<AUTUserNotificationActionHandler>> *, Class> *_actionHandlers;
 }
 
-/// A dictionary with keys of references to registered fetch handlers and values
-/// of the notification class that the fetch handler is registered for.
-@property (readonly, nonatomic, copy) NSDictionary<AUTUserNotificationsWeakBox<id<AUTRemoteUserNotificationFetchHandler>> *, Class> *fetchHandlers;
+/// A map table with keys of references to registered fetch handlers and values
+/// of the set of notification classes that the fetch handler is registered for.
+///
+/// Should only be used while synchronized on `self`.
+@property (nonatomic, readonly) NSMapTable<id<AUTRemoteUserNotificationFetchHandler>, NSSet<Class> *> *fetchHandlers;
 
-/// A dictionary with key of references to registered action handlers, and
-/// values of the notification class that the action handler is registered for.
-@property (readonly, nonatomic, copy) NSDictionary<AUTUserNotificationsWeakBox<id<AUTUserNotificationActionHandler>> *, Class> *actionHandlers;
+/// A map table with key of references to registered action handlers, and
+/// values of the set of notification classes that the action handler is
+/// registered for.
+///
+/// Should only be used while synchronized on `self`.
+@property (nonatomic, readonly) NSMapTable<id<AUTUserNotificationActionHandler>, NSSet<Class> *> *actionHandlers;
 
-@property (readonly, nonatomic, strong) RACSignal *receivedLocalNotifications;
-@property (readonly, nonatomic, strong) RACSignal *receivedRemoteNotifications;
-@property (readonly, nonatomic, strong) RACSignal *receivedSilentRemoteNotifications;
+@property (readonly, nonatomic) RACSignal *receivedLocalNotifications;
+@property (readonly, nonatomic) RACSignal *receivedRemoteNotifications;
+@property (readonly, nonatomic) RACSignal *receivedSilentRemoteNotifications;
 
 /// Sends AUTUserNotifications that have had an action performed upon them.
-@property (readonly, nonatomic, strong) RACSignal *actedUponNotifications;
+@property (readonly, nonatomic) RACSignal *actedUponNotifications;
 
-@property (readonly, nonatomic, strong) NSObject<AUTUserNotifier> *notifier;
-@property (readonly, nonatomic, strong) NSObject<AUTUserNotificationHandler> *handler;
+@property (readonly, nonatomic) NSObject<AUTUserNotifier> *notifier;
+@property (readonly, nonatomic) NSObject<AUTUserNotificationHandler> *handler;
 
-@property (readonly, nonatomic, strong) Class rootRemoteNotificationClass;
+@property (readonly, nonatomic) Class rootRemoteNotificationClass;
 
 @end
 
@@ -101,8 +95,8 @@ NS_ASSUME_NONNULL_BEGIN
     _notifier = notifier;
     _handler = handler;
     _rootRemoteNotificationClass = rootRemoteNotificationClass;
-    _fetchHandlers = [NSMutableDictionary dictionary];
-    _actionHandlers = [NSMutableDictionary dictionary];
+    _fetchHandlers = [NSMapTable weakToStrongObjectsMapTable];
+    _actionHandlers = [NSMapTable weakToStrongObjectsMapTable];
 
     // Share a subscription to received local notifications.
     _receivedLocalNotifications = [[RACSubject subject] setNameWithFormat:@"-receivedLocalNotifications"];
@@ -374,7 +368,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [RACDisposable disposableWithBlock:^{
         @strongify(fetchHandler);
 
-        [self removeFetchHandler:fetchHandler];
+        [self removeFetchHandler:fetchHandler forRemoteUserNotificationsOfClass:notificationClass];
     }];
 }
 
@@ -511,46 +505,61 @@ NS_ASSUME_NONNULL_BEGIN
         }];
 }
 
-#pragma mark - Fetch Handlers Dictionary
+#pragma mark - Fetch Handlers
 
 - (NSArray <id<AUTRemoteUserNotificationFetchHandler>> *)fetchHandlersForSilentRemoteNotification:(AUTRemoteUserNotification *)notification {
     NSParameterAssert(notification != nil);
 
-    return [[[[[self.fetchHandlers
-        keysOfEntriesPassingTest:^(AUTUserNotificationsWeakBox<id<AUTRemoteUserNotificationFetchHandler>> *handlerBox, Class notificationClass, BOOL *_) {
-            return [notification isKindOfClass:notificationClass];
-        }]
-        rac_sequence]
-        // Unwrap the object from the box.
-        map:^(AUTUserNotificationsWeakBox<id<AUTRemoteUserNotificationFetchHandler>> *handlerBox) {
-            return handlerBox.value;
-        }]
-        // If the box's value was auto-nilled by ARC, do not include it.
-        ignore:nil]
-        array];
-}
+    NSMutableSet<id<AUTRemoteUserNotificationFetchHandler>> *handlers = [NSMutableSet set];
 
-- (NSDictionary *)fetchHandlers {
-    @synchronized(self) {
-        return [_fetchHandlers copy];
+    @synchronized (self) {
+        for (id<AUTRemoteUserNotificationFetchHandler> handler in self.fetchHandlers) {
+            NSSet<Class> *notificationClasses = [self.fetchHandlers objectForKey:handler];
+            if (notificationClasses == nil) continue;
+
+            for (Class notificationClass in notificationClasses) {
+                if (![notification isKindOfClass:notificationClass]) continue;
+                [handlers addObject:handler];
+            }
+        }
     }
+
+    return [handlers allObjects];
 }
 
-- (void)addFetchHandler:(__weak id<AUTRemoteUserNotificationFetchHandler>)fetchHandler forRemoteUserNotificationsOfClass:(Class)notificationClass {
-    __strong id<AUTRemoteUserNotificationFetchHandler> strongFetchHandler = fetchHandler;
+- (void)addFetchHandler:(__weak id<AUTRemoteUserNotificationFetchHandler>)weakFetchHandler forRemoteUserNotificationsOfClass:(Class)notificationClass {
+    NSParameterAssert(notificationClass != nil);
+    __strong id<AUTRemoteUserNotificationFetchHandler> strongFetchHandler = weakFetchHandler;
     if (strongFetchHandler == nil) return;
 
     @synchronized (self) {
-        _fetchHandlers[[AUTUserNotificationsWeakBox box:strongFetchHandler]] = notificationClass;
+        NSSet<Class> *notificationClasses = [self.fetchHandlers objectForKey:strongFetchHandler];
+        if (notificationClasses == nil) {
+            notificationClasses = [NSSet setWithObject:notificationClass];
+        } else {
+            notificationClasses = [notificationClasses setByAddingObject:notificationClass];
+        }
+
+        [self.fetchHandlers setObject:notificationClasses forKey:strongFetchHandler];
     }
 }
 
-- (void)removeFetchHandler:(__weak id<AUTRemoteUserNotificationFetchHandler>)fetchHandler {
-    __strong id<AUTRemoteUserNotificationFetchHandler> strongFetchHandler = fetchHandler;
+- (void)removeFetchHandler:(__weak id<AUTRemoteUserNotificationFetchHandler>)weakFetchHandler forRemoteUserNotificationsOfClass:(Class)notificationClass {
+    NSParameterAssert(notificationClass != nil);
+    __strong id<AUTRemoteUserNotificationFetchHandler> strongFetchHandler = weakFetchHandler;
     if (strongFetchHandler == nil) return;
 
     @synchronized (self) {
-        [_fetchHandlers removeObjectForKey:[AUTUserNotificationsWeakBox box:fetchHandler]];
+        NSSet<Class> *notificationClasses = [self.fetchHandlers objectForKey:strongFetchHandler];
+        if (notificationClasses == nil) return;
+
+        NSMutableSet *mutableNotificationClasses = [notificationClasses mutableCopy];
+        [mutableNotificationClasses removeObject:notificationClass];
+        if (mutableNotificationClasses.count == 0) {
+            [self.fetchHandlers removeObjectForKey:strongFetchHandler];
+        } else {
+            [self.fetchHandlers setObject:[mutableNotificationClasses copy] forKey:strongFetchHandler];
+        }
     }
 }
 
@@ -569,7 +578,7 @@ NS_ASSUME_NONNULL_BEGIN
     return [RACDisposable disposableWithBlock:^{
         @strongify(actionHandler);
 
-        [self removeActionHandler:actionHandler];
+        [self removeActionHandler:actionHandler forUserNotificationsOfClass:notificationClass];
     }];
 }
 
@@ -705,46 +714,61 @@ NS_ASSUME_NONNULL_BEGIN
         }];
 }
 
-#pragma mark - Action Handlers Dictionary
+#pragma mark - Action Handlers
 
 - (NSArray <id<AUTUserNotificationActionHandler>> *)actionHandlersForNotification:(AUTUserNotification *)notification {
     NSParameterAssert(notification != nil);
 
-    return [[[[[self.actionHandlers
-        keysOfEntriesPassingTest:^(AUTUserNotificationsWeakBox<id<AUTUserNotificationActionHandler>> *handlerBox, Class notificationClass, BOOL *_) {
-            return [notification isKindOfClass:notificationClass];
-        }]
-        rac_sequence]
-        // Unwrap the object from the nonretained value.
-        map:^(AUTUserNotificationsWeakBox<id<AUTUserNotificationActionHandler>> *handlerBox) {
-            return handlerBox.value;
-        }]
-        // If the box's value was auto-nilled by ARC, do not include it.
-        ignore:nil]
-        array];
-}
+    NSMutableSet<id<AUTUserNotificationActionHandler>> *handlers = [NSMutableSet set];
 
-- (NSDictionary *)actionHandlers {
-    @synchronized(self) {
-        return [_actionHandlers copy];
+    @synchronized (self) {
+        for (id<AUTUserNotificationActionHandler> handler in self.actionHandlers) {
+            NSSet<Class> *notificationClasses = [self.actionHandlers objectForKey:handler];
+            if (notificationClasses == nil) continue;
+
+            for (Class notificationClass in notificationClasses) {
+                if (![notification isKindOfClass:notificationClass]) continue;
+                [handlers addObject:handler];
+            }
+        }
     }
+
+    return [handlers allObjects];
 }
 
-- (void)addActionHandler:(__weak id<AUTUserNotificationActionHandler>)actionHandler forUserNotificationsOfClass:(Class)notificationClass {
-    __strong id<AUTUserNotificationActionHandler> strongActionHandler = actionHandler;
+- (void)addActionHandler:(__weak id<AUTUserNotificationActionHandler>)weakActionHandler forUserNotificationsOfClass:(Class)notificationClass {
+    NSParameterAssert(notificationClass != nil);
+    __strong id<AUTUserNotificationActionHandler> strongActionHandler = weakActionHandler;
     if (strongActionHandler == nil) return;
 
     @synchronized (self) {
-        _actionHandlers[[AUTUserNotificationsWeakBox box:strongActionHandler]] = notificationClass;
+        NSSet<Class> *notificationClasses = [self.actionHandlers objectForKey:strongActionHandler];
+        if (notificationClasses == nil) {
+            notificationClasses = [NSSet setWithObject:notificationClass];
+        } else {
+            notificationClasses = [notificationClasses setByAddingObject:notificationClass];
+        }
+
+        [self.actionHandlers setObject:notificationClasses forKey:strongActionHandler];
     }
 }
 
-- (void)removeActionHandler:(__weak id<AUTUserNotificationActionHandler>)actionHandler {
-    __strong id<AUTUserNotificationActionHandler> strongActionHandler = actionHandler;
+- (void)removeActionHandler:(__weak id<AUTUserNotificationActionHandler>)weakActionHandler forUserNotificationsOfClass:(Class)notificationClass {
+    NSParameterAssert(notificationClass != nil);
+    __strong id<AUTUserNotificationActionHandler> strongActionHandler = weakActionHandler;
     if (strongActionHandler == nil) return;
 
     @synchronized (self) {
-        [_actionHandlers removeObjectForKey:[AUTUserNotificationsWeakBox box:actionHandler]];
+        NSSet<Class> *notificationClasses = [self.actionHandlers objectForKey:strongActionHandler];
+        if (notificationClasses == nil) return;
+
+        NSMutableSet *mutableNotificationClasses = [notificationClasses mutableCopy];
+        [mutableNotificationClasses removeObject:notificationClass];
+        if (mutableNotificationClasses.count == 0) {
+            [self.actionHandlers removeObjectForKey:strongActionHandler];
+        } else {
+            [self.actionHandlers setObject:[mutableNotificationClasses copy] forKey:strongActionHandler];
+        }
     }
 }
 
