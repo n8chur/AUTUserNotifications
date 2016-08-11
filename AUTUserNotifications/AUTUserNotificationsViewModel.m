@@ -421,7 +421,7 @@ NS_ASSUME_NONNULL_BEGIN
                 }]
                 doCompleted:^{
                     @strongify(self);
-                    AUTLogRemoteUserNotificationInfo(@"%@ finished performing fetch for silent remote notification: %@", self, notification);
+                    AUTLogRemoteUserNotificationInfo(@"%@ finished performing fetch for silent remote notification: <%@ %p>", self, notification.class, notification);
                 }];
         }]
         subscribeError:^(NSError *error) {
@@ -627,7 +627,7 @@ NS_ASSUME_NONNULL_BEGIN
         ignore:nil]
         doNext:^(AUTRemoteUserNotification *notification) {
             @strongify(self);
-            AUTLogRemoteUserNotificationInfo(@"%@ performing action '%@' on remote notification: %@ ", self, notification.actionIdentifier, notification);
+            AUTLogRemoteUserNotificationInfo(@"%@ performing action '%@' on remote notification: %@", self, notification.actionIdentifier, notification);
         }];
 
     return [RACSignal merge:@[ localActions, remoteActions ]];
