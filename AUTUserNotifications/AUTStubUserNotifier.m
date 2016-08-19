@@ -33,6 +33,8 @@ NS_ASSUME_NONNULL_BEGIN
 
     _handler = handler;
     _scheduledLocalNotifications = [NSMutableArray array];
+    _applicationState = UIApplicationStateActive;
+
 
     return self;
 }
@@ -41,6 +43,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @synthesize scheduledLocalNotifications = _scheduledLocalNotifications;
 @synthesize isRegisteredForRemoteNotifications = _isRegisteredForRemoteNotifications;
+@synthesize applicationState = _applicationState;
 
 #pragma mark Display Settings
 

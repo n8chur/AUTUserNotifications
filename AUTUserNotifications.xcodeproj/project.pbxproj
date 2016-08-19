@@ -14,6 +14,10 @@
 		3A2D7AD01BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7ACF1BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A2D7AD21BBAFE9000302833 /* AUTUserNotificationActionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AD11BBAFE9000302833 /* AUTUserNotificationActionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A2D7AD41BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AD31BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2E224F1D6668C100E2BC1A /* AUTUserNotificationsErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2E224D1D6668C100E2BC1A /* AUTUserNotificationsErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2E22501D6668C100E2BC1A /* AUTUserNotificationsErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2E224E1D6668C100E2BC1A /* AUTUserNotificationsErrors.m */; };
+		3A2E22541D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2E22521D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h */; };
+		3A2E22551D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2E22531D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m */; };
 		3A2F60E81BBB019100BE420C /* AUTUserNotificationViewModelSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */; };
 		3A2F60EB1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */; };
 		3A2F60FF1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60EE1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m */; };
@@ -104,6 +108,10 @@
 		3A2D7ACF1BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotificationTokenRegistrar.h; sourceTree = "<group>"; };
 		3A2D7AD11BBAFE9000302833 /* AUTUserNotificationActionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationActionHandler.h; sourceTree = "<group>"; };
 		3A2D7AD31BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotificationFetchHandler.h; sourceTree = "<group>"; };
+		3A2E224D1D6668C100E2BC1A /* AUTUserNotificationsErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationsErrors.h; sourceTree = "<group>"; };
+		3A2E224E1D6668C100E2BC1A /* AUTUserNotificationsErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotificationsErrors.m; sourceTree = "<group>"; };
+		3A2E22521D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIUserNotificationSettings+AUTDescription.h"; sourceTree = "<group>"; };
+		3A2E22531D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIUserNotificationSettings+AUTDescription.m"; sourceTree = "<group>"; };
 		3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotificationViewModelSpec.m; sourceTree = "<group>"; };
 		3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTRemoteUserNotificationSpec.m; sourceTree = "<group>"; };
 		3A2F60ED1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubRemoteNotificationFetchHandler.h; sourceTree = "<group>"; };
@@ -198,6 +206,38 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3A2E224C1D66687700E2BC1A /* Errors */ = {
+			isa = PBXGroup;
+			children = (
+				3A2E224D1D6668C100E2BC1A /* AUTUserNotificationsErrors.h */,
+				3A2E224E1D6668C100E2BC1A /* AUTUserNotificationsErrors.m */,
+			);
+			name = Errors;
+			sourceTree = "<group>";
+		};
+		3A2E22511D668EB500E2BC1A /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				3A2E22561D668F8E00E2BC1A /* UIKit */,
+			);
+			name = Extensions;
+			sourceTree = "<group>";
+		};
+		3A2E22561D668F8E00E2BC1A /* UIKit */ = {
+			isa = PBXGroup;
+			children = (
+				3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */,
+				3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */,
+				3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */,
+				3A2D7ACC1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m */,
+				3A2E22521D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h */,
+				3A2E22531D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m */,
+				3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */,
+				3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */,
+			);
+			name = UIKit;
+			sourceTree = "<group>";
+		};
 		3A2F60E91BBB019400BE420C /* Specs */ = {
 			isa = PBXGroup;
 			children = (
@@ -262,6 +302,8 @@
 			isa = PBXGroup;
 			children = (
 				3ADDAE3A1BBAEA63002870D9 /* AUTUserNotifications.h */,
+				3A2E224C1D66687700E2BC1A /* Errors */,
+				3A2E22511D668EB500E2BC1A /* Extensions */,
 				3A2F61081BBB094F00BE420C /* Logging */,
 				3ADDAEA91BBAF83E002870D9 /* Notifications */,
 				3ADDAEAB1BBAF87A002870D9 /* View Models */,
@@ -380,12 +422,6 @@
 				3ADDAE941BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h */,
 				3ADDAE9F1BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m */,
 				3A2D7AC91BBAFC7C00302833 /* AUTUserNotifier.h */,
-				3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */,
-				3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */,
-				3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */,
-				3A2D7ACC1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m */,
-				3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */,
-				3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */,
 			);
 			name = "View Models";
 			sourceTree = "<group>";
@@ -421,9 +457,11 @@
 				3ADDAEA41BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h in Headers */,
 				3A2F610B1BBB096800BE420C /* AUTLog.h in Headers */,
 				3ADDAE3B1BBAEA63002870D9 /* AUTUserNotifications.h in Headers */,
+				3A2E22541D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h in Headers */,
 				3ADDAEA51BBAF6F9002870D9 /* AUTLocalUserNotification.h in Headers */,
 				3ADDAE9C1BBAF6B1002870D9 /* AUTUserNotification.h in Headers */,
 				3ADDAE991BBAF6B1002870D9 /* AUTRemoteUserNotification.h in Headers */,
+				3A2E224F1D6668C100E2BC1A /* AUTUserNotificationsErrors.h in Headers */,
 				3A9E540E1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h in Headers */,
 				3A2D7AD21BBAFE9000302833 /* AUTUserNotificationActionHandler.h in Headers */,
 				3ADDAE981BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h in Headers */,
@@ -555,9 +593,11 @@
 				3AEB33D21BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m in Sources */,
 				3AA686F41BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m in Sources */,
 				3ADDAE9A1BBAF6B1002870D9 /* AUTRemoteUserNotification.m in Sources */,
+				3A2E22501D6668C100E2BC1A /* AUTUserNotificationsErrors.m in Sources */,
 				3ADDAEA01BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m in Sources */,
 				3ADDAE9D1BBAF6B1002870D9 /* AUTUserNotification.m in Sources */,
 				3AEB33D41BBCBD6A0088AE62 /* AUTStubUserNotifier.m in Sources */,
+				3A2E22551D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m in Sources */,
 				3A9E540F1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

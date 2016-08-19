@@ -11,6 +11,7 @@
 
 #import "UIApplication+AUTUserNotificationHandler.h"
 #import "UIApplication+AUTUserNotifier.h"
+#import "UIUserNotificationSettings+AUTDescription.h"
 
 #import "AUTLog.h"
 #import "AUTUserNotifier.h"
@@ -18,6 +19,7 @@
 #import "AUTRemoteUserNotificationTokenRegistrar.h"
 #import "AUTUserNotificationActionHandler.h"
 #import "AUTRemoteUserNotificationFetchHandler.h"
+#import "AUTUserNotificationsErrors.h"
 
 #import "AUTUserNotification_Private.h"
 #import "AUTLocalUserNotification_Private.h"
@@ -156,7 +158,7 @@ NS_ASSUME_NONNULL_BEGIN
         // immediately.
         UIUserNotificationSettings *currentSettings = self.notifier.currentUserNotificationSettings;
         if (currentSettings != nil && [settings isEqual:currentSettings]) {
-            AUTLogUserNotificationRegistrationInfo(@"%@ settings equal to current settings, doing nothing", self);
+            AUTLogUserNotificationRegistrationInfo(@"%@ settings equal to current settings, doing nothing", self_weak_);
 
             return [RACSignal return:currentSettings];
         }
@@ -166,12 +168,11 @@ NS_ASSUME_NONNULL_BEGIN
         RACSignal *registeredSettings = [[[[self registeredSettings]
             take:1]
             doNext:^(UIUserNotificationSettings *settings) {
-                @strongify(self);
-                AUTLogUserNotificationRegistrationInfo(@"%@ received registered settings accepted by user: %@", self, settings);
+                AUTLogUserNotificationRegistrationInfo(@"%@ received registered settings: %@", self_weak_, settings.aut_description);
             }]
             replay];
 
-        AUTLogUserNotificationRegistrationInfo(@"%@ registering settings with system: %@", self, settings);
+        AUTLogUserNotificationRegistrationInfo(@"%@ registering settings with system: %@", self_weak_, settings.aut_description);
         [self.notifier registerUserNotificationSettings:settings];
 
         return registeredSettings;
@@ -215,7 +216,7 @@ NS_ASSUME_NONNULL_BEGIN
                 return [RACSignal error:error];
             }]
             doError:^(NSError *error) {
-                AUTLogUserNotificationRegistrationInfo(@"%@ received error requesting device token from system: %@", self, error);
+                AUTLogUserNotificationRegistrationError(@"%@ received error requesting device token from system: %@", self, error);
             }]
             replay];
 
@@ -249,12 +250,10 @@ NS_ASSUME_NONNULL_BEGIN
 
             return [[[self.tokenRegistrar registerDeviceToken:deviceToken]
                 initially:^{
-                    @strongify(self);
-                    AUTLogUserNotificationRegistrationInfo(@"%@ registering token %@ with registrar %@...", self, deviceToken, self.tokenRegistrar);
+                    AUTLogUserNotificationRegistrationInfo(@"%@ registering token %@ with registrar %@...", self_weak_, deviceToken, self_weak_.tokenRegistrar);
                 }]
                 doCompleted:^{
-                    @strongify(self);
-                    AUTLogUserNotificationRegistrationInfo(@"%@ successfully registered token %@ with registrar %@...", self, deviceToken, self.tokenRegistrar);
+                    AUTLogUserNotificationRegistrationInfo(@"%@ successfully registered token %@ with registrar %@...", self_weak_, deviceToken, self_weak_.tokenRegistrar);
                 }];
         }];
     }];
@@ -298,9 +297,7 @@ NS_ASSUME_NONNULL_BEGIN
         // notification in their user info.
         ignore:nil]
         doNext:^(AUTLocalUserNotification *notification) {
-            @strongify(self);
-
-            AUTLogLocalUserNotificationInfo(@"%@ received local notification: %@", self, notification);
+            AUTLogLocalUserNotificationInfo(@"%@ received local notification: %@", self_weak_, notification);
         }];
 }
 
@@ -329,8 +326,7 @@ NS_ASSUME_NONNULL_BEGIN
         // notification.
         ignore:nil]
         doNext:^(AUTRemoteUserNotification *notification) {
-            @strongify(self);
-            AUTLogRemoteUserNotificationInfo(@"%@ received remote notification: %@", self, notification);
+            AUTLogRemoteUserNotificationInfo(@"%@ received remote notification: %@", self_weak_, notification);
         }];
 }
 
@@ -364,9 +360,9 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self addFetchHandler:fetchHandler forRemoteUserNotificationsOfClass:notificationClass];
 
-    @weakify(fetchHandler);
+    @weakify(self, fetchHandler);
     return [RACDisposable disposableWithBlock:^{
-        @strongify(fetchHandler);
+        @strongify(self, fetchHandler);
 
         [self removeFetchHandler:fetchHandler forRemoteUserNotificationsOfClass:notificationClass];
     }];
@@ -389,6 +385,12 @@ NS_ASSUME_NONNULL_BEGIN
             if (self == nil) return nil;
 
             AUTRemoteUserNotification *notification = [self remoteNotificationFromJSONDictionary:JSONDictionary];
+            if (notification == nil) {
+                AUTLogRemoteUserNotificationInfo(@"%@ unable to create remote notification to perform action, invoking completion handler", self_weak_);
+                fetchCompletionHandler(UIBackgroundFetchResultNoData);
+                return nil;
+            }
+
             notification.systemFetchCompletionHandler = fetchCompletionHandler;
             return notification;
         }]
@@ -416,18 +418,14 @@ NS_ASSUME_NONNULL_BEGIN
 
             return [[[self combinedFetchHandlerSignalsForSilentRemoteNotification:notification]
                 initially:^{
-                    @strongify(self);
-                    AUTLogRemoteUserNotificationInfo(@"%@ performing fetch for silent remote notification: %@", self, notification);
+                    AUTLogRemoteUserNotificationInfo(@"%@ performing fetch for silent remote notification: %@", self_weak_, notification);
                 }]
                 doCompleted:^{
-                    @strongify(self);
-                    AUTLogRemoteUserNotificationInfo(@"%@ finished performing fetch for silent remote notification: <%@ %p>", self, notification.class, notification);
+                    AUTLogRemoteUserNotificationInfo(@"%@ finished performing fetch for silent remote notification: <%@ %p>", self_weak_, notification.class, notification);
                 }];
         }]
         subscribeError:^(NSError *error) {
-            @strongify(self);
-
-            NSString *reason = [NSString stringWithFormat:@"%@ -performFetchesForSilentRemoteNotifications errored due to programmer error: %@", self, error];
+            NSString *reason = [NSString stringWithFormat:@"%@ -performFetchesForSilentRemoteNotifications errored due to programmer error: %@", self_weak_, error];
             @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
         }];
 }
@@ -437,10 +435,14 @@ NS_ASSUME_NONNULL_BEGIN
 
     NSArray <id<AUTRemoteUserNotificationFetchHandler>> *handlers = [self fetchHandlersForSilentRemoteNotification:notification];
 
+    @weakify(self);
+
     // If there were no fetch handlers for the notification, invoke the fetch
     // completion handler with NoData and complete.
     if (handlers.count == 0) {
         return [RACSignal defer:^{
+            AUTLogRemoteUserNotificationInfo(@"%@ no handlers for notification <%@ %p>, invoking completion handler", self_weak_, notification.class, notification);
+
             notification.systemFetchCompletionHandler(UIBackgroundFetchResultNoData);
             notification.systemFetchCompletionHandler = nil;
 
@@ -451,7 +453,7 @@ NS_ASSUME_NONNULL_BEGIN
     // Otherwise, invoke all fetch handlers and collect results into an array of
     // RACSignals representing all work that should be done as a result of this
     // notification.
-    NSArray *fetchHandlerSignals = [handlers.rac_sequence map:^(id<AUTRemoteUserNotificationFetchHandler> handler) {
+    NSArray<RACSignal *> *fetchHandlerSignals = [handlers.rac_sequence map:^(id<AUTRemoteUserNotificationFetchHandler> handler) {
         return [self performFetchForNotification:notification withHandler:handler];
     }].array;
 
@@ -461,7 +463,7 @@ NS_ASSUME_NONNULL_BEGIN
         // Find the "worst" returned status of all handlers.
         map:^(NSArray *backgroundRefreshResults) {
             // Sorts the statuses in the order of NewData, NoData, Failed.
-            NSArray *sortedStatues = [backgroundRefreshResults sortedArrayUsingSelector: @selector(compare:)];
+            NSArray *sortedStatues = [backgroundRefreshResults sortedArrayUsingSelector:@selector(compare:)];
 
             // The last status is the "worst", so send it.
             return sortedStatues.lastObject;
@@ -469,6 +471,8 @@ NS_ASSUME_NONNULL_BEGIN
         // Invoke the system completion handler with the "worst" status
         // resulting from all registered handlers.
         doNext:^(NSNumber *worstStatus) {
+            AUTLogRemoteUserNotificationInfo(@"%@ all action handlers completed for notification <%@ %p>, invoking completion handler with status: %@", self_weak_, notification.class, notification, worstStatus);
+
             notification.systemFetchCompletionHandler(worstStatus.unsignedIntegerValue);
             notification.systemFetchCompletionHandler = nil;
         }];
@@ -479,12 +483,12 @@ NS_ASSUME_NONNULL_BEGIN
     NSParameterAssert(handler != nil);
 
     __block BOOL didSendValidValue = NO;
-    __weak id<AUTRemoteUserNotificationFetchHandler> weakHandler = handler;
+    @weakify(handler);
 
     return [[[[handler performFetchForNotification:notification]
         doNext:^(NSNumber *refreshResult) {
-            NSCAssert(!didSendValidValue, @"%@ -performFetchForNotification: %@ must only send one next value, instead received: %@", weakHandler, notification, refreshResult);
-            NSCAssert([refreshResult isKindOfClass:NSNumber.class], @"%@ -performFetchForNotification: %@ must send an NSNumber, instead received: %@", weakHandler, notification, refreshResult);
+            NSCAssert(!didSendValidValue, @"%@ -performFetchForNotification: %@ must only send one next value, instead received: %@", handler_weak_, notification, refreshResult);
+            NSCAssert([refreshResult isKindOfClass:NSNumber.class], @"%@ -performFetchForNotification: %@ must send an NSNumber, instead received: %@", handler_weak_, notification, refreshResult);
 
             switch ((UIBackgroundFetchResult)refreshResult.unsignedIntegerValue) {
             case UIBackgroundFetchResultNewData:
@@ -494,14 +498,14 @@ NS_ASSUME_NONNULL_BEGIN
                 return;
             }
 
-            NSString *reason = [NSString stringWithFormat:@"%@ -performFetchForNotification: %@ sent an invalid refresh result: %@", weakHandler, notification, refreshResult];
+            NSString *reason = [NSString stringWithFormat:@"%@ -performFetchForNotification: %@ sent an invalid refresh result: %@", handler_weak_, notification, refreshResult];
             @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
         }]
         doError:^(NSError *error) {
-            NSCAssert(error, @"%@ -performFetchForNotification: %@ errored: %@. All errors must be caught.", weakHandler, notification, error);
+            NSCAssert(error, @"%@ -performFetchForNotification: %@ errored: %@. All errors must be caught.", handler_weak_, notification, error);
         }]
         doCompleted:^{
-            NSCAssert(didSendValidValue, @"%@ -performFetchForNotification: %@ must send a UIBackgroundFetchResult before completing", weakHandler, notification);
+            NSCAssert(didSendValidValue, @"%@ -performFetchForNotification: %@ must send a UIBackgroundFetchResult before completing", handler_weak_, notification);
         }];
 }
 
@@ -574,9 +578,9 @@ NS_ASSUME_NONNULL_BEGIN
 
     [self addActionHandler:actionHandler forUserNotificationsOfClass:notificationClass];
 
-    @weakify(actionHandler);
+    @weakify(self, actionHandler);
     return [RACDisposable disposableWithBlock:^{
-        @strongify(actionHandler);
+        @strongify(self, actionHandler);
 
         [self removeActionHandler:actionHandler forUserNotificationsOfClass:notificationClass];
     }];
@@ -598,17 +602,24 @@ NS_ASSUME_NONNULL_BEGIN
             @strongify(self);
             if (self == nil) return nil;
 
-            return [AUTLocalUserNotification
+            AUTLocalUserNotification *notification = [AUTLocalUserNotification
                 notificationRestoredFromSystemNotification:systemNotification
                 withActionIdentifier:actionIdentifier
                 systemActionCompletionHandler:completionHandler];
+
+            if (notification == nil) {
+                AUTLogLocalUserNotificationInfo(@"%@ unable to restore notification to perform action, invoking completion handler", self_weak_);
+                completionHandler();
+                return nil;
+            }
+
+            return notification;
         }]
         // Ignore notifications that do not contain an encoded local user
         // notification in their user info.
         ignore:nil]
         doNext:^(AUTLocalUserNotification *notification) {
-            @strongify(self);
-            AUTLogLocalUserNotificationInfo(@"%@ performing action '%@' on local notification: %@ ", self, notification.actionIdentifier, notification);
+            AUTLogLocalUserNotificationInfo(@"%@ performing action '%@' on local notification: %@ ", self_weak_, notification.actionIdentifier, notification);
         }];
 
     RACSignal *remoteActions = [[[[self.handler
@@ -653,18 +664,15 @@ NS_ASSUME_NONNULL_BEGIN
 
             return [[self combinedActionHandlerSignalsForNotification:notification]
                 doCompleted:^{
-                    @strongify(self);
                     if ([notification isKindOfClass:AUTRemoteUserNotification.class]) {
-                        AUTLogRemoteUserNotificationInfo(@"%@ finished performing action '%@' on remote notification: %@", self, notification.actionIdentifier, notification);
+                        AUTLogRemoteUserNotificationInfo(@"%@ finished performing action '%@' on remote notification: %@", self_weak_, notification.actionIdentifier, notification);
                     } else if ([notification isKindOfClass:AUTLocalUserNotification.class]) {
-                        AUTLogLocalUserNotificationInfo(@"%@ finished performing action '%@' on local notification: %@", self, notification.actionIdentifier, notification);
+                        AUTLogLocalUserNotificationInfo(@"%@ finished performing action '%@' on local notification: %@", self_weak_, notification.actionIdentifier, notification);
                     }
                 }];
         }]
         subscribeError:^(NSError *error) {
-            @strongify(self);
-
-            NSString *reason = [NSString stringWithFormat:@"%@ -performActionsForActedUponNotifications errored due to programmer error: %@", self, error];
+            NSString *reason = [NSString stringWithFormat:@"%@ -performActionsForActedUponNotifications: errored due to programmer error: %@", self_weak_, error];
             @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
         }];
 }
@@ -672,12 +680,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)combinedActionHandlerSignalsForNotification:(AUTUserNotification *)notification {
     NSParameterAssert(notification != nil);
 
+    @weakify(self);
+
     NSArray <id<AUTUserNotificationActionHandler>> *handlers = [self actionHandlersForNotification:notification];
 
     // If there were no action handlers for the notification, invoke the action
     // completion handler and complete.
     if (handlers.count == 0) {
         return [RACSignal defer:^{
+            AUTLogLocalUserNotificationInfo(@"%@ no handlers for notification <%@ %p>, invoking completion handler", self_weak_, notification.class, notification);
+
             notification.systemActionCompletionHandler();
             notification.systemActionCompletionHandler = nil;
 
@@ -696,6 +708,8 @@ NS_ASSUME_NONNULL_BEGIN
         // Wait for all action handlers to complete, then invoke the action
         // completion handler.
         doCompleted:^{
+            AUTLogLocalUserNotificationInfo(@"%@ all action handlers completed for notification <%@ %p>, invoking completion handler", self_weak_, notification.class, notification);
+
             notification.systemActionCompletionHandler();
             notification.systemActionCompletionHandler = nil;
         }];
@@ -705,12 +719,13 @@ NS_ASSUME_NONNULL_BEGIN
     NSParameterAssert(notification != nil);
     NSParameterAssert(handler != nil);
 
-    __weak id<AUTUserNotificationActionHandler> weakHandler = handler;
+    @weakify(self, handler);
 
     return [[[handler performActionForNotification:notification]
         ignoreValues]
         doError:^(NSError *error) {
-            NSCAssert(error, @"%@ -performActionForNotification: %@ errored: %@. All errors must be caught.", weakHandler, notification, error);
+            NSString *reason = [NSString stringWithFormat:@"%@ %@ -performActionForNotification: errored due to programmer error: %@", self_weak_, handler_weak_, error];
+            @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
         }];
 }
 
@@ -796,15 +811,37 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)scheduleLocalNotification:(AUTLocalUserNotification *)notification {
     NSParameterAssert(notification != nil);
 
+    @weakify(self);
+
     return [RACSignal defer:^{
+        @strongify(self);
+        if (self == nil) return [RACSignal empty];
+
         UILocalNotification *systemNotification = [notification createSystemNotification];
         if (systemNotification == nil) return [RACSignal empty];
 
-        AUTLogLocalUserNotificationInfo(@"%@ scheduling local notification: %@ ", self, notification);
+        BOOL shouldNotificationBeScheduled = systemNotification.fireDate != nil;
 
-        if (systemNotification.fireDate != nil) {
+        // If notifications alerts are disabled, notifications will never be
+        // able to be scheduled, regardless of whether the notifier is active.
+        BOOL canShowSystemAlerts = (self.notifier.currentUserNotificationSettings.types & UIUserNotificationTypeAlert) == UIUserNotificationTypeAlert;
+
+        if (shouldNotificationBeScheduled) {
+            if (!canShowSystemAlerts) return [self unableToPresentNotificationError:notification];
+
+            AUTLogLocalUserNotificationInfo(@"%@ scheduling local notification: %@ ", self_weak_, notification);
+
             [self.notifier scheduleLocalNotification:systemNotification];
         } else {
+            // If the notification can be sent immediately but notification
+            // alerts are disabled, it will only be sent successfully if the
+            // notifier is in the foreground.
+            if (!canShowSystemAlerts && self.notifier.applicationState != UIApplicationStateActive) {
+                return [self unableToPresentNotificationError:notification];
+            }
+
+            AUTLogLocalUserNotificationInfo(@"%@ presenting local notification: %@ ", self_weak_, notification);
+
             [self.notifier presentLocalNotificationNow:systemNotification];
         }
 
@@ -812,12 +849,31 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
+- (RACSignal *)unableToPresentNotificationError:(AUTLocalUserNotification *)notification {
+    NSParameterAssert(notification != nil);
+
+    @weakify(self);
+
+    return [RACSignal defer:^{
+        NSError *error = [NSError errorWithDomain:AUTUserNotificationsErrorDomain code:AUTUserNotificationsErrorUnauthorized userInfo:@{
+            NSLocalizedDescriptionKey: NSLocalizedString(@"The notification could not be scheduled", nil),
+            NSLocalizedFailureReasonErrorKey: NSLocalizedString(@"The notifier is not authorized to present or schedule system notification alerts", nil),
+        }];
+
+        AUTLogLocalUserNotificationError(@"%@ unable to present local notification: %@ %@", self_weak_, notification, error);
+
+        return [RACSignal error:error];
+    }];
+}
+
 - (RACSignal *)cancelLocalNotificationsOfClass:(Class)notificationClass {
     NSParameterAssert([notificationClass isSubclassOfClass:AUTLocalUserNotification.class]);
 
+    @weakify(self);
+
     return [[[[self scheduledLocalNotificationsOfClass:notificationClass]
         doNext:^(AUTLocalUserNotification *notification) {
-            AUTLogLocalUserNotificationInfo(@"%@ canceling local notification: %@ ", self, notification);
+            AUTLogLocalUserNotificationInfo(@"%@ canceling local notification: %@ ", self_weak_, notification);
         }]
         doNext:^(AUTLocalUserNotification *notification) {
             [self.notifier cancelLocalNotification:notification.systemNotification];
@@ -828,10 +884,12 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)cancelLocalNotificationsOfClass:(Class)notificationClass passingTest:(BOOL (^)(__kindof AUTLocalUserNotification *notification))testBlock {
     NSParameterAssert([notificationClass isSubclassOfClass:AUTLocalUserNotification.class]);
 
+    @weakify(self);
+
     return [[[[[self scheduledLocalNotificationsOfClass:notificationClass]
         filter:testBlock]
         doNext:^(AUTLocalUserNotification *notification) {
-            AUTLogLocalUserNotificationInfo(@"%@ canceling local notification: %@ ", self, notification);
+            AUTLogLocalUserNotificationInfo(@"%@ canceling local notification: %@ ", self_weak_, notification);
         }]
         doNext:^(AUTLocalUserNotification *notification) {
             [self.notifier cancelLocalNotification:notification.systemNotification];

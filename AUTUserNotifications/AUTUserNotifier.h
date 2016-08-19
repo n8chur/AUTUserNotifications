@@ -16,6 +16,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// Matches methods on UIApplication.
 @protocol AUTUserNotifier <NSObject>
 
+#pragma mark - State
+
+@property (readonly, nonatomic) UIApplicationState applicationState;
+
 #pragma mark - Display Settings
 
 - (void)registerUserNotificationSettings:(UIUserNotificationSettings *)notificationSettings;

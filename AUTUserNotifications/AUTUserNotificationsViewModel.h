@@ -132,8 +132,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// Schedules the given local notification for presentation to the user upon
 /// subscription, completing when scheduling has succeeded.
 ///
-/// If user notifications have not yet been scheduled with the system, this
-/// signal will immediately error with the TODO: specify error.
+/// If the notification could not be scheduled because the user has forbidden
+/// the notifier from sending notifications, errors in the
+/// AUTUserNotificationsErrorDomain with the
+/// AUTUserNotificationsErrorUnauthorized code.
 - (RACSignal *)scheduleLocalNotification:(__kindof AUTLocalUserNotification *)notification;
 
 /// Cancels all local notifications of the specified class upon subscription,

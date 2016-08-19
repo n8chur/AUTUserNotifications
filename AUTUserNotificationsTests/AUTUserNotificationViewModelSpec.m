@@ -63,7 +63,7 @@ describe(@"lifecycle", ^{
 
 describe(@"-registerSettingsCommand", ^{
     it(@"should register settings", ^{
-        UIUserNotificationSettings *settings = [[UIUserNotificationSettings alloc] init];
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
 
         UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
         expect(registeredSettings).to.beIdenticalTo(settings);
@@ -100,6 +100,17 @@ describe(@"-registerForRemoteNotificationsCommand", ^{
 });
 
 describe(@"-receivedNotificationsOfClass:", ^{
+    beforeEach(^{
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+
+        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
+        expect(registeredSettings).to.beIdenticalTo(settings);
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+
+        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
+    });
+
     describe(@"local notifications", ^{
         it(@"should receive filtered local notifications", ^{
             AUTTestLocalUserNotification *notificationSubclass = [[AUTTestLocalUserNotification alloc] init];
@@ -652,6 +663,17 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
 });
 
 describe(@"-scheduledLocalNotifications", ^{
+    beforeEach(^{
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+
+        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
+        expect(registeredSettings).to.beIdenticalTo(settings);
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+
+        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
+    });
+
     it(@"should send all scheduled notifications", ^{
         AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
         AUTTestLocalUserNotification *anotherNotification = [[AUTTestLocalUserNotification alloc] init];
@@ -678,6 +700,17 @@ describe(@"-scheduledLocalNotifications", ^{
 });
 
 describe(@"-scheduledLocalNotificationsOfClass:", ^{
+    beforeEach(^{
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+
+        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
+        expect(registeredSettings).to.beIdenticalTo(settings);
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+
+        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
+    });
+
     it(@"should send only the scheduled notifications of the specified class", ^{
         AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
         AUTTestLocalUserNotificationSubclass *anotherNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
@@ -704,6 +737,17 @@ describe(@"-scheduledLocalNotificationsOfClass:", ^{
 });
 
 describe(@"-scheduleLocalNotification:", ^{
+    beforeEach(^{
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+
+        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
+        expect(registeredSettings).to.beIdenticalTo(settings);
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+
+        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
+    });
+
     it(@"should schedule a local notification", ^{
         AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
 
@@ -724,6 +768,17 @@ describe(@"-scheduleLocalNotification:", ^{
 });
 
 describe(@"-cancelLocalNotificationsOfClass:", ^{
+    beforeEach(^{
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+
+        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
+        expect(registeredSettings).to.beIdenticalTo(settings);
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+
+        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
+    });
+
     it(@"should only cancel scheduled notifications of the specified class", ^{
         AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
         AUTTestLocalUserNotificationSubclass *anotherNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
@@ -753,6 +808,17 @@ describe(@"-cancelLocalNotificationsOfClass:", ^{
 });
 
 describe(@"-cancelScheduledLocalNotificationsOfClass:passingTest:", ^{
+    beforeEach(^{
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+
+        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
+        expect(registeredSettings).to.beIdenticalTo(settings);
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+
+        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
+    });
+
     it(@"should only cancel scheduled notifications of the specified class", ^{
         AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
         notification.fireDate = [NSDate distantFuture];
