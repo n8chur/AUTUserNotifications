@@ -59,7 +59,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// An object that performs token registration with the server responsible for
 /// sending push notifications. Invoked when executing
 /// registerForRemoteNotificationsCommand.
-@property (readwrite, atomic, weak, nullable) id<AUTRemoteUserNotificationTokenRegistrar> tokenRegistrar;
+@property (readwrite, atomic, weak) id<AUTRemoteUserNotificationTokenRegistrar> tokenRegistrar;
 
 /// When executed, registers the provided notification settings with the system.
 ///
@@ -70,7 +70,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// representing the settings that were registered. This value may differ from
 /// the settings that this command was executed with if the user elected to
 /// limit the scope of notifications.
-@property (readonly, nonatomic, strong) RACCommand *registerSettingsCommand;
+@property (readonly, nonatomic) RACCommand *registerSettingsCommand;
 
 /// When executed, registers for remote notifications with both the system and
 /// the server responsible for sending remote notifications.
@@ -85,9 +85,15 @@ NS_ASSUME_NONNULL_BEGIN
 /// Its execution signals will complete if registration succeeded, or error
 /// otherwise. If successful, this command will become disabled. If
 /// unsuccessful, this command will remain enabled.
-@property (readonly, nonatomic, strong) RACCommand *registerForRemoteNotificationsCommand;
+@property (readonly, nonatomic) RACCommand *registerForRemoteNotificationsCommand;
 
-/// Sends notifications of the specified class as they are received.
+/// Sends non-silent notifications that are subclasses of AUTUserNotification as
+/// they are received.
+///
+/// A hot signal that completes when the receiver is deallocated.
+@property (readonly, nonatomic) RACSignal *receivedNotifications;
+
+/// Sends non-silent notifications of the specified class as they are received.
 ///
 /// The specified notification class must be kind of AUTUserNotification.
 ///

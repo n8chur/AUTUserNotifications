@@ -33,6 +33,7 @@ NS_ASSUME_NONNULL_BEGIN
     RACSubject *_receivedLocalNotifications;
     RACSubject *_receivedRemoteNotifications;
     RACSubject *_receivedSilentRemoteNotifications;
+    RACSubject *_receivedNotifications;
     RACSubject *_actedUponNotifications;
 }
 
@@ -111,6 +112,10 @@ NS_ASSUME_NONNULL_BEGIN
     // Share a subscription to received silent remote notifications.
     _receivedSilentRemoteNotifications = [[RACSubject subject] setNameWithFormat:@"-receivedSilentRemoteNotifications"];
     [[self createReceivedSilentRemoteNotifications] subscribe:_receivedSilentRemoteNotifications];
+    
+    // Share a subscription to received non-silent notifications.
+    _receivedNotifications = [[RACSubject subject] setNameWithFormat:@"-receivedNotifications"];
+    [[self createReceivedNotifications] subscribe:_receivedNotifications];
 
     // Perform fetches for all registered handlers as silent notifications are
     // received.
@@ -177,6 +182,18 @@ NS_ASSUME_NONNULL_BEGIN
 
         return registeredSettings;
     }];
+}
+
+- (RACSignal *)createReceivedNotifications {
+    RACSignal *localNotifications = self.receivedLocalNotifications;
+
+    // Do not send remote notifications that are triggering a background fetch,
+    // as they are handled in a way that can indicate when the fetch completes.
+    RACSignal *nonSilentRemoteNotifications = [self.receivedRemoteNotifications filter:^ BOOL (AUTRemoteUserNotification *notification) {
+        return !notification.isSilent;
+    }];
+    
+    return [RACSignal merge:@[ localNotifications, nonSilentRemoteNotifications ]];
 }
 
 #pragma mark - Remote Notification Registration
@@ -333,17 +350,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)receivedNotificationsOfClass:(Class)notificationClass {
     NSParameterAssert([notificationClass isSubclassOfClass:AUTUserNotification.class]);
 
-    RACSignal *localNotifications = self.receivedLocalNotifications;
-
-    // Do not send remote notifications that are triggering a background fetch,
-    // as they are handled in a way that can indicate when the fetch completes.
-    RACSignal *nonSilentRemoteNotifications = [self.receivedRemoteNotifications filter:^ BOOL (AUTRemoteUserNotification *notification) {
-        return !notification.isSilent;
-    }];
-
-    return [[[RACSignal
-        merge:@[ localNotifications, nonSilentRemoteNotifications ]]
-        filter:^(AUTLocalUserNotification *notification) {
+    return [[self.receivedNotifications
+        filter:^(AUTUserNotification *notification) {
             return [notification isKindOfClass:notificationClass];
         }]
         setNameWithFormat:@"-receivedNotificationsOfClass: %@", notificationClass];
