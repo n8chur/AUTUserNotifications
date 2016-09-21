@@ -173,8 +173,8 @@ describe(@"-receivedNotificationsOfClass:", ^{
                 takeUntil:finishReceiving]
                 replay];
 
-            [stubNotifier displayRemoteNotification:[notificationSubclass asJSONDictionary]];
-            [stubNotifier displayRemoteNotification:[notificationSuperclass asJSONDictionary]];
+            [stubNotifier displayRemoteNotification:[notificationSubclass asRemoteJSONDictionary]];
+            [stubNotifier displayRemoteNotification:[notificationSuperclass asRemoteJSONDictionary]];
 
             [finishReceiving sendCompleted];
 
@@ -191,7 +191,7 @@ describe(@"-receivedNotificationsOfClass:", ^{
                 replay];
 
             [NSNotificationCenter.defaultCenter postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil userInfo:@{
-                UIApplicationLaunchOptionsRemoteNotificationKey: [AUTTestRootRemoteUserNotification asJSONDictionary],
+                UIApplicationLaunchOptionsRemoteNotificationKey: [AUTTestRootRemoteUserNotification asRemoteJSONDictionary],
             }];
 
             AUTTestRootRemoteUserNotification *receivedNotification = [receivedNotifications asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -219,7 +219,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
     it(@"should indicate that no data was fetched when no fetch handlers are registered", ^{
         RACSignal *replayedFetchResult = [fetchResult replay];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
         NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -237,7 +237,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
         RACSignal *replayedFetchResult = [fetchResult replay];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
         NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -274,7 +274,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
         RACSignal *replayedFetchResult = [fetchResult replay];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
         NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -295,7 +295,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
         RACSignal *replayedFetchResult = [fetchResult replay];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
         NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -317,7 +317,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
         [childDisposable dispose];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
         NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -330,7 +330,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
         replayedFetchResult = [fetchResult replay];
 
-        notification = [AUTAnotherTestChildRemoteUserNotification asJSONDictionary];
+        notification = [AUTAnotherTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
         systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -351,7 +351,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
         RACSignal *replayedFetchResult = [fetchResult replay];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
         NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -364,7 +364,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
         replayedFetchResult = [fetchResult replay];
 
-        notification = [AUTAnotherTestChildRemoteUserNotification asJSONDictionary];
+        notification = [AUTAnotherTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
         systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -396,7 +396,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
             RACSignal *replayedFetchResult = [fetchResult replay];
 
-            NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+            NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
             [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
             NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -423,7 +423,7 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
             RACSignal *replayedFetchResult = [fetchResult replay];
 
-            NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+            NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
             [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
 
             NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
@@ -458,7 +458,7 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
         RACSignal *replayedActionCompleted = [actionCompleted replay];
 
         NSString *actionIdentifier = @"an action";
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:notification completionHandler:completionHandler];
 
         expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
@@ -473,7 +473,7 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
 
         RACSignal *replayedActionCompleted = [actionCompleted replay];
 
-        NSDictionary *notification = [notificationClass asJSONDictionary];
+        NSDictionary *notification = [notificationClass asSilentJSONDictionary];
         [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:notification completionHandler:completionHandler];
 
         expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
@@ -525,7 +525,7 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
 
         RACSignal *replayedActionCompleted = [actionCompleted replay];
 
-        NSDictionary *remoteNotification = [remoteNotificationClass asJSONDictionary];
+        NSDictionary *remoteNotification = [remoteNotificationClass asSilentJSONDictionary];
         [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:remoteNotification completionHandler:completionHandler];
 
         expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
@@ -581,7 +581,7 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
 
         RACSignal *replayedActionCompleted = [actionCompleted replay];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asJSONDictionary];
+        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
         [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:notification completionHandler:completionHandler];
 
         expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
@@ -603,7 +603,7 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
 
         [remoteNotificationClassDisposable dispose];
 
-        NSDictionary *remoteNotification = [remoteNotificationClass asJSONDictionary];
+        NSDictionary *remoteNotification = [remoteNotificationClass asSilentJSONDictionary];
         [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:remoteNotification completionHandler:completionHandler];
 
         expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
@@ -646,7 +646,7 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
 
             RACSignal *replayedActionCompleted = [actionCompleted replay];
 
-            NSDictionary *notification = [notificationClass asJSONDictionary];
+            NSDictionary *notification = [notificationClass asSilentJSONDictionary];
             [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:notification completionHandler:completionHandler];
 
             expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();

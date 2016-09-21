@@ -19,10 +19,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// Invoked when a fetch should be performed for the specified remote user
 /// notification.
 ///
-/// The returned signal should send a UIBackgroundFetchResult indicating the
-/// result of the fetch and then complete. This is typically a trigger for the
-/// system to suspend the application. If it does not conforms to this behavior,
-/// an exception will be thrown.
+/// The returned signal not error and should send a UIBackgroundFetchResult
+/// indicating the result of the fetch and then complete. This is typically a
+/// trigger for the system to suspend the application. If it does not conforms
+/// to this behavior, an exception will be thrown.
 - (RACSignal *)performFetchForNotification:(AUTRemoteUserNotification *)notification;
 
 @end

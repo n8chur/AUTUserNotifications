@@ -37,10 +37,19 @@ NS_ASSUME_NONNULL_BEGIN
     return @"root";
 }
 
-+ (NSDictionary *)asJSONDictionary {
++ (NSDictionary *)asSilentJSONDictionary {
     return @{
         @"aps": @{
-            @"category": self.systemCategoryIdentifier
+            @"category": self.systemCategoryIdentifier,
+            @"content-available": @1,
+        }
+    };
+}
+
++ (NSDictionary *)asRemoteJSONDictionary {
+    return @{
+        @"aps": @{
+            @"category": self.systemCategoryIdentifier,
         }
     };
 }

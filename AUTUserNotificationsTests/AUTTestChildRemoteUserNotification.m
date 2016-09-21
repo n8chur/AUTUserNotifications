@@ -16,14 +16,6 @@ NS_ASSUME_NONNULL_BEGIN
     return @"child";
 }
 
-+ (NSDictionary *)asJSONDictionary {
-    return @{
-        @"aps": @{
-            @"category": self.systemCategoryIdentifier
-        }
-    };
-}
-
 @end
 
 NS_ASSUME_NONNULL_END

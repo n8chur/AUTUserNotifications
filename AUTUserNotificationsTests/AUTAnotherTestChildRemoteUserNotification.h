@@ -12,10 +12,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AUTAnotherTestChildRemoteUserNotification : AUTTestRootRemoteUserNotification
 
-/// Returns a JSON dictionary that should be mapped to an instance of the
-/// receiver.
-+ (NSDictionary *)asJSONDictionary;
-
 @end
 
 NS_ASSUME_NONNULL_END

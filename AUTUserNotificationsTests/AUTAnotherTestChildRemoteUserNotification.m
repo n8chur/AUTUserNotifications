@@ -13,15 +13,7 @@ NS_ASSUME_NONNULL_BEGIN
 @implementation AUTAnotherTestChildRemoteUserNotification
 
 + (NSString *)systemCategoryIdentifier {
-    return @"another-child";
-}
-
-+ (NSDictionary *)asJSONDictionary {
-    return @{
-        @"aps": @{
-            @"category": self.systemCategoryIdentifier
-        }
-    };
+    return @"another-child-silent";
 }
 
 @end

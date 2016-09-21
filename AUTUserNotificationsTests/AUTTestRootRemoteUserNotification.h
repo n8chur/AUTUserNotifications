@@ -12,9 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AUTTestRootRemoteUserNotification : AUTRemoteUserNotification
 
-/// Returns a JSON dictionary that should be mapped to an instance of the
-/// receiver.
-+ (NSDictionary *)asJSONDictionary;
+/// Returns a silent representatino of a JSON dictionary that should be mapped
+/// to an instance of the receiver.
++ (NSDictionary *)asSilentJSONDictionary;
+
+/// Returns a remote representatino of a JSON dictionary that should be mapped
+/// to an instance of the receiver.
++ (NSDictionary *)asRemoteJSONDictionary;
 
 @end
 

@@ -22,8 +22,9 @@ NS_ASSUME_NONNULL_BEGIN
 /// The action that should be performed is identified by the actionIdentifier
 /// property on the passed AUTUserNotification instance.
 ///
-/// The returned signal should complete when the action has been performed. This
-/// is typically a trigger for the system to suspend the application.
+/// The returned signal should not error and should complete when the action has
+/// been performed. This is typically a trigger for the system to suspend the
+/// application.
 - (RACSignal *)performActionForNotification:(AUTUserNotification *)notification;
 
 @end

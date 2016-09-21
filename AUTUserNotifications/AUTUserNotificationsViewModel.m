@@ -109,13 +109,13 @@ NS_ASSUME_NONNULL_BEGIN
     _receivedRemoteNotifications = [[RACSubject subject] setNameWithFormat:@"-receivedRemoteNotifications"];
     [[self createReceivedRemoteNotifications] subscribe:_receivedRemoteNotifications];
     
-    // Share a subscription to received silent remote notifications.
-    _receivedSilentRemoteNotifications = [[RACSubject subject] setNameWithFormat:@"-receivedSilentRemoteNotifications"];
-    [[self createReceivedSilentRemoteNotifications] subscribe:_receivedSilentRemoteNotifications];
-    
     // Share a subscription to received non-silent notifications.
     _receivedNotifications = [[RACSubject subject] setNameWithFormat:@"-receivedNotifications"];
-    [[self createReceivedNotifications] subscribe:_receivedNotifications];
+    [[self createReceivedNotificationsWithLocalNotifications:_receivedLocalNotifications remoteNotifications:_receivedRemoteNotifications] subscribe:_receivedNotifications];
+    
+    // Share a subscription to received silent remote notifications.
+    _receivedSilentRemoteNotifications = [[RACSubject subject] setNameWithFormat:@"-receivedSilentRemoteNotifications"];
+    [[self createReceivedSilentRemoteNotificationsWithRemoteNotifications:_receivedRemoteNotifications] subscribe:_receivedSilentRemoteNotifications];
 
     // Perform fetches for all registered handlers as silent notifications are
     // received.
@@ -184,12 +184,12 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
-- (RACSignal *)createReceivedNotifications {
-    RACSignal *localNotifications = self.receivedLocalNotifications;
-
+- (RACSignal *)createReceivedNotificationsWithLocalNotifications:(RACSignal *)localNotifications remoteNotifications:(RACSignal *)remoteNotifications {
+    NSParameterAssert(localNotifications != nil && remoteNotifications != nil);
+    
     // Do not send remote notifications that are triggering a background fetch,
     // as they are handled in a way that can indicate when the fetch completes.
-    RACSignal *nonSilentRemoteNotifications = [self.receivedRemoteNotifications filter:^ BOOL (AUTRemoteUserNotification *notification) {
+    RACSignal *nonSilentRemoteNotifications = [remoteNotifications filter:^ BOOL (AUTRemoteUserNotification *notification) {
         return !notification.isSilent;
     }];
     
@@ -321,24 +321,74 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)createReceivedRemoteNotifications {
     @weakify(self);
 
-    RACSignal *launchNotification = [[[NSNotificationCenter.defaultCenter rac_addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil]
-        map:^(NSNotification *notification) {
+    RACSignal *launchNotification = [[[[NSNotificationCenter.defaultCenter rac_addObserverForName:UIApplicationDidFinishLaunchingNotification object:nil]
+        map:^ RACTuple * (NSNotification *notification) {
             return notification.userInfo[UIApplicationLaunchOptionsRemoteNotificationKey];
         }]
-        ignore:nil];
-
-    RACSignal *postLaunchNotifications = [[self.handler rac_signalForSelector:@selector(application:didReceiveRemoteNotification:) fromProtocol:@protocol(AUTUserNotificationHandler)]
-        reduceEach:^(id _, NSDictionary *JSONDictionary){
-            return JSONDictionary;
-        }];
-
-    return [[[[RACSignal merge:@[ launchNotification, postLaunchNotifications ]]
+        ignore:nil]
         map:^ AUTRemoteUserNotification * (NSDictionary *JSONDictionary){
             @strongify(self);
             if (self == nil) return nil;
+            
+            AUTLogRemoteUserNotificationInfo(@"Attempting to parse remote notification JSON from launch options: %@", JSONDictionary);
 
-            return [self remoteNotificationFromJSONDictionary:JSONDictionary];
-        }]
+            AUTRemoteUserNotification *notification = [self remoteNotificationFromJSONDictionary:JSONDictionary];
+            if (notification == nil) {
+                AUTLogRemoteUserNotificationInfo(@"%@ unable to create remote notification from launch options", self_weak_);
+                return nil;
+            }
+
+            return notification;
+        }];
+    
+    RACSignal *receivedRemoteNotificationsWithFetchHandler = [[self.handler rac_signalForSelector:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:) fromProtocol:@protocol(AUTUserNotificationHandler)]
+        reduceEach:^ AUTRemoteUserNotification * (id _, NSDictionary *JSONDictionary, void (^fetchCompletionHandler)(UIBackgroundFetchResult)){
+            @strongify(self);
+            if (self == nil) return nil;
+            
+            AUTLogRemoteUserNotificationInfo(@"Attempting to parse remote notification JSON from application:didReceiveRemoteNotification:fetchCompletionHandler: %@", JSONDictionary);
+
+            AUTRemoteUserNotification *notification = [self remoteNotificationFromJSONDictionary:JSONDictionary];
+            if (notification == nil) {
+                AUTLogRemoteUserNotificationInfo(@"%@ unable to create remote notification from application:didReceiveRemoteNotification:fetchCompletionHandler:, calling completion handler", self_weak_);
+                fetchCompletionHandler(UIBackgroundFetchResultNoData);
+                return nil;
+            }
+
+            notification.systemFetchCompletionHandler = fetchCompletionHandler;
+            return notification;
+        }];
+    
+    /// There is an issue with iOS 10.0.1 where
+    /// application:didReceiveRemoteNotification:fetchCompletionHandler: is not
+    /// called when tapping on a remote notification that was received while the
+    /// application is in the background, but
+    /// application:didReceiveRemoteNotification: is. According to the
+    /// documentation iOS will not call both callbacks at the same time.
+    /// We need to listen to that callback as well as the callback that includes
+    /// the fetch completion handler.
+    RACSignal *receivedRemoteNotificationsWithoutFetchHandler = [[self.handler rac_signalForSelector:@selector(application:didReceiveRemoteNotification:) fromProtocol:@protocol(AUTUserNotificationHandler)]
+        reduceEach:^ AUTRemoteUserNotification * (id _, NSDictionary *JSONDictionary){
+            @strongify(self);
+            if (self == nil) return nil;
+            
+            AUTLogRemoteUserNotificationInfo(@"Attempting to parse remote notification JSON from application:didReceiveRemoteNotification: %@", JSONDictionary);
+
+            AUTRemoteUserNotification *notification = [self remoteNotificationFromJSONDictionary:JSONDictionary];
+            if (notification == nil) {
+                AUTLogRemoteUserNotificationInfo(@"%@ unable to create remote notification from application:didReceiveRemoteNotification:", self_weak_);
+                return nil;
+            }
+            
+            return notification;
+        }];
+    
+    RACSignal *postLaunchNotifications = [RACSignal merge:@[
+        receivedRemoteNotificationsWithFetchHandler,
+        receivedRemoteNotificationsWithoutFetchHandler,
+    ]];
+
+    return [[[RACSignal merge:@[ launchNotification, postLaunchNotifications ]]
         // Ignore notifications that do not validly parse to a remote
         // notification.
         ignore:nil]
@@ -380,31 +430,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// Creates a signal that sends silent AUTRemoteUserNotification instances as
 /// they are received.
-///
-/// Populates the fetchCompletionHandler property on the sent notification, for
-/// execution when all fetch handlers have performed their fetch.
-- (RACSignal *)createReceivedSilentRemoteNotifications {
-    @weakify(self);
+- (RACSignal *)createReceivedSilentRemoteNotificationsWithRemoteNotifications:(RACSignal *)remoteNotifications {
+    NSParameterAssert(remoteNotifications != nil);
 
-    return [[[self.handler
-        rac_signalForSelector:@selector(application:didReceiveRemoteNotification:fetchCompletionHandler:) fromProtocol:@protocol(AUTUserNotificationHandler)]
-        reduceEach:^ AUTRemoteUserNotification * (id _, NSDictionary *JSONDictionary, void (^fetchCompletionHandler)(UIBackgroundFetchResult)){
-            @strongify(self);
-            if (self == nil) return nil;
-
-            AUTRemoteUserNotification *notification = [self remoteNotificationFromJSONDictionary:JSONDictionary];
-            if (notification == nil) {
-                AUTLogRemoteUserNotificationInfo(@"%@ unable to create remote notification to perform action, invoking completion handler", self_weak_);
-                fetchCompletionHandler(UIBackgroundFetchResultNoData);
-                return nil;
-            }
-
-            notification.systemFetchCompletionHandler = fetchCompletionHandler;
-            return notification;
-        }]
-        // Ignore notifications that do not validly parse to a remote
-        // notification.
-        ignore:nil];
+    return [remoteNotifications filter:^ BOOL (AUTRemoteUserNotification *notification) {
+        return notification.isSilent && (notification.systemFetchCompletionHandler != nil);
+    }];
 }
 
 /// For each sent silent remote notification sent over the specified signal,
@@ -426,10 +457,10 @@ NS_ASSUME_NONNULL_BEGIN
 
             return [[[self combinedFetchHandlerSignalsForSilentRemoteNotification:notification]
                 initially:^{
-                    AUTLogRemoteUserNotificationInfo(@"%@ performing fetch for silent remote notification: %@", self_weak_, notification);
+                    AUTLogRemoteUserNotificationInfo(@"%@ performing fetch for silent remote notification: <%@: %p>", self_weak_, notification.class, &notification);
                 }]
                 doCompleted:^{
-                    AUTLogRemoteUserNotificationInfo(@"%@ finished performing fetch for silent remote notification: <%@ %p>", self_weak_, notification.class, notification);
+                    AUTLogRemoteUserNotificationInfo(@"%@ finished performing fetch for silent remote notification: <%@: %p>", self_weak_, notification.class, notification);
                 }];
         }]
         subscribeError:^(NSError *error) {
@@ -449,7 +480,7 @@ NS_ASSUME_NONNULL_BEGIN
     // completion handler with NoData and complete.
     if (handlers.count == 0) {
         return [RACSignal defer:^{
-            AUTLogRemoteUserNotificationInfo(@"%@ no handlers for notification <%@ %p>, invoking completion handler", self_weak_, notification.class, notification);
+            AUTLogRemoteUserNotificationInfo(@"%@ no handlers for notification <%@: %p>, invoking completion handler", self_weak_, notification.class, notification);
 
             notification.systemFetchCompletionHandler(UIBackgroundFetchResultNoData);
             notification.systemFetchCompletionHandler = nil;
@@ -479,7 +510,7 @@ NS_ASSUME_NONNULL_BEGIN
         // Invoke the system completion handler with the "worst" status
         // resulting from all registered handlers.
         doNext:^(NSNumber *worstStatus) {
-            AUTLogRemoteUserNotificationInfo(@"%@ all action handlers completed for notification <%@ %p>, invoking completion handler with status: %@", self_weak_, notification.class, notification, worstStatus);
+            AUTLogRemoteUserNotificationInfo(@"%@ all action handlers completed for notification <%@: %p>, invoking completion handler with status: %@", self_weak_, notification.class, notification, worstStatus);
 
             notification.systemFetchCompletionHandler(worstStatus.unsignedIntegerValue);
             notification.systemFetchCompletionHandler = nil;
@@ -635,6 +666,8 @@ NS_ASSUME_NONNULL_BEGIN
         reduceEach:^ AUTRemoteUserNotification * (id _, NSString *actionIdentifier, NSDictionary *JSONDictionary, void (^completionHandler)()){
             @strongify(self);
             if (self == nil) return nil;
+            
+            AUTLogRemoteUserNotificationInfo(@"Received action handler for identifier %@ with notification JSON: %@", actionIdentifier, JSONDictionary);
 
             AUTRemoteUserNotification *notification = [self remoteNotificationFromJSONDictionary:JSONDictionary];
             notification.systemActionCompletionHandler = completionHandler;
@@ -696,7 +729,7 @@ NS_ASSUME_NONNULL_BEGIN
     // completion handler and complete.
     if (handlers.count == 0) {
         return [RACSignal defer:^{
-            AUTLogLocalUserNotificationInfo(@"%@ no handlers for notification <%@ %p>, invoking completion handler", self_weak_, notification.class, notification);
+            AUTLogLocalUserNotificationInfo(@"%@ no handlers for notification <%@: %p>, invoking completion handler", self_weak_, notification.class, notification);
 
             notification.systemActionCompletionHandler();
             notification.systemActionCompletionHandler = nil;
@@ -716,7 +749,7 @@ NS_ASSUME_NONNULL_BEGIN
         // Wait for all action handlers to complete, then invoke the action
         // completion handler.
         doCompleted:^{
-            AUTLogLocalUserNotificationInfo(@"%@ all action handlers completed for notification <%@ %p>, invoking completion handler", self_weak_, notification.class, notification);
+            AUTLogLocalUserNotificationInfo(@"%@ all action handlers completed for notification <%@: %p>, invoking completion handler", self_weak_, notification.class, notification);
 
             notification.systemActionCompletionHandler();
             notification.systemActionCompletionHandler = nil;
