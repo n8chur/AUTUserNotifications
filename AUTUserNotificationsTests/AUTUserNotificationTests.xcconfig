@@ -8,6 +8,9 @@
 
 #include "../Carthage/Checkouts/xcconfigs/iOS/iOS-Application.xcconfig"
 
+// The product bundle identifier to use.
+PRODUCT_BUNDLE_IDENTIFIER = com.automatic.$(PRODUCT_NAME:rfc1034identifier)
+
 // unavailable in earlier versions will be weak-linked; your code should check
 // for null function pointers or specific system versions before calling newer
 // APIs.

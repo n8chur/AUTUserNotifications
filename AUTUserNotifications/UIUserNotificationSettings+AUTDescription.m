@@ -6,7 +6,7 @@
 //  Copyright © 2016 Automatic Labs. All rights reserved.
 //
 
-@import ReactiveCocoa;
+@import ReactiveObjC;
 
 #import "UIUserNotificationSettings+AUTDescription.h"
 

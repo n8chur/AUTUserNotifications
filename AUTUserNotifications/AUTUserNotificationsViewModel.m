@@ -7,7 +7,7 @@
 //
 
 @import Mantle;
-@import ReactiveCocoa;
+@import ReactiveObjC;
 
 #import "UIApplication+AUTUserNotificationHandler.h"
 #import "UIApplication+AUTUserNotifier.h"

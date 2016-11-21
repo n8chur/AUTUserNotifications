@@ -2,5 +2,5 @@
 github "automatic/AUTLogKit" ~> 5.0
 
 # External
-github "ReactiveCocoa/ReactiveCocoa" ~> 2.5
+github "ReactiveCocoa/ReactiveObjC" ~> 2.1
 github "Mantle/Mantle" ~> 2.0

@@ -35,9 +35,10 @@
 		3AA686EE1BBB686A00FF3C3A /* AUTSubclassesOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA686EA1BBB686A00FF3C3A /* AUTSubclassesOf.m */; };
 		3AA686F31BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3AA686F41BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */; };
+		3AB916A91DDE3E200064BA34 /* ReactiveObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AB916A81DDE3E200064BA34 /* ReactiveObjC.framework */; };
+		3AB916AA1DDE3EB10064BA34 /* ReactiveObjC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3AB916A81DDE3E200064BA34 /* ReactiveObjC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3ADDAE3B1BBAEA63002870D9 /* AUTUserNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE3A1BBAEA63002870D9 /* AUTUserNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ADDAE421BBAEA63002870D9 /* AUTUserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE371BBAEA63002870D9 /* AUTUserNotifications.framework */; };
-		3ADDAE681BBAED45002870D9 /* ReactiveCocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE661BBAED45002870D9 /* ReactiveCocoa.framework */; };
 		3ADDAE6C1BBAED57002870D9 /* AUTLogKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE691BBAED56002870D9 /* AUTLogKit.framework */; };
 		3ADDAE6F1BBAED69002870D9 /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE6B1BBAED57002870D9 /* CocoaLumberjack.framework */; };
 		3ADDAE741BBAED88002870D9 /* AUTTestKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE701BBAED88002870D9 /* AUTTestKit.framework */; };
@@ -46,7 +47,6 @@
 		3ADDAE841BBAEE59002870D9 /* CocoaLumberjack.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE6B1BBAED57002870D9 /* CocoaLumberjack.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3ADDAE851BBAEE59002870D9 /* Expecta.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE711BBAED88002870D9 /* Expecta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3ADDAE861BBAEE59002870D9 /* Nocilla.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE721BBAED88002870D9 /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3ADDAE871BBAEE59002870D9 /* ReactiveCocoa.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE661BBAED45002870D9 /* ReactiveCocoa.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3ADDAE881BBAEE59002870D9 /* Specta.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE731BBAED88002870D9 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3ADDAE981BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE8E1BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		3ADDAE991BBAF6B1002870D9 /* AUTRemoteUserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE8F1BBAF6B1002870D9 /* AUTRemoteUserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -86,13 +86,13 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				3AB916AA1DDE3EB10064BA34 /* ReactiveObjC.framework in Embed Frameworks */,
 				3ADDAEAA1BBAF85E002870D9 /* Mantle.framework in Embed Frameworks */,
 				3ADDAE821BBAEE59002870D9 /* AUTLogKit.framework in Embed Frameworks */,
 				3ADDAE831BBAEE59002870D9 /* AUTTestKit.framework in Embed Frameworks */,
 				3ADDAE841BBAEE59002870D9 /* CocoaLumberjack.framework in Embed Frameworks */,
 				3ADDAE851BBAEE59002870D9 /* Expecta.framework in Embed Frameworks */,
 				3ADDAE861BBAEE59002870D9 /* Nocilla.framework in Embed Frameworks */,
-				3ADDAE871BBAEE59002870D9 /* ReactiveCocoa.framework in Embed Frameworks */,
 				3ADDAE881BBAEE59002870D9 /* Specta.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -135,6 +135,7 @@
 		3AA686EA1BBB686A00FF3C3A /* AUTSubclassesOf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTSubclassesOf.m; sourceTree = "<group>"; };
 		3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIUserNotificationSettings+AUTSynthesizedSettings.h"; sourceTree = "<group>"; };
 		3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIUserNotificationSettings+AUTSynthesizedSettings.m"; sourceTree = "<group>"; };
+		3AB916A81DDE3E200064BA34 /* ReactiveObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveObjC.framework; path = "Carthage/Build/iOS/ReactiveObjC.framework"; sourceTree = "<group>"; };
 		3ADDAE371BBAEA63002870D9 /* AUTUserNotifications.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AUTUserNotifications.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ADDAE3A1BBAEA63002870D9 /* AUTUserNotifications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AUTUserNotifications.h; sourceTree = "<group>"; };
 		3ADDAE3C1BBAEA63002870D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -154,7 +155,6 @@
 		3ADDAE601BBAEC87002870D9 /* iOS-StaticLibrary.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = "iOS-StaticLibrary.xcconfig"; sourceTree = "<group>"; };
 		3ADDAE621BBAECC4002870D9 /* AUTUserNotifications.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = AUTUserNotifications.xcconfig; path = AUTUserNotifications/AUTUserNotifications.xcconfig; sourceTree = "<group>"; };
 		3ADDAE631BBAECE3002870D9 /* AUTUserNotificationTests.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = AUTUserNotificationTests.xcconfig; path = AUTUserNotificationsTests/AUTUserNotificationTests.xcconfig; sourceTree = "<group>"; };
-		3ADDAE661BBAED45002870D9 /* ReactiveCocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveCocoa.framework; path = Carthage/Build/iOS/ReactiveCocoa.framework; sourceTree = "<group>"; };
 		3ADDAE691BBAED56002870D9 /* AUTLogKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AUTLogKit.framework; path = Carthage/Build/iOS/AUTLogKit.framework; sourceTree = "<group>"; };
 		3ADDAE6B1BBAED57002870D9 /* CocoaLumberjack.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CocoaLumberjack.framework; path = Carthage/Build/iOS/CocoaLumberjack.framework; sourceTree = "<group>"; };
 		3ADDAE701BBAED88002870D9 /* AUTTestKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AUTTestKit.framework; path = Carthage/Build/iOS/AUTTestKit.framework; sourceTree = "<group>"; };
@@ -190,7 +190,7 @@
 				3ADDAE6C1BBAED57002870D9 /* AUTLogKit.framework in Frameworks */,
 				3ADDAEA81BBAF80F002870D9 /* Mantle.framework in Frameworks */,
 				3ADDAE6F1BBAED69002870D9 /* CocoaLumberjack.framework in Frameworks */,
-				3ADDAE681BBAED45002870D9 /* ReactiveCocoa.framework in Frameworks */,
+				3AB916A91DDE3E200064BA34 /* ReactiveObjC.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -387,7 +387,7 @@
 				3ADDAE711BBAED88002870D9 /* Expecta.framework */,
 				3ADDAEA71BBAF80F002870D9 /* Mantle.framework */,
 				3ADDAE721BBAED88002870D9 /* Nocilla.framework */,
-				3ADDAE661BBAED45002870D9 /* ReactiveCocoa.framework */,
+				3AB916A81DDE3E200064BA34 /* ReactiveObjC.framework */,
 				3ADDAE731BBAED88002870D9 /* Specta.framework */,
 			);
 			name = Frameworks;
@@ -518,7 +518,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = AUT;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0820;
 				ORGANIZATIONNAME = "Automatic Labs";
 				TargetAttributes = {
 					3ADDAE361BBAEA63002870D9 = {

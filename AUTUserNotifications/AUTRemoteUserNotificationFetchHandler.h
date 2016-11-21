@@ -6,7 +6,7 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
-@import ReactiveCocoa;
+@import ReactiveObjC;
 
 @class AUTRemoteUserNotification;
 
@@ -23,7 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 /// indicating the result of the fetch and then complete. This is typically a
 /// trigger for the system to suspend the application. If it does not conforms
 /// to this behavior, an exception will be thrown.
-- (RACSignal *)performFetchForNotification:(AUTRemoteUserNotification *)notification;
+- (RACSignal<NSNumber *> *)performFetchForNotification:(AUTRemoteUserNotification *)notification;
 
 @end
 

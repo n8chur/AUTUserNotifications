@@ -1,0 +1,5 @@
+[Cache]
+    S3-Bucket = co.automatic.carthagecache
+
+[IgnoreMap]
+    xcconfigs = xcconfigs

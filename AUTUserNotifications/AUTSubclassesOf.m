@@ -6,7 +6,7 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
-@import ReactiveCocoa;
+@import ReactiveObjC;
 @import ObjectiveC;
 
 #import "AUTSubclassesOf.h"

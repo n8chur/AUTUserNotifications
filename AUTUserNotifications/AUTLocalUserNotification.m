@@ -7,7 +7,7 @@
 //
 
 @import Mantle;
-@import ReactiveCocoa;
+@import ReactiveObjC;
 
 #import "AUTLog.h"
 

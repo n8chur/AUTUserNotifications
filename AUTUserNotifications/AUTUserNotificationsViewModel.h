@@ -7,7 +7,7 @@
 //
 
 @import UIKit;
-@import ReactiveCocoa;
+@import ReactiveObjC;
 
 @class AUTUserNotification;
 @class AUTLocalUserNotification;
@@ -63,14 +63,12 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// When executed, registers the provided notification settings with the system.
 ///
-/// Should be executed with a parameter of UIUserNotificationSettings specifying
-/// the settings that should be registered. If not, an exception is thrown.
+/// Should be executed with the settings that should be registered.
 ///
-/// Its execution signals will send a next value of UIUserNotificationSettings
-/// representing the settings that were registered. This value may differ from
-/// the settings that this command was executed with if the user elected to
-/// limit the scope of notifications.
-@property (readonly, nonatomic) RACCommand *registerSettingsCommand;
+/// Its execution signals will send the settings that were registered. This
+/// value may differ from the settings that this command was executed with if
+/// the user elected to limit the scope of notifications.
+@property (readonly, nonatomic) RACCommand<UIUserNotificationSettings *, UIUserNotificationSettings *> *registerSettingsCommand;
 
 /// When executed, registers for remote notifications with both the system and
 /// the server responsible for sending remote notifications.
@@ -91,14 +89,14 @@ NS_ASSUME_NONNULL_BEGIN
 /// they are received.
 ///
 /// A hot signal that completes when the receiver is deallocated.
-@property (readonly, nonatomic) RACSignal *receivedNotifications;
+@property (readonly, nonatomic) RACSignal<__kindof AUTUserNotification *> *receivedNotifications;
 
 /// Sends non-silent notifications of the specified class as they are received.
 ///
 /// The specified notification class must be kind of AUTUserNotification.
 ///
 /// Returns a hot signal that completes when the receiver is deallocated.
-- (RACSignal *)receivedNotificationsOfClass:(Class)notificationClass;
+- (RACSignal<__kindof AUTUserNotification *> *)receivedNotificationsOfClass:(Class)notificationClass;
 
 /// Registers a handler that has its action handling method invoked whenever an
 /// action is performed on a notification of the specified class.
@@ -124,16 +122,16 @@ NS_ASSUME_NONNULL_BEGIN
 /// should dispose of it to unregister the action handler.
 - (RACDisposable *)registerFetchHandler:(id<AUTRemoteUserNotificationFetchHandler>)fetchHandler forRemoteUserNotificationsOfClass:(Class)notificationClass;
 
-/// Sends each AUTLocalUserNotification instance that is currently scheduled
-/// upon subscription, then completes.
-- (RACSignal *)scheduledLocalNotifications;
+/// Sends each local notification that is currently scheduled upon subscription,
+/// then completes.
+- (RACSignal<__kindof AUTLocalUserNotification *> *)scheduledLocalNotifications;
 
-/// Sends each AUTLocalUserNotification instance that is currently scheduled and
-/// of the specified class upon subscription, then completes.
+/// Sends each local notification that is currently scheduled and of the
+/// specified class upon subscription, then completes.
 ///
 /// The specified class must be kind of AUTLocalUserNotification (local only,
 /// not remote). An exception is thrown if it is not.
-- (RACSignal *)scheduledLocalNotificationsOfClass:(Class)notificationClass;
+- (RACSignal<__kindof AUTLocalUserNotification *> *)scheduledLocalNotificationsOfClass:(Class)notificationClass;
 
 /// Schedules the given local notification for presentation to the user upon
 /// subscription, completing when scheduling has succeeded.
