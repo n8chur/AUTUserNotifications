@@ -20,7 +20,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init {
     self = [super init];
-    if (self == nil) return nil;
 
     _actionHandler = [RACSignal empty];
 

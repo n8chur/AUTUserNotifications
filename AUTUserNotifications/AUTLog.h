@@ -8,21 +8,8 @@
 
 @import AUTLogKit;
 
-/// A context for logging events related to remote user notifications.
-AUTLOGKIT_CONTEXT_DECLARE(AUTLogContextRemoteUserNotifications);
+/// A context for logging events related to user notifications.
+AUTLOGKIT_CONTEXT_DECLARE(AUTLogContextUserNotifications);
 
-#define AUTLogRemoteUserNotificationError(frmt, ...) AUTLogError(AUTLogContextRemoteUserNotifications, frmt, ##__VA_ARGS__)
-#define AUTLogRemoteUserNotificationInfo(frmt, ...)  AUTLogInfo(AUTLogContextRemoteUserNotifications, frmt, ##__VA_ARGS__)
-
-/// A context for logging events related to local user notifications.
-AUTLOGKIT_CONTEXT_DECLARE(AUTLogContextLocalUserNotifications);
-
-#define AUTLogLocalUserNotificationError(frmt, ...) AUTLogError(AUTLogContextLocalUserNotifications, frmt, ##__VA_ARGS__)
-#define AUTLogLocalUserNotificationInfo(frmt, ...)  AUTLogInfo(AUTLogContextLocalUserNotifications, frmt, ##__VA_ARGS__)
-
-/// A context for logging events related to registration of user notification
-/// display settings and token registration.
-AUTLOGKIT_CONTEXT_DECLARE(AUTLogContextUserNotificationRegistration);
-
-#define AUTLogUserNotificationRegistrationError(frmt, ...) AUTLogError(AUTLogContextUserNotificationRegistration, frmt, ##__VA_ARGS__)
-#define AUTLogUserNotificationRegistrationInfo(frmt, ...)  AUTLogInfo(AUTLogContextUserNotificationRegistration, frmt, ##__VA_ARGS__)
+#define AUTLogUserNotificationError(frmt, ...) AUTLogError(AUTLogContextUserNotifications, frmt, ##__VA_ARGS__)
+#define AUTLogUserNotificationInfo(frmt, ...)  AUTLogInfo(AUTLogContextUserNotifications, frmt, ##__VA_ARGS__)

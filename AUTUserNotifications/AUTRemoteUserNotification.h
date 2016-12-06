@@ -7,7 +7,6 @@
 //
 
 #import <AUTUserNotifications/AUTUserNotification.h>
-#import <AUTUserNotifications/AUTUserNotificationAlertDisplayable.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -26,34 +25,10 @@ NS_ASSUME_NONNULL_BEGIN
 /// The properties on this class are mapped from the payload of a remote
 /// notification, as specified in:
 /// https://developer.apple.com/library/prerelease/ios/documentation/NetworkingInternet/Conceptual/RemoteNotificationsPG/Chapters/ApplePushService.html#//apple_ref/doc/uid/TP40008194-CH100-SW1
-///
-/// The localization key and localization arguments properties support only up
-/// to 10 arguments in the format string due to limitations of NSString.
-@interface AUTRemoteUserNotification : AUTUserNotification <MTLJSONSerializing, AUTUserNotificationAlertDisplayable>
+@interface AUTRemoteUserNotification : AUTUserNotification <MTLJSONSerializing>
 
 /// Mapped from "aps.content-available"
 @property (readonly, nonatomic, assign, getter=isSilent) BOOL silent;
-
-/// Mapped from "aps.alert.title"
-@property (readonly, nonatomic, copy, nullable) NSString *title;
-
-/// Mapped from "aps.alert.title-loc-key"
-@property (readonly, nonatomic, copy, nullable) NSString *titleLocalizationKey;
-
-/// Mapped from "aps.alert.title-loc-args"
-@property (readonly, nonatomic, copy, nullable) NSArray<NSString *> *titleLocalizationArguments;
-
-/// Mapped from "aps.alert.action-loc-key"
-@property (readonly, nonatomic, copy, nullable) NSString *actionLocalizationKey;
-
-/// Mapped from "aps.alert.body"
-@property (readonly, nonatomic, copy, nullable) NSString *body;
-
-/// Mapped from "aps.alert.loc-key"
-@property (readonly, nonatomic, copy, nullable) NSString *bodyLocalizationKey;
-
-/// Mapped from "aps.alert.loc-args"
-@property (readonly, nonatomic, copy, nullable) NSArray<NSString *> *bodyLocalizationArguments;
 
 /// A class method to return the category from the notification dictionary as
 /// delivered by the system. This method can be helpful when deciding which

@@ -15,7 +15,7 @@ PRODUCT_BUNDLE_IDENTIFIER = com.automatic.$(PRODUCT_NAME:rfc1034identifier)
 // unavailable in earlier versions will be weak-linked; your code should check
 // for null function pointers or specific system versions before calling newer
 // APIs.
-IPHONEOS_DEPLOYMENT_TARGET = 8.0
+IPHONEOS_DEPLOYMENT_TARGET = 10.0
 
 // This is the project-relative path to the plist file that contains the
 // Info.plist information used by bundles.

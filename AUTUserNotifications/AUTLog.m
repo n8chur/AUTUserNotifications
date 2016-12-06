@@ -8,6 +8,4 @@
 
 #import "AUTLog.h"
 
-AUTLOGKIT_CONTEXT_INIT(AUTLogContextRemoteUserNotifications, "RemoteUserNotifications");
-AUTLOGKIT_CONTEXT_INIT(AUTLogContextLocalUserNotifications, "LocalUserNotifications");
-AUTLOGKIT_CONTEXT_INIT(AUTLogContextUserNotificationRegistration, "UserNotificationRegistration");
+AUTLOGKIT_CONTEXT_INIT(AUTLogContextUserNotifications, "UserNotifications");

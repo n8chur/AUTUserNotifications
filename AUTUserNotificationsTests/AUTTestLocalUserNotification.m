@@ -6,18 +6,31 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
+#import "AUTExtObjC.h"
+
 #import "AUTTestLocalUserNotification.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
 @implementation AUTTestLocalUserNotification
 
-- (nullable UILocalNotification *)createSystemNotification {
-    UILocalNotification *notification = [super createSystemNotification];
+- (instancetype)init {
+    self = [super init];
+    _triggerTimeInterval = 0.1;
+    return self;
+}
 
-    notification.fireDate = self.fireDate;
+- (nullable UNMutableNotificationContent *)createNotificationContent {
+    let content = [super createNotificationContent];
+    if (content == nil) return nil;
 
-    return notification;
+    content.body = @"AUTTestLocalUserNotification";
+
+    return content;
+}
+
+- (nullable UNNotificationTrigger *)createNotificationTrigger {
+    return [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:self.triggerTimeInterval repeats:NO];
 }
 
 @end
@@ -28,7 +41,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @implementation AUTTestLocalRestorationFailureUserNotification
 
-- (BOOL)restoreFromSystemNotification:(UILocalNotification *)notification {
+- (BOOL)restoreFromRequest:(UNNotificationRequest *)request {
+    if (![super restoreFromRequest:request]) return NO;
+
     return NO;
 }
 

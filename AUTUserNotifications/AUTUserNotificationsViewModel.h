@@ -6,15 +6,14 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
-@import UIKit;
+@import UserNotifications;
 @import ReactiveObjC;
 
 @class AUTUserNotification;
 @class AUTLocalUserNotification;
 @class AUTRemoteUserNotification;
 
-@protocol AUTUserNotifier;
-@protocol AUTUserNotificationHandler;
+@protocol AUTUserNotificationCenter;
 @protocol AUTUserNotificationActionHandler;
 @protocol AUTRemoteUserNotificationFetchHandler;
 @protocol AUTRemoteUserNotificationTokenRegistrar;
@@ -25,78 +24,52 @@ NS_ASSUME_NONNULL_BEGIN
 /// performed on them to interested consumers.
 @interface AUTUserNotificationsViewModel : NSObject
 
-/// Invokes initWithRootRemoteNotificationClass: with AUTRemoteUserNotification
-/// as the rootRemoteNotificationClass.
-- (instancetype)init;
+- (instancetype)init NS_UNAVAILABLE;
 
-/// Invokes the designated initializer with UIApplication.sharedApplication as
-/// the notifier and UIApplication.sharedApplication.delegate as the handler.
+/// Invokes the designated initializer with
+/// UNUserNotificationCenter.currentNotificationCenter as the center.
+- (instancetype)initWithRootRemoteNotificationClass:(Class)rootRemoteNotificationClass defaultPresentationOptions:(UNNotificationPresentationOptions)presentationOptions;
+
+/// When executed with an UNAuthorizationOptions, requests authorization to
+/// present notifications with the provided options.
 ///
-/// Throws an exception if your UIApplication.sharedApplication.delegate does
-/// not conform to AUTUserNotificationHandler.
-- (instancetype)initWithRootRemoteNotificationClass:(Class)rootRemoteNotificationClass;
+/// Its execution signals send the granted settings if successful, and error
+/// otherwise.
+@property (readonly, nonatomic) RACCommand<NSNumber *, UNNotificationSettings *> *requestAuthorization;
 
-/// Invokes the designated initializer with AUTRemoteUserNotification as the
-/// rootRemoteNotificationClass.
-- (instancetype)initWithNotifier:(id<AUTUserNotifier>)notifier handler:(id<AUTUserNotificationHandler>)handler;
+/// Sends the current user notification settings and completes.
+@property (readonly, nonatomic) RACSignal<UNNotificationSettings *> *settings;
 
-/// @param notifier The object that should be used to send system notifications.
-///        Typically an instance of UIApplication, but can be stubbed for
-///        testing purposes.
+/// When executed with a token registrar, registers for remote notifications
+/// with both the system and the server responsible for sending remote
+/// notifications.
 ///
-/// @param handler The object that should be used to handle system notifications
-///        receipt and registration. Typically an object that conforms to
-///        UIApplicationDelegate, but can be stubbed for testing purposes.
-///
-/// @param rootRemoteNotificationClass The class at the root of the hierarchy of
-///        remote notification classes. Must be a subclass of
-///        AUTRemoteUserNotification, and is expected to implement
-///        +[MTLJSONSerializing classForParsingJSONDictionary:] to allow the
-///        correct remote notification subclass to be serialized from a system
-///        remote notification.
-- (instancetype)initWithNotifier:(id<AUTUserNotifier>)notifier handler:(id<AUTUserNotificationHandler>)handler rootRemoteNotificationClass:(Class)rootRemoteNotificationClass NS_DESIGNATED_INITIALIZER;
-
-/// An object that performs token registration with the server responsible for
-/// sending push notifications. Invoked when executing
-/// registerForRemoteNotificationsCommand.
-@property (readwrite, atomic, weak) id<AUTRemoteUserNotificationTokenRegistrar> tokenRegistrar;
-
-/// When executed, registers the provided notification settings with the system.
-///
-/// Should be executed with the settings that should be registered.
-///
-/// Its execution signals will send the settings that were registered. This
-/// value may differ from the settings that this command was executed with if
-/// the user elected to limit the scope of notifications.
-@property (readonly, nonatomic) RACCommand<UIUserNotificationSettings *, UIUserNotificationSettings *> *registerSettingsCommand;
-
-/// When executed, registers for remote notifications with both the system and
+/// Delegates out to the provided token registrar to perform registration with
 /// the server responsible for sending remote notifications.
-///
-/// Delegates out to its token registrar to perform registration with the server
-/// responsible for sending remote notifications. As such, this command is
-/// disabled when tokenRegistrar is nil.
-///
-/// Its execution signals will not complete until settings have been registered
-/// using the registerSettingsCommand.
 ///
 /// Its execution signals will complete if registration succeeded, or error
 /// otherwise. If successful, this command will become disabled. If
 /// unsuccessful, this command will remain enabled.
-@property (readonly, nonatomic) RACCommand *registerForRemoteNotificationsCommand;
+@property (readonly, nonatomic) RACCommand<id<AUTRemoteUserNotificationTokenRegistrar>, id> *registerForRemoteNotifications;
 
-/// Sends non-silent notifications that are subclasses of AUTUserNotification as
-/// they are received.
+/// A hot signal that sends non-silent notifications that are subclasses of
+/// AUTUserNotification as they are presented.
+///
+/// Values are sent on a background scheduler prior to the presentation options
+/// being delivered to the system.
 ///
 /// A hot signal that completes when the receiver is deallocated.
-@property (readonly, nonatomic) RACSignal<__kindof AUTUserNotification *> *receivedNotifications;
+@property (readonly, nonatomic) RACSignal<__kindof AUTUserNotification *> *presentedNotifications;
 
-/// Sends non-silent notifications of the specified class as they are received.
+/// Sends non-silent notifications of the specified class as they are presented.
 ///
 /// The specified notification class must be kind of AUTUserNotification.
 ///
+/// Values are sent on a background scheduler prior to the presentation options
+/// being delivered to the system.
+///
 /// Returns a hot signal that completes when the receiver is deallocated.
-- (RACSignal<__kindof AUTUserNotification *> *)receivedNotificationsOfClass:(Class)notificationClass;
+- (RACSignal<__kindof AUTUserNotification *> *)presentedNotificationsOfClass:(Class)notificationClass;
 
 /// Registers a handler that has its action handling method invoked whenever an
 /// action is performed on a notification of the specified class.
@@ -122,6 +95,26 @@ NS_ASSUME_NONNULL_BEGIN
 /// should dispose of it to unregister the action handler.
 - (RACDisposable *)registerFetchHandler:(id<AUTRemoteUserNotificationFetchHandler>)fetchHandler forRemoteUserNotificationsOfClass:(Class)notificationClass;
 
+/// Should return an NSNumber-wrapped UNNotificationPresentationOptions
+/// indicating the presentation override that should occur for the given
+/// notification, or else nil of no override should occur.
+typedef NSNumber * _Nullable (^AUTUserNotificationPresentationOverride)(__kindof AUTUserNotification *notification);
+
+/// Adds an override that is invoked to override the defaultPresentationOptions
+/// specified at initialization with the presentation options returned from the
+/// given override for a specific notification.
+///
+/// Overrides evaluated in the order that they are added. The first override to
+/// return a non-nil presentation option is used. If no overrides return a
+/// value, the default presentation options are used.
+///
+/// @return A disposable that should be used to remove the override.
+- (RACDisposable *)addPresentationOverride:(AUTUserNotificationPresentationOverride)presentationOverride;
+
+@end
+
+@interface AUTUserNotificationsViewModel (Scheduling)
+
 /// Sends each local notification that is currently scheduled upon subscription,
 /// then completes.
 - (RACSignal<__kindof AUTLocalUserNotification *> *)scheduledLocalNotifications;
@@ -134,27 +127,51 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal<__kindof AUTLocalUserNotification *> *)scheduledLocalNotificationsOfClass:(Class)notificationClass;
 
 /// Schedules the given local notification for presentation to the user upon
-/// subscription, completing when scheduling has succeeded.
-///
-/// If the notification could not be scheduled because the user has forbidden
-/// the notifier from sending notifications, errors in the
-/// AUTUserNotificationsErrorDomain with the
-/// AUTUserNotificationsErrorUnauthorized code.
+/// subscription, completing if scheduling was succeesful, or else erroring if
+/// scheduling was unsuccessful.
 - (RACSignal *)scheduleLocalNotification:(__kindof AUTLocalUserNotification *)notification;
 
-/// Cancels all local notifications of the specified class upon subscription,
-/// completing when cancellation has finished.
+/// Unschedules all local notifications of the specified class upon
+/// subscription, completing when successful.
 ///
 /// The specified class must be kind of AUTLocalUserNotification (local only,
 /// not remote). An exception is thrown if it is not.
-- (RACSignal *)cancelLocalNotificationsOfClass:(Class)notificationClass;
+- (RACSignal *)unscheduleLocalNotificationsOfClass:(Class)notificationClass;
 
-/// Cancels all local notifications of the specified class upon subscription
-/// that pass the given test, completing when cancellation has finished.
+/// Unschedules all local notifications of the specified class that pass the
+/// given test upon subscription, completing when successful.
 ///
 /// The specified class must be kind of AUTLocalUserNotification (local only,
 /// not remote). An exception is thrown if it is not.
-- (RACSignal *)cancelLocalNotificationsOfClass:(Class)notificationClass passingTest:(BOOL (^)(__kindof AUTLocalUserNotification *notification))testBlock;
+- (RACSignal *)unscheduleLocalNotificationsOfClass:(Class)notificationClass passingTest:(BOOL (^)(__kindof AUTLocalUserNotification *notification))test;
+
+@end
+
+@interface AUTUserNotificationsViewModel (Delivery)
+
+/// Sends each delivered notification upon subscription, then completes.
+- (RACSignal<__kindof AUTUserNotification *> *)deliveredNotifications;
+
+/// Sends each delivered notification of the specified class upon subscription,
+/// then completes.
+///
+/// The specified class must be kind of AUTUserNotification. An exception is
+/// thrown if it is not.
+- (RACSignal<__kindof AUTUserNotification *> *)deliveredNotificationsOfClass:(Class)notificationClass;
+
+/// Cancels all delivered notifications of the specified class upon
+/// subscription, completing when removal has finished.
+///
+/// The specified class must be kind of AUTUserNotification. An exception is
+/// thrown if it is not.
+- (RACSignal *)removeDeliveredNotificationsOfClass:(Class)notificationClass;
+
+/// Cancels all delivered notifications of the specified class that pass the
+/// give test upon subscription, completing when removal has finished.
+///
+/// The specified class must be kind of AUTUserNotification. An exception is
+/// thrown if it is not.
+- (RACSignal *)removeDeliveredNotificationsOfClass:(Class)notificationClass passingTest:(BOOL (^)(__kindof AUTUserNotification *notification))testBlock;
 
 @end
 

@@ -20,6 +20,20 @@
                ReferencedContainer = "container:AUTUserNotifications.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "3ADDAE401BBAEA63002870D9"
+               BuildableName = "AUTUserNotificationsTests.xctest"
+               BlueprintName = "AUTUserNotificationsTests"
+               ReferencedContainer = "container:AUTUserNotifications.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

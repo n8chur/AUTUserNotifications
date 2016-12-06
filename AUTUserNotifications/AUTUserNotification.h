@@ -6,6 +6,7 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
+@import UserNotifications;
 @import Mantle;
 
 NS_ASSUME_NONNULL_BEGIN
@@ -18,14 +19,30 @@ NS_ASSUME_NONNULL_BEGIN
 /// of a remote notification.
 @interface AUTUserNotification : MTLModel
 
-/// If an action was performed on the receiver, populated with the identifier of
-/// the action.
+/// The response that the receiver restored from, or else nil if the
+/// notification has yet to be received.
+@property (readonly, nonatomic, nullable) UNNotificationResponse *response;
+
+/// Restores attributes on the receiver from a notification response.
 ///
-/// Subclasses are encouraged to expose an enumeration that wraps the values of
-/// this string for consumer safety.
+/// Subclasses are encouraged to override this method if they desire to
+/// customize the notification that is restored from a notification response.
 ///
-/// If no action was invoked on the notification, this identifier is nil.
-@property (readonly, atomic, copy, nullable) NSString *actionIdentifier;
+/// @return NO if the receiver could not be restored from the specified
+///         response, otherwise YES.
+- (BOOL)restoreFromResponse:(UNNotificationResponse *)response;
+
+/// The request that the receiver restored from, or else nil.
+@property (readonly, nonatomic, nullable) UNNotificationRequest *request;
+
+/// Restores attributes on the receiver from a notification request.
+///
+/// Subclasses are encouraged to override this method if they desire to
+/// customize the notification that is restored from a notification request.
+///
+/// @return NO if the receiver could not be restored from the specified
+///         request, otherwise YES.
+- (BOOL)restoreFromRequest:(UNNotificationRequest *)request;
 
 /// The category identifier for an instance of the receiver.
 ///
@@ -33,24 +50,39 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// Subclasses may override this method to provide a custom category identifier.
 /// This is required in the case of remote notifications.
-+ (NSString *)systemCategoryIdentifier;
+///
+/// @see -[UNNotificationCategory identifier];
+@property (readonly, nonatomic, copy, class) NSString *systemCategoryIdentifier;
 
-/// The user notification category for this class.
+/// The category options for an instance of the receiver.
 ///
-/// Subclasses do not need to override this method directly. Instead, they
-/// should override systemActionsForContext: and systemCategoryIdentifier, which
-/// are invoked when calling this method to build the returned category.
+/// The default implementation of this method returns .none.
 ///
-/// @return nil if there are no actions for the specified category.
-+ (nullable UIUserNotificationCategory *)systemCategory;
+/// Subclasses may override this method to provide a custom category identifier.
+/// This is required in the case of remote notifications.
+///
+/// @see -[UNNotificationCategory options];
+@property (readonly, nonatomic, class) UNNotificationCategoryOptions systemCategoryOptions;
 
 /// The actions that are available on an instance of the receiver.
 ///
 /// Subclasses should override this method to provide the actions available on
 /// a notification of the receiver's class.
 ///
-/// @return nil or an empty array if there are no actions.
-+ (nullable NSArray<UIUserNotificationAction *> *)systemActionsForContext:(UIUserNotificationActionContext)context;
+/// The default implementation of this method returns an empty array.
+///
+/// @see -[UNNotificationCategory actions];
+@property (readonly, nonatomic, copy, class) NSArray<UNNotificationAction *> *systemCategoryActions;
+
+/// The intents that are available on an instance of the receiver.
+///
+/// Subclasses should override this method to provide the actions available on
+/// a notification of the receiver's class.
+///
+/// The default implementation of this method returns an empty array.
+///
+/// @see -[UNNotificationCategory intentIdentifiers];
+@property (readonly, nonatomic, copy, class) NSArray<NSString *> *systemCategoryIntentIdentifiers;
 
 @end
 

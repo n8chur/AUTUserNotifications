@@ -9,7 +9,10 @@
 @import Specta;
 @import Expecta;
 #import <AUTUserNotifications/AUTUserNotifications.h>
+#import <AUTUserNotifications/AUTUserNotification_Private.h>
 #import <AUTUserNotifications/AUTLocalUserNotification_Private.h>
+
+#import "AUTExtObjC.h"
 
 #import "AUTTestLocalUserNotification.h"
 
@@ -17,95 +20,97 @@ SpecBegin(AUTLocalUserNotification)
 
 describe(@"unarchiving from a system notification", ^{
     it(@"should restore successfully", ^{
-        AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
-        notification.fireDate = [NSDate date];
+        let notification = [[AUTTestLocalUserNotification alloc] init];
+        let request = [notification createNotificationRequest];
 
-        UILocalNotification *systemNotification = [notification createSystemNotification];
-
-        AUTTestLocalUserNotification *restoredNotification = (AUTTestLocalUserNotification *)[AUTLocalUserNotification
-            notificationRestoredFromSystemNotification:systemNotification
-            withActionIdentifier:nil
-            systemActionCompletionHandler:^{}];
-
+        let restoredNotification = [AUTUserNotification
+            notificationRestoredFromRequest:request
+            rootRemoteNotificationClass:AUTRemoteUserNotification.class];
+            
         expect(restoredNotification).to.beKindOf(AUTTestLocalUserNotification.class);
-        expect(restoredNotification.fireDate).to.equal(notification.fireDate);
+        expect(restoredNotification).to.equal(notification);
     });
 
     it(@"should handle user info being nil", ^{
-        UILocalNotification *systemNotification = [[UILocalNotification alloc] init];
+        let content = [[UNNotificationContent alloc] init];
+        let trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:0.1 repeats:NO];
+        let request = [UNNotificationRequest requestWithIdentifier:@"ID" content:content trigger:trigger];
 
-        AUTLocalUserNotification *restoredNotification = [AUTLocalUserNotification
-            notificationRestoredFromSystemNotification:systemNotification
-            withActionIdentifier:nil
-            systemActionCompletionHandler:^{}];
+        let restoredNotification = [AUTUserNotification
+            notificationRestoredFromRequest:request
+            rootRemoteNotificationClass:AUTRemoteUserNotification.class];
 
         expect(restoredNotification).to.beNil();
     });
 
     it(@"should handle user info not containing the expected key", ^{
-        UILocalNotification *systemNotification = [[UILocalNotification alloc] init];
-        systemNotification.userInfo = @{};
+        let content = [[UNMutableNotificationContent alloc] init];
+        content.userInfo = @{};
 
-        AUTLocalUserNotification *restoredNotification = [AUTLocalUserNotification
-            notificationRestoredFromSystemNotification:systemNotification
-            withActionIdentifier:nil
-            systemActionCompletionHandler:^{}];
+        let trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:0.1 repeats:NO];
+        let request = [UNNotificationRequest requestWithIdentifier:@"ID" content:content trigger:trigger];
+
+        let restoredNotification = [AUTUserNotification
+            notificationRestoredFromRequest:request
+            rootRemoteNotificationClass:AUTRemoteUserNotification.class];
 
         expect(restoredNotification).to.beNil();
     });
 
     it(@"should handle unarchiving an invalid class", ^{
-        UILocalNotification *systemNotification = [[UILocalNotification alloc] init];
+        let content = [[UNMutableNotificationContent alloc] init];
 
-        NSMutableData *data = [NSMutableData data];
-        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+        let data = [NSMutableData data];
+        let archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
         [archiver encodeObject:[NSDate date] forKey:NSKeyedArchiveRootObjectKey];
         [archiver finishEncoding];
 
-        systemNotification.userInfo = @{
+        content.userInfo = @{
             AUTLocalUserNotificationKey: [data copy],
         };
 
-        AUTLocalUserNotification *restoredNotification = [AUTLocalUserNotification
-            notificationRestoredFromSystemNotification:systemNotification
-            withActionIdentifier:nil
-            systemActionCompletionHandler:^{}];
+        let trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:0.1 repeats:NO];
+        let request = [UNNotificationRequest requestWithIdentifier:@"ID" content:content trigger:trigger];
+
+        let restoredNotification = [AUTUserNotification
+            notificationRestoredFromRequest:request
+            rootRemoteNotificationClass:AUTRemoteUserNotification.class];
 
         expect(restoredNotification).to.beNil();
     });
 
     it(@"should catch exceptions that occur while unarchiving an invalid class", ^{
         AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
-        notification.fireDate = [NSDate date];
 
-        UILocalNotification *systemNotification = [[UILocalNotification alloc] init];
+        let content = [[UNMutableNotificationContent alloc] init];
 
-        NSMutableData *data = [NSMutableData data];
-        NSKeyedArchiver *archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
+        let data = [NSMutableData data];
+        let archiver = [[NSKeyedArchiver alloc] initForWritingWithMutableData:data];
         [archiver setClassName:@"AUTInvalidClass" forClass:AUTTestLocalUserNotification.class];
         [archiver encodeObject:notification forKey:NSKeyedArchiveRootObjectKey];
         [archiver finishEncoding];
 
-        systemNotification.userInfo = @{
+        content.userInfo = @{
             AUTLocalUserNotificationKey: [data copy],
         };
 
-        AUTLocalUserNotification *restoredNotification = [AUTLocalUserNotification
-            notificationRestoredFromSystemNotification:systemNotification
-            withActionIdentifier:nil
-            systemActionCompletionHandler:^{}];
+        let trigger = [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:0.1 repeats:NO];
+        let request = [UNNotificationRequest requestWithIdentifier:@"ID" content:content trigger:trigger];
+
+        let restoredNotification = [AUTUserNotification
+            notificationRestoredFromRequest:request
+            rootRemoteNotificationClass:AUTRemoteUserNotification.class];
 
         expect(restoredNotification).to.beNil();
     });
 
     it(@"should fail restoration if the subclass desires", ^{
-        AUTTestLocalRestorationFailureUserNotification *notification = [[AUTTestLocalRestorationFailureUserNotification alloc] init];
-        UILocalNotification *systemNotification = [notification createSystemNotification];
+        let notification = [[AUTTestLocalRestorationFailureUserNotification alloc] init];
+        let request = [notification createNotificationRequest];
 
-        AUTLocalUserNotification *restoredNotification = [AUTLocalUserNotification
-            notificationRestoredFromSystemNotification:systemNotification
-            withActionIdentifier:nil
-            systemActionCompletionHandler:^{}];
+        let restoredNotification = [AUTUserNotification
+            notificationRestoredFromRequest:request
+            rootRemoteNotificationClass:AUTRemoteUserNotification.class];
 
         expect(restoredNotification).to.beNil();
     });

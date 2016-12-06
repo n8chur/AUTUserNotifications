@@ -7,17 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		3A2D7AC81BBAFC2600302833 /* AUTUserNotificationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AC71BBAFC2600302833 /* AUTUserNotificationHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A2D7ACA1BBAFC7C00302833 /* AUTUserNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AC91BBAFC7C00302833 /* AUTUserNotifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A2D7ACD1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A2D7ACE1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2D7ACC1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m */; };
+		3A2D7ACA1BBAFC7C00302833 /* AUTUserNotificationCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AC91BBAFC7C00302833 /* AUTUserNotificationCenter.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A2D7AD01BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7ACF1BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A2D7AD21BBAFE9000302833 /* AUTUserNotificationActionHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AD11BBAFE9000302833 /* AUTUserNotificationActionHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A2D7AD41BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2D7AD31BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A2E224F1D6668C100E2BC1A /* AUTUserNotificationsErrors.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2E224D1D6668C100E2BC1A /* AUTUserNotificationsErrors.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A2E22501D6668C100E2BC1A /* AUTUserNotificationsErrors.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2E224E1D6668C100E2BC1A /* AUTUserNotificationsErrors.m */; };
-		3A2E22541D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2E22521D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h */; };
-		3A2E22551D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2E22531D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m */; };
+		3A2E22541D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2E22521D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A2E22551D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2E22531D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.m */; };
 		3A2F60E81BBB019100BE420C /* AUTUserNotificationViewModelSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */; };
 		3A2F60EB1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */; };
 		3A2F60FF1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F60EE1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.m */; };
@@ -29,12 +23,32 @@
 		3A2F610B1BBB096800BE420C /* AUTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2F61091BBB096800BE420C /* AUTLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A2F610C1BBB096800BE420C /* AUTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F610A1BBB096800BE420C /* AUTLog.m */; };
 		3A4261321D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4261311D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m */; };
-		3A9E540E1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3A9E540F1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */; };
+		3A6A06ED1DF09D5A00A875D2 /* AUTAssertNotNil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06E61DF09D5A00A875D2 /* AUTAssertNotNil.h */; };
+		3A6A06EE1DF09D5A00A875D2 /* AUTAutoType.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06E71DF09D5A00A875D2 /* AUTAutoType.h */; };
+		3A6A06EF1DF09D5A00A875D2 /* AUTExtObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06E81DF09D5A00A875D2 /* AUTExtObjC.h */; };
+		3A6A06F01DF09D5A00A875D2 /* AUTNotNil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06E91DF09D5A00A875D2 /* AUTNotNil.h */; };
+		3A6A06F11DF09D5A00A875D2 /* AUTStrongifyOr.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06EA1DF09D5A00A875D2 /* AUTStrongifyOr.h */; };
+		3A6A06F21DF09D5A00A875D2 /* AUTUnavailableDesignatedInitializer.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06EB1DF09D5A00A875D2 /* AUTUnavailableDesignatedInitializer.h */; };
+		3A6A06F31DF09D5A00A875D2 /* metamacros.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06EC1DF09D5A00A875D2 /* metamacros.h */; };
+		3A6A06F61DF0AE5200A875D2 /* AUTLocalUserNotification_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06F51DF0AE5200A875D2 /* AUTLocalUserNotification_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3A6A06F91DF0C9E800A875D2 /* AUTRemoteUserNotification_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06F81DF0C9E800A875D2 /* AUTRemoteUserNotification_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3A6A06FF1DF0E10F00A875D2 /* AUTUserNotificationsAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06FC1DF0E10F00A875D2 /* AUTUserNotificationsAppDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A6A07011DF0E8B600A875D2 /* AUTUserNotificationsViewModel_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A07001DF0E8B600A875D2 /* AUTUserNotificationsViewModel_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3A6A07041DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A07021DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3A6A07051DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6A07031DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.m */; };
+		3A6A07081DF1414600A875D2 /* AUTStubUserNotificationsApplication.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A07061DF1414600A875D2 /* AUTStubUserNotificationsApplication.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3A6A07091DF1414600A875D2 /* AUTStubUserNotificationsApplication.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6A07071DF1414600A875D2 /* AUTStubUserNotificationsApplication.m */; };
+		3A6A07101DF1699500A875D2 /* AUTRemoteUserNotificationFetchHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A070F1DF1699500A875D2 /* AUTRemoteUserNotificationFetchHandler.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3A6A07121DF1E5BA00A875D2 /* AUTUserNotificationsViewModel+Scheduling.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6A07111DF1E5BA00A875D2 /* AUTUserNotificationsViewModel+Scheduling.m */; };
+		3A6A07141DF1E70B00A875D2 /* AUTUserNotificationsViewModel+Delivery.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6A07131DF1E70B00A875D2 /* AUTUserNotificationsViewModel+Delivery.m */; };
+		3A6A07171DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A07151DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.h */; };
+		3A6A07181DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A6A07161DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.m */; };
+		3A7246291DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A7246271DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3A72462A1DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7246281DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.m */; };
 		3AA686ED1BBB686A00FF3C3A /* AUTSubclassesOf.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AA686E91BBB686A00FF3C3A /* AUTSubclassesOf.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		3AA686EE1BBB686A00FF3C3A /* AUTSubclassesOf.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA686EA1BBB686A00FF3C3A /* AUTSubclassesOf.m */; };
-		3AA686F31BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		3AA686F41BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */; };
+		3AA686F31BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AA686F11BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3AA686F41BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA686F21BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.m */; };
 		3AB916A91DDE3E200064BA34 /* ReactiveObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AB916A81DDE3E200064BA34 /* ReactiveObjC.framework */; };
 		3AB916AA1DDE3EB10064BA34 /* ReactiveObjC.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3AB916A81DDE3E200064BA34 /* ReactiveObjC.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3ADDAE3B1BBAEA63002870D9 /* AUTUserNotifications.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE3A1BBAEA63002870D9 /* AUTUserNotifications.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -48,7 +62,6 @@
 		3ADDAE851BBAEE59002870D9 /* Expecta.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE711BBAED88002870D9 /* Expecta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3ADDAE861BBAEE59002870D9 /* Nocilla.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE721BBAED88002870D9 /* Nocilla.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		3ADDAE881BBAEE59002870D9 /* Specta.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE731BBAED88002870D9 /* Specta.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3ADDAE981BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE8E1BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		3ADDAE991BBAF6B1002870D9 /* AUTRemoteUserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE8F1BBAF6B1002870D9 /* AUTRemoteUserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ADDAE9A1BBAF6B1002870D9 /* AUTRemoteUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDAE901BBAF6B1002870D9 /* AUTRemoteUserNotification.m */; };
 		3ADDAE9B1BBAF6B1002870D9 /* AUTUserNotification_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE911BBAF6B1002870D9 /* AUTUserNotification_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -56,17 +69,13 @@
 		3ADDAE9D1BBAF6B1002870D9 /* AUTUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDAE931BBAF6B1002870D9 /* AUTUserNotification.m */; };
 		3ADDAE9E1BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAE941BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ADDAEA01BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDAE9F1BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m */; };
-		3ADDAEA41BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAEA11BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		3ADDAEA51BBAF6F9002870D9 /* AUTLocalUserNotification.h in Headers */ = {isa = PBXBuildFile; fileRef = 3ADDAEA21BBAF6F9002870D9 /* AUTLocalUserNotification.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3ADDAEA61BBAF6F9002870D9 /* AUTLocalUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3ADDAEA31BBAF6F9002870D9 /* AUTLocalUserNotification.m */; };
 		3ADDAEA81BBAF80F002870D9 /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAEA71BBAF80F002870D9 /* Mantle.framework */; };
 		3ADDAEAA1BBAF85E002870D9 /* Mantle.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAEA71BBAF80F002870D9 /* Mantle.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		3AEB33D11BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AEB33CD1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		3AEB33D21BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB33CE1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m */; };
-		3AEB33D31BBCBD6A0088AE62 /* AUTStubUserNotifier.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotifier.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		3AEB33D41BBCBD6A0088AE62 /* AUTStubUserNotifier.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotifier.m */; };
+		3AEB33D31BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.h */; settings = {ATTRIBUTES = (Private, ); }; };
+		3AEB33D41BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.m */; };
 		3AF00C171D4737CB00FE37CF /* AUTAnotherTestChildRemoteUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AF00C161D4737CB00FE37CF /* AUTAnotherTestChildRemoteUserNotification.m */; };
-		8760C08B1BC7BCC3003624BF /* AUTUserNotificationAlertDisplayable.h in Headers */ = {isa = PBXBuildFile; fileRef = 8760C08A1BC7BCC3003624BF /* AUTUserNotificationAlertDisplayable.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -101,17 +110,11 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		3A2D7AC71BBAFC2600302833 /* AUTUserNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationHandler.h; sourceTree = "<group>"; };
-		3A2D7AC91BBAFC7C00302833 /* AUTUserNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotifier.h; sourceTree = "<group>"; };
-		3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AUTUserNotifier.h"; sourceTree = "<group>"; };
-		3A2D7ACC1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+AUTUserNotifier.m"; sourceTree = "<group>"; };
+		3A2D7AC91BBAFC7C00302833 /* AUTUserNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationCenter.h; sourceTree = "<group>"; };
 		3A2D7ACF1BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotificationTokenRegistrar.h; sourceTree = "<group>"; };
 		3A2D7AD11BBAFE9000302833 /* AUTUserNotificationActionHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationActionHandler.h; sourceTree = "<group>"; };
-		3A2D7AD31BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotificationFetchHandler.h; sourceTree = "<group>"; };
-		3A2E224D1D6668C100E2BC1A /* AUTUserNotificationsErrors.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationsErrors.h; sourceTree = "<group>"; };
-		3A2E224E1D6668C100E2BC1A /* AUTUserNotificationsErrors.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotificationsErrors.m; sourceTree = "<group>"; };
-		3A2E22521D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIUserNotificationSettings+AUTDescription.h"; sourceTree = "<group>"; };
-		3A2E22531D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIUserNotificationSettings+AUTDescription.m"; sourceTree = "<group>"; };
+		3A2E22521D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUNAuthorizationOptionsDescription.h; sourceTree = "<group>"; };
+		3A2E22531D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUNAuthorizationOptionsDescription.m; sourceTree = "<group>"; };
 		3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotificationViewModelSpec.m; sourceTree = "<group>"; };
 		3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTRemoteUserNotificationSpec.m; sourceTree = "<group>"; };
 		3A2F60ED1BBB01A700BE420C /* AUTStubRemoteNotificationFetchHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubRemoteNotificationFetchHandler.h; sourceTree = "<group>"; };
@@ -129,13 +132,33 @@
 		3A2F61091BBB096800BE420C /* AUTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTLog.h; sourceTree = "<group>"; };
 		3A2F610A1BBB096800BE420C /* AUTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTLog.m; sourceTree = "<group>"; };
 		3A4261311D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTLocalUserNotificationSpec.m; sourceTree = "<group>"; };
-		3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIApplication+AUTUserNotificationHandler.h"; sourceTree = "<group>"; };
-		3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIApplication+AUTUserNotificationHandler.m"; sourceTree = "<group>"; };
+		3A6A06E61DF09D5A00A875D2 /* AUTAssertNotNil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTAssertNotNil.h; sourceTree = "<group>"; };
+		3A6A06E71DF09D5A00A875D2 /* AUTAutoType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTAutoType.h; sourceTree = "<group>"; };
+		3A6A06E81DF09D5A00A875D2 /* AUTExtObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTExtObjC.h; sourceTree = "<group>"; };
+		3A6A06E91DF09D5A00A875D2 /* AUTNotNil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTNotNil.h; sourceTree = "<group>"; };
+		3A6A06EA1DF09D5A00A875D2 /* AUTStrongifyOr.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStrongifyOr.h; sourceTree = "<group>"; };
+		3A6A06EB1DF09D5A00A875D2 /* AUTUnavailableDesignatedInitializer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUnavailableDesignatedInitializer.h; sourceTree = "<group>"; };
+		3A6A06EC1DF09D5A00A875D2 /* metamacros.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = metamacros.h; sourceTree = "<group>"; };
+		3A6A06F51DF0AE5200A875D2 /* AUTLocalUserNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTLocalUserNotification_Private.h; sourceTree = "<group>"; };
+		3A6A06F81DF0C9E800A875D2 /* AUTRemoteUserNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotification_Private.h; sourceTree = "<group>"; };
+		3A6A06FC1DF0E10F00A875D2 /* AUTUserNotificationsAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationsAppDelegate.h; sourceTree = "<group>"; };
+		3A6A07001DF0E8B600A875D2 /* AUTUserNotificationsViewModel_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationsViewModel_Private.h; sourceTree = "<group>"; };
+		3A6A07021DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubUserNotificationsAppDelegate.h; sourceTree = "<group>"; };
+		3A6A07031DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubUserNotificationsAppDelegate.m; sourceTree = "<group>"; };
+		3A6A07061DF1414600A875D2 /* AUTStubUserNotificationsApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubUserNotificationsApplication.h; sourceTree = "<group>"; };
+		3A6A07071DF1414600A875D2 /* AUTStubUserNotificationsApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubUserNotificationsApplication.m; sourceTree = "<group>"; };
+		3A6A070F1DF1699500A875D2 /* AUTRemoteUserNotificationFetchHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotificationFetchHandler.h; sourceTree = "<group>"; };
+		3A6A07111DF1E5BA00A875D2 /* AUTUserNotificationsViewModel+Scheduling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AUTUserNotificationsViewModel+Scheduling.m"; sourceTree = "<group>"; };
+		3A6A07131DF1E70B00A875D2 /* AUTUserNotificationsViewModel+Delivery.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AUTUserNotificationsViewModel+Delivery.m"; sourceTree = "<group>"; };
+		3A6A07151DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUNNotificationPresentationOptionsDescription.h; sourceTree = "<group>"; };
+		3A6A07161DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUNNotificationPresentationOptionsDescription.m; sourceTree = "<group>"; };
+		3A7246271DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "AUTUserNotificationsViewModel+Stubs.h"; sourceTree = "<group>"; };
+		3A7246281DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "AUTUserNotificationsViewModel+Stubs.m"; sourceTree = "<group>"; };
 		3AA686E91BBB686A00FF3C3A /* AUTSubclassesOf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTSubclassesOf.h; sourceTree = "<group>"; };
 		3AA686EA1BBB686A00FF3C3A /* AUTSubclassesOf.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTSubclassesOf.m; sourceTree = "<group>"; };
-		3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIUserNotificationSettings+AUTSynthesizedSettings.h"; sourceTree = "<group>"; };
-		3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIUserNotificationSettings+AUTSynthesizedSettings.m"; sourceTree = "<group>"; };
-		3AB916A81DDE3E200064BA34 /* ReactiveObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveObjC.framework; path = "Carthage/Build/iOS/ReactiveObjC.framework"; sourceTree = "<group>"; };
+		3AA686F11BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UNUserNotificationCenter+AUTSynthesizedCategories.h"; sourceTree = "<group>"; };
+		3AA686F21BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UNUserNotificationCenter+AUTSynthesizedCategories.m"; sourceTree = "<group>"; };
+		3AB916A81DDE3E200064BA34 /* ReactiveObjC.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = ReactiveObjC.framework; path = Carthage/Build/iOS/ReactiveObjC.framework; sourceTree = "<group>"; };
 		3ADDAE371BBAEA63002870D9 /* AUTUserNotifications.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AUTUserNotifications.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3ADDAE3A1BBAEA63002870D9 /* AUTUserNotifications.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AUTUserNotifications.h; sourceTree = "<group>"; };
 		3ADDAE3C1BBAEA63002870D9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -161,7 +184,6 @@
 		3ADDAE711BBAED88002870D9 /* Expecta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Expecta.framework; path = Carthage/Build/iOS/Expecta.framework; sourceTree = "<group>"; };
 		3ADDAE721BBAED88002870D9 /* Nocilla.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Nocilla.framework; path = Carthage/Build/iOS/Nocilla.framework; sourceTree = "<group>"; };
 		3ADDAE731BBAED88002870D9 /* Specta.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Specta.framework; path = Carthage/Build/iOS/Specta.framework; sourceTree = "<group>"; };
-		3ADDAE8E1BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotification_Private.h; sourceTree = "<group>"; };
 		3ADDAE8F1BBAF6B1002870D9 /* AUTRemoteUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTRemoteUserNotification.h; sourceTree = "<group>"; };
 		3ADDAE901BBAF6B1002870D9 /* AUTRemoteUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTRemoteUserNotification.m; sourceTree = "<group>"; };
 		3ADDAE911BBAF6B1002870D9 /* AUTUserNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotification_Private.h; sourceTree = "<group>"; };
@@ -169,17 +191,13 @@
 		3ADDAE931BBAF6B1002870D9 /* AUTUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotification.m; sourceTree = "<group>"; };
 		3ADDAE941BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationsViewModel.h; sourceTree = "<group>"; };
 		3ADDAE9F1BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotificationsViewModel.m; sourceTree = "<group>"; };
-		3ADDAEA11BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTLocalUserNotification_Private.h; sourceTree = "<group>"; };
 		3ADDAEA21BBAF6F9002870D9 /* AUTLocalUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTLocalUserNotification.h; sourceTree = "<group>"; };
 		3ADDAEA31BBAF6F9002870D9 /* AUTLocalUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTLocalUserNotification.m; sourceTree = "<group>"; };
 		3ADDAEA71BBAF80F002870D9 /* Mantle.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Mantle.framework; path = Carthage/Build/iOS/Mantle.framework; sourceTree = "<group>"; };
-		3AEB33CD1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubUserNotificationHandler.h; sourceTree = "<group>"; };
-		3AEB33CE1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubUserNotificationHandler.m; sourceTree = "<group>"; };
-		3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotifier.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubUserNotifier.h; sourceTree = "<group>"; };
-		3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotifier.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubUserNotifier.m; sourceTree = "<group>"; };
+		3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTStubUserNotificationCenter.h; sourceTree = "<group>"; };
+		3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubUserNotificationCenter.m; sourceTree = "<group>"; };
 		3AF00C151D4737CB00FE37CF /* AUTAnotherTestChildRemoteUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTAnotherTestChildRemoteUserNotification.h; sourceTree = "<group>"; };
 		3AF00C161D4737CB00FE37CF /* AUTAnotherTestChildRemoteUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTAnotherTestChildRemoteUserNotification.m; sourceTree = "<group>"; };
-		8760C08A1BC7BCC3003624BF /* AUTUserNotificationAlertDisplayable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTUserNotificationAlertDisplayable.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,36 +224,25 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		3A2E224C1D66687700E2BC1A /* Errors */ = {
-			isa = PBXGroup;
-			children = (
-				3A2E224D1D6668C100E2BC1A /* AUTUserNotificationsErrors.h */,
-				3A2E224E1D6668C100E2BC1A /* AUTUserNotificationsErrors.m */,
-			);
-			name = Errors;
-			sourceTree = "<group>";
-		};
 		3A2E22511D668EB500E2BC1A /* Extensions */ = {
 			isa = PBXGroup;
 			children = (
-				3A2E22561D668F8E00E2BC1A /* UIKit */,
+				3A2E22561D668F8E00E2BC1A /* UserNotifications */,
 			);
 			name = Extensions;
 			sourceTree = "<group>";
 		};
-		3A2E22561D668F8E00E2BC1A /* UIKit */ = {
+		3A2E22561D668F8E00E2BC1A /* UserNotifications */ = {
 			isa = PBXGroup;
 			children = (
-				3A9E540C1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h */,
-				3A9E540D1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m */,
-				3A2D7ACB1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h */,
-				3A2D7ACC1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m */,
-				3A2E22521D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h */,
-				3A2E22531D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m */,
-				3AA686F11BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h */,
-				3AA686F21BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m */,
+				3A2E22521D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.h */,
+				3A2E22531D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.m */,
+				3A6A07151DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.h */,
+				3A6A07161DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.m */,
+				3AA686F11BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.h */,
+				3AA686F21BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.m */,
 			);
-			name = UIKit;
+			name = UserNotifications;
 			sourceTree = "<group>";
 		};
 		3A2F60E91BBB019400BE420C /* Specs */ = {
@@ -278,6 +285,29 @@
 			name = Logging;
 			sourceTree = "<group>";
 		};
+		3A6A06E41DF09D4D00A875D2 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				3A6A06E51DF09D5A00A875D2 /* AUTExtObjC */,
+			);
+			name = Vendor;
+			sourceTree = "<group>";
+		};
+		3A6A06E51DF09D5A00A875D2 /* AUTExtObjC */ = {
+			isa = PBXGroup;
+			children = (
+				3A6A06E61DF09D5A00A875D2 /* AUTAssertNotNil.h */,
+				3A6A06E71DF09D5A00A875D2 /* AUTAutoType.h */,
+				3A6A06E81DF09D5A00A875D2 /* AUTExtObjC.h */,
+				3A6A06E91DF09D5A00A875D2 /* AUTNotNil.h */,
+				3A6A06EA1DF09D5A00A875D2 /* AUTStrongifyOr.h */,
+				3A6A06EB1DF09D5A00A875D2 /* AUTUnavailableDesignatedInitializer.h */,
+				3A6A06EC1DF09D5A00A875D2 /* metamacros.h */,
+			);
+			name = AUTExtObjC;
+			path = Carthage/Checkouts/AUTExtObjC/AUTExtObjC;
+			sourceTree = "<group>";
+		};
 		3ADDAE2D1BBAEA63002870D9 = {
 			isa = PBXGroup;
 			children = (
@@ -286,6 +316,7 @@
 				3ADDAE611BBAEC8E002870D9 /* Configuration */,
 				3ADDAE641BBAED00002870D9 /* Frameworks */,
 				3ADDAE381BBAEA63002870D9 /* Products */,
+				3A6A06E41DF09D4D00A875D2 /* Vendor */,
 			);
 			sourceTree = "<group>";
 		};
@@ -302,7 +333,6 @@
 			isa = PBXGroup;
 			children = (
 				3ADDAE3A1BBAEA63002870D9 /* AUTUserNotifications.h */,
-				3A2E224C1D66687700E2BC1A /* Errors */,
 				3A2E22511D668EB500E2BC1A /* Extensions */,
 				3A2F61081BBB094F00BE420C /* Logging */,
 				3ADDAEA91BBAF83E002870D9 /* Notifications */,
@@ -397,15 +427,14 @@
 			isa = PBXGroup;
 			children = (
 				3ADDAEA21BBAF6F9002870D9 /* AUTLocalUserNotification.h */,
-				3ADDAEA11BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h */,
+				3A6A06F51DF0AE5200A875D2 /* AUTLocalUserNotification_Private.h */,
 				3ADDAEA31BBAF6F9002870D9 /* AUTLocalUserNotification.m */,
 				3ADDAE8F1BBAF6B1002870D9 /* AUTRemoteUserNotification.h */,
-				3ADDAE8E1BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h */,
+				3A6A06F81DF0C9E800A875D2 /* AUTRemoteUserNotification_Private.h */,
 				3ADDAE901BBAF6B1002870D9 /* AUTRemoteUserNotification.m */,
 				3ADDAE921BBAF6B1002870D9 /* AUTUserNotification.h */,
 				3ADDAE911BBAF6B1002870D9 /* AUTUserNotification_Private.h */,
 				3ADDAE931BBAF6B1002870D9 /* AUTUserNotification.m */,
-				8760C08A1BC7BCC3003624BF /* AUTUserNotificationAlertDisplayable.h */,
 			);
 			name = Notifications;
 			sourceTree = "<group>";
@@ -413,15 +442,18 @@
 		3ADDAEAB1BBAF87A002870D9 /* View Models */ = {
 			isa = PBXGroup;
 			children = (
-				3A2D7AD31BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h */,
+				3A6A070F1DF1699500A875D2 /* AUTRemoteUserNotificationFetchHandler.h */,
 				3A2D7ACF1BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h */,
 				3AA686E91BBB686A00FF3C3A /* AUTSubclassesOf.h */,
 				3AA686EA1BBB686A00FF3C3A /* AUTSubclassesOf.m */,
 				3A2D7AD11BBAFE9000302833 /* AUTUserNotificationActionHandler.h */,
-				3A2D7AC71BBAFC2600302833 /* AUTUserNotificationHandler.h */,
+				3A2D7AC91BBAFC7C00302833 /* AUTUserNotificationCenter.h */,
+				3A6A06FC1DF0E10F00A875D2 /* AUTUserNotificationsAppDelegate.h */,
+				3A6A07001DF0E8B600A875D2 /* AUTUserNotificationsViewModel_Private.h */,
 				3ADDAE941BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h */,
 				3ADDAE9F1BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m */,
-				3A2D7AC91BBAFC7C00302833 /* AUTUserNotifier.h */,
+				3A6A07111DF1E5BA00A875D2 /* AUTUserNotificationsViewModel+Scheduling.m */,
+				3A6A07131DF1E70B00A875D2 /* AUTUserNotificationsViewModel+Delivery.m */,
 			);
 			name = "View Models";
 			sourceTree = "<group>";
@@ -429,10 +461,14 @@
 		3AEB33CC1BBCBD3B0088AE62 /* Stubs */ = {
 			isa = PBXGroup;
 			children = (
-				3AEB33CD1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h */,
-				3AEB33CE1BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m */,
-				3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotifier.h */,
-				3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotifier.m */,
+				3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.h */,
+				3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.m */,
+				3A6A07021DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.h */,
+				3A6A07031DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.m */,
+				3A6A07061DF1414600A875D2 /* AUTStubUserNotificationsApplication.h */,
+				3A6A07071DF1414600A875D2 /* AUTStubUserNotificationsApplication.m */,
+				3A7246271DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.h */,
+				3A7246281DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.m */,
 			);
 			name = Stubs;
 			sourceTree = "<group>";
@@ -444,29 +480,36 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A2D7ACA1BBAFC7C00302833 /* AUTUserNotifier.h in Headers */,
-				3A2D7ACD1BBAFCD700302833 /* UIApplication+AUTUserNotifier.h in Headers */,
-				3AEB33D31BBCBD6A0088AE62 /* AUTStubUserNotifier.h in Headers */,
+				3A6A06F31DF09D5A00A875D2 /* metamacros.h in Headers */,
+				3A2D7ACA1BBAFC7C00302833 /* AUTUserNotificationCenter.h in Headers */,
+				3A6A07101DF1699500A875D2 /* AUTRemoteUserNotificationFetchHandler.h in Headers */,
+				3AEB33D31BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.h in Headers */,
 				3AA686ED1BBB686A00FF3C3A /* AUTSubclassesOf.h in Headers */,
-				3AA686F31BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.h in Headers */,
+				3AA686F31BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.h in Headers */,
+				3A6A06EF1DF09D5A00A875D2 /* AUTExtObjC.h in Headers */,
 				3ADDAE9E1BBAF6B1002870D9 /* AUTUserNotificationsViewModel.h in Headers */,
-				3A2D7AD41BBAFEDD00302833 /* AUTRemoteUserNotificationFetchHandler.h in Headers */,
-				8760C08B1BC7BCC3003624BF /* AUTUserNotificationAlertDisplayable.h in Headers */,
+				3A6A06F01DF09D5A00A875D2 /* AUTNotNil.h in Headers */,
 				3A2D7AD01BBAFD9000302833 /* AUTRemoteUserNotificationTokenRegistrar.h in Headers */,
-				3AEB33D11BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.h in Headers */,
-				3ADDAEA41BBAF6F9002870D9 /* AUTLocalUserNotification_Private.h in Headers */,
 				3A2F610B1BBB096800BE420C /* AUTLog.h in Headers */,
+				3A7246291DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.h in Headers */,
 				3ADDAE3B1BBAEA63002870D9 /* AUTUserNotifications.h in Headers */,
-				3A2E22541D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.h in Headers */,
+				3A6A06EE1DF09D5A00A875D2 /* AUTAutoType.h in Headers */,
+				3A6A07041DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.h in Headers */,
+				3A6A06F11DF09D5A00A875D2 /* AUTStrongifyOr.h in Headers */,
+				3A2E22541D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.h in Headers */,
 				3ADDAEA51BBAF6F9002870D9 /* AUTLocalUserNotification.h in Headers */,
+				3A6A06F91DF0C9E800A875D2 /* AUTRemoteUserNotification_Private.h in Headers */,
+				3A6A07011DF0E8B600A875D2 /* AUTUserNotificationsViewModel_Private.h in Headers */,
+				3A6A07171DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.h in Headers */,
+				3A6A06ED1DF09D5A00A875D2 /* AUTAssertNotNil.h in Headers */,
 				3ADDAE9C1BBAF6B1002870D9 /* AUTUserNotification.h in Headers */,
+				3A6A06FF1DF0E10F00A875D2 /* AUTUserNotificationsAppDelegate.h in Headers */,
 				3ADDAE991BBAF6B1002870D9 /* AUTRemoteUserNotification.h in Headers */,
-				3A2E224F1D6668C100E2BC1A /* AUTUserNotificationsErrors.h in Headers */,
-				3A9E540E1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.h in Headers */,
 				3A2D7AD21BBAFE9000302833 /* AUTUserNotificationActionHandler.h in Headers */,
-				3ADDAE981BBAF6B1002870D9 /* AUTRemoteUserNotification_Private.h in Headers */,
+				3A6A06F21DF09D5A00A875D2 /* AUTUnavailableDesignatedInitializer.h in Headers */,
+				3A6A07081DF1414600A875D2 /* AUTStubUserNotificationsApplication.h in Headers */,
+				3A6A06F61DF0AE5200A875D2 /* AUTLocalUserNotification_Private.h in Headers */,
 				3ADDAE9B1BBAF6B1002870D9 /* AUTUserNotification_Private.h in Headers */,
-				3A2D7AC81BBAFC2600302833 /* AUTUserNotificationHandler.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -586,19 +629,21 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3A2D7ACE1BBAFCD700302833 /* UIApplication+AUTUserNotifier.m in Sources */,
 				3A2F610C1BBB096800BE420C /* AUTLog.m in Sources */,
 				3ADDAEA61BBAF6F9002870D9 /* AUTLocalUserNotification.m in Sources */,
 				3AA686EE1BBB686A00FF3C3A /* AUTSubclassesOf.m in Sources */,
-				3AEB33D21BBCBD6A0088AE62 /* AUTStubUserNotificationHandler.m in Sources */,
-				3AA686F41BBB68DC00FF3C3A /* UIUserNotificationSettings+AUTSynthesizedSettings.m in Sources */,
+				3AA686F41BBB68DC00FF3C3A /* UNUserNotificationCenter+AUTSynthesizedCategories.m in Sources */,
 				3ADDAE9A1BBAF6B1002870D9 /* AUTRemoteUserNotification.m in Sources */,
-				3A2E22501D6668C100E2BC1A /* AUTUserNotificationsErrors.m in Sources */,
+				3A6A07181DF2074C00A875D2 /* AUTUNNotificationPresentationOptionsDescription.m in Sources */,
 				3ADDAEA01BBAF6B6002870D9 /* AUTUserNotificationsViewModel.m in Sources */,
 				3ADDAE9D1BBAF6B1002870D9 /* AUTUserNotification.m in Sources */,
-				3AEB33D41BBCBD6A0088AE62 /* AUTStubUserNotifier.m in Sources */,
-				3A2E22551D668ECB00E2BC1A /* UIUserNotificationSettings+AUTDescription.m in Sources */,
-				3A9E540F1BBB4029002C16E0 /* UIApplication+AUTUserNotificationHandler.m in Sources */,
+				3AEB33D41BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.m in Sources */,
+				3A6A07141DF1E70B00A875D2 /* AUTUserNotificationsViewModel+Delivery.m in Sources */,
+				3A72462A1DF619EF00654972 /* AUTUserNotificationsViewModel+Stubs.m in Sources */,
+				3A6A07121DF1E5BA00A875D2 /* AUTUserNotificationsViewModel+Scheduling.m in Sources */,
+				3A6A07051DF140B100A875D2 /* AUTStubUserNotificationsAppDelegate.m in Sources */,
+				3A6A07091DF1414600A875D2 /* AUTStubUserNotificationsApplication.m in Sources */,
+				3A2E22551D668ECB00E2BC1A /* AUTUNAuthorizationOptionsDescription.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

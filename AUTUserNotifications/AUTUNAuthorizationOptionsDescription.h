@@ -1,15 +1,15 @@
 //
-//  AUTUserNotificationsErrors.m
+//  AUTUNAuthorizationOptionsDescription.h
 //  AUTUserNotifications
 //
 //  Created by Eric Horacek on 8/18/16.
 //  Copyright © 2016 Automatic Labs. All rights reserved.
 //
 
-#import "AUTUserNotificationsErrors.h"
+@import UserNotifications;
 
 NS_ASSUME_NONNULL_BEGIN
 
-NSString * const AUTUserNotificationsErrorDomain = @"AUTUserNotificationsErrorDomain";
+extern NSString * const AUTUNAuthorizationOptionsDescription(UNAuthorizationOptions options);
 
 NS_ASSUME_NONNULL_END

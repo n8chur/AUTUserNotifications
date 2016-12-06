@@ -6,12 +6,12 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
-@import Specta;
-@import Expecta;
+#import <Specta/Specta.h>
+#import <Expecta/Expecta.h>
 #import <AUTUserNotifications/AUTUserNotifications.h>
+#import <AUTUserNotifications/AUTLocalUserNotification_Private.h>
+#import <AUTUserNotifications/AUTUserNotificationsViewModel+Stubs.h>
 
-#import "AUTStubUserNotifier.h"
-#import "AUTStubUserNotificationHandler.h"
 #import "AUTStubRemoteNotificationRegistrar.h"
 #import "AUTStubRemoteNotificationFetchHandler.h"
 #import "AUTStubUserNotificationActionHandler.h"
@@ -20,38 +20,48 @@
 #import "AUTTestChildRemoteUserNotification.h"
 #import "AUTAnotherTestChildRemoteUserNotification.h"
 
+#import "AUTExtObjC.h"
+
 SpecBegin(AUTUserNotificationsViewModel)
 
 __block NSError *error;
 __block BOOL success;
 
-__block AUTStubUserNotificationHandler *stubNotificationHandler;
-__block AUTStubUserNotifier *stubNotifier;
+__block AUTStubUserNotificationsAppDelegate *stubAppDelegate;
+__block AUTStubUserNotificationsApplication *stubApplication;
+__block AUTStubUserNotificationCenter *stubCenter;
 __block AUTStubRemoteNotificationRegistrar *stubRegistrar;
 __block AUTUserNotificationsViewModel *viewModel;
+
+let DefaultPresentationOptions = UNNotificationPresentationOptionSound;
 
 beforeEach(^{
     error = nil;
     success = NO;
 
-    stubNotificationHandler = [[AUTStubUserNotificationHandler alloc] init];
-    stubNotifier = [[AUTStubUserNotifier alloc] initWithHandler:stubNotificationHandler];
+    stubAppDelegate = [[AUTStubUserNotificationsAppDelegate alloc] init];
+    stubApplication = [[AUTStubUserNotificationsApplication alloc] initWithDelegate:stubAppDelegate];
+    stubCenter = [[AUTStubUserNotificationCenter alloc] init];
     stubRegistrar = [[AUTStubRemoteNotificationRegistrar alloc] init];
 
     viewModel = [[AUTUserNotificationsViewModel alloc]
-        initWithNotifier:stubNotifier
-        handler:stubNotificationHandler
-        rootRemoteNotificationClass:AUTTestRootRemoteUserNotification.class];
+        initWithCenter:stubCenter
+        application:stubApplication
+        appDelegate:stubAppDelegate
+        rootRemoteNotificationClass:AUTTestRootRemoteUserNotification.class
+        defaultPresentationOptions:DefaultPresentationOptions];
 });
 
 describe(@"lifecycle", ^{
     it(@"should deallocate", ^{
         RACSignal *willDealloc;
         @autoreleasepool {
-            AUTUserNotificationsViewModel *viewModel = [[AUTUserNotificationsViewModel alloc]
-                initWithNotifier:stubNotifier
-                handler:stubNotificationHandler
-                rootRemoteNotificationClass:AUTTestRootRemoteUserNotification.class];
+            let viewModel = [[AUTUserNotificationsViewModel alloc]
+                initWithCenter:stubCenter
+                application:stubApplication
+                appDelegate:stubAppDelegate
+                rootRemoteNotificationClass:AUTTestRootRemoteUserNotification.class
+                defaultPresentationOptions:DefaultPresentationOptions];
 
             willDealloc = viewModel.rac_willDeallocSignal;
         }
@@ -61,16 +71,33 @@ describe(@"lifecycle", ^{
     });
 });
 
-describe(@"-registerSettingsCommand", ^{
-    it(@"should register settings", ^{
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+describe(@"-requestAuthorization", ^{
+    it(@"should request authorization", ^{
+        let options = @(UNAuthorizationOptionSound | UNAuthorizationOptionAlert);
 
-        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
-        expect(registeredSettings).to.beIdenticalTo(settings);
+        stubCenter.settings = (UNNotificationSettings *)NSObject.new;
+
+        stubCenter.authorizationGranted = YES;
+
+        let registeredSettings = [[viewModel.requestAuthorization execute:options]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(registeredSettings).to.beIdenticalTo(stubCenter.settings);
         expect(error).to.beNil();
         expect(success).to.beTruthy();
+    });
 
-        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
+    it(@"should fail with an authorization error", ^{
+        let options = @(UNAuthorizationOptionSound | UNAuthorizationOptionAlert);
+
+        stubCenter.authorizationError = [NSError errorWithDomain:@"Test" code:-1 userInfo:nil];
+
+        let registeredSettings = [[viewModel.requestAuthorization execute:options]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(registeredSettings).to.beNil();
+        expect(error).to.beIdenticalTo(stubCenter.authorizationError);
+        expect(success).to.beFalsy();
     });
 });
 
@@ -78,87 +105,109 @@ describe(@"-registerForRemoteNotificationsCommand", ^{
     it(@"should perform registration with the registrar", ^{
         NSData *token = [@"token" dataUsingEncoding:NSUTF8StringEncoding];
 
-        // Provide the token to the stubbed notifier
-        stubNotifier.remoteNotificationRegistrationDeviceToken = token;
-        viewModel.tokenRegistrar = stubRegistrar;
+        // Provide the token to the stubbed center
+        stubApplication.remoteNotificationRegistrationDeviceToken = token;
 
-        success = [[viewModel.registerForRemoteNotificationsCommand execute:nil] asynchronouslyWaitUntilCompleted:&error];
+        success = [[viewModel.registerForRemoteNotifications execute:stubRegistrar]
+            asynchronouslyWaitUntilCompleted:&error];
+
         expect(error).to.beNil();
         expect(success).to.beTruthy();
-
         expect(stubRegistrar.registeredDeviceToken).to.beIdenticalTo(token);
     });
 
-    it(@"should be disabled when no token registrar is set", ^{
-        NSNumber *enabled = [viewModel.registerForRemoteNotificationsCommand.enabled asynchronousFirstOrDefault:nil success:&success error:&error];
-        expect(error).to.beNil();
-        expect(success).to.beTruthy();
+    it(@"should error if a failure occurs", ^{
+        stubApplication.remoteNotificationRegistrationError = [NSError errorWithDomain:@"Test" code:-1 userInfo:nil];
 
-        expect(enabled).notTo.beNil();
-        expect(enabled).to.beFalsy();
+        success = [[viewModel.registerForRemoteNotifications execute:stubRegistrar]
+            asynchronouslyWaitUntilCompleted:&error];
+
+        expect(success).to.beFalsy();
+        expect(error).to.beIdenticalTo(stubApplication.remoteNotificationRegistrationError);
+        expect(stubRegistrar.registeredDeviceToken).to.beNil();
     });
 });
 
-describe(@"-receivedNotificationsOfClass:", ^{
-    beforeEach(^{
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+describe(@"-presentedNotifications", ^{
+    describe(@"local notifications", ^{
+        it(@"should receive local notifications", ^{
+            let localNotification = [[AUTTestLocalUserNotification alloc] init];
 
-        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
-        expect(registeredSettings).to.beIdenticalTo(settings);
-        expect(error).to.beNil();
-        expect(success).to.beTruthy();
+            let presented = [viewModel.presentedNotifications replay];
 
-        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
+            let request = [localNotification createNotificationRequest];
+            let notification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:request];
+
+            let presentationOption = [[stubCenter presentNotification:notification]
+                asynchronousFirstOrDefault:nil success:&success error:&error];
+
+            expect(presentationOption).to.equal(DefaultPresentationOptions);
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
+
+            let receivedNotification = [[presented take:1] asynchronousFirstOrDefault:nil success:&success error:&error];
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
+            expect(receivedNotification).to.equal(localNotification);
+        });
     });
 
+    describe(@"remote notifications", ^{
+        it(@"should receive remote notifications", ^{
+            Class notificationClass = AUTTestRootRemoteUserNotification.class;
+
+            let presented = [viewModel.presentedNotifications replay];
+
+            let presentationOption = [[stubCenter presentNotification:[notificationClass asStubNotification]]
+                asynchronousFirstOrDefault:nil success:&success error:&error];
+
+            expect(presentationOption).to.equal(DefaultPresentationOptions);
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
+
+            let receivedNotification = [[presented take:1] asynchronousFirstOrDefault:nil success:&success error:&error];
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
+            expect(receivedNotification).to.beAnInstanceOf(notificationClass.class);
+        });
+    });
+});
+
+describe(@"-presentedNotificationsOfClass:", ^{
     describe(@"local notifications", ^{
         it(@"should receive filtered local notifications", ^{
-            AUTTestLocalUserNotification *notificationSubclass = [[AUTTestLocalUserNotification alloc] init];
-            AUTLocalUserNotification *notificationSuperclass = [[AUTLocalUserNotification alloc] init];
+            let notificationSubclass = [[AUTTestLocalUserNotification alloc] init];
+            let notificationSuperclass = [[AUTLocalUserNotification alloc] init];
 
-            RACSubject *finishReceiving = [RACSubject subject];
-
-            RACSignal *receivedSubclasses = [[[viewModel receivedNotificationsOfClass:notificationSubclass.class]
-                takeUntil:finishReceiving]
+            let presentedSubclasses = [[viewModel presentedNotificationsOfClass:notificationSubclass.class]
                 replay];
 
-            expect([[viewModel scheduleLocalNotification:notificationSuperclass] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
-            expect(error).to.beNil();
+            var request = [notificationSuperclass createNotificationRequest];
+            var notification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:request];
 
-            expect([[viewModel scheduleLocalNotification:notificationSubclass] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
-            expect(error).to.beNil();
+            var presentationOption = [[stubCenter presentNotification:notification]
+                asynchronousFirstOrDefault:nil success:&success error:&error];
 
-            [finishReceiving sendCompleted];
-
-            NSArray *receivedNotifications = [[receivedSubclasses collect] asynchronousFirstOrDefault:nil success:&success error:&error];
+            expect(presentationOption).to.equal(DefaultPresentationOptions);
             expect(error).to.beNil();
             expect(success).to.beTruthy();
-            expect(receivedNotifications).to.beKindOf(NSArray.class);
-            expect(receivedNotifications).to.haveACountOf(1);
-            expect(receivedNotifications.firstObject).to.beAnInstanceOf(notificationSubclass.class);
-            expect(receivedNotifications.firstObject).to.equal(notificationSubclass);
-            expect(receivedNotifications.firstObject).notTo.beIdenticalTo(notificationSubclass);
-        });
 
-        it(@"should receive notifications from an application launch", ^{
-            AUTLocalUserNotification *notification = [[AUTLocalUserNotification alloc] init];
+            request = [notificationSubclass createNotificationRequest];
+            notification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:request];
 
-            RACSignal *receivedNotifications = [[viewModel receivedNotificationsOfClass:AUTLocalUserNotification.class]
-                replay];
+            presentationOption = [[stubCenter presentNotification:notification]
+                asynchronousFirstOrDefault:nil success:&success error:&error];
 
-            UILocalNotification *systemNotification = [notification createSystemNotification];
-            expect(systemNotification).to.beKindOf(UILocalNotification.class);
-
-            [NSNotificationCenter.defaultCenter postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil userInfo:@{
-                UIApplicationLaunchOptionsLocalNotificationKey: systemNotification,
-            }];
-
-            AUTLocalUserNotification *receivedNotification = [receivedNotifications asynchronousFirstOrDefault:nil success:&success error:&error];
+            expect(presentationOption).to.equal(DefaultPresentationOptions);
             expect(error).to.beNil();
             expect(success).to.beTruthy();
-            expect(receivedNotification).to.beAnInstanceOf(AUTLocalUserNotification.class);
-            expect(receivedNotification).to.equal(notification);
-            expect(receivedNotification).notTo.beIdenticalTo(notification);
+
+            let receivedNotification = [[presentedSubclasses take:1] asynchronousFirstOrDefault:nil success:&success error:&error];
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
+            expect(receivedNotification).to.beAnInstanceOf(notificationSubclass.class);
+            expect(receivedNotification).to.equal(notificationSubclass);
+            expect(receivedNotification).notTo.beIdenticalTo(notificationSubclass);
         });
     });
 
@@ -167,62 +216,105 @@ describe(@"-receivedNotificationsOfClass:", ^{
             Class notificationSubclass = AUTTestChildRemoteUserNotification.class;
             Class notificationSuperclass = AUTTestRootRemoteUserNotification.class;
 
-            RACSubject *finishReceiving = [RACSubject subject];
-
-            RACSignal *receivedSubclasses = [[[viewModel receivedNotificationsOfClass:AUTTestChildRemoteUserNotification.class]
-                takeUntil:finishReceiving]
+            let receivedSubclasses = [[viewModel presentedNotificationsOfClass:notificationSubclass]
                 replay];
 
-            [stubNotifier displayRemoteNotification:[notificationSubclass asRemoteJSONDictionary]];
-            [stubNotifier displayRemoteNotification:[notificationSuperclass asRemoteJSONDictionary]];
+            var presentationOption = [[stubCenter presentNotification:[notificationSubclass asStubNotification]]
+                asynchronousFirstOrDefault:nil success:&success error:&error];
 
-            [finishReceiving sendCompleted];
-
-            NSArray *receivedNotifications = [[receivedSubclasses collect] asynchronousFirstOrDefault:nil success:&success error:&error];
+            expect(presentationOption).to.equal(DefaultPresentationOptions);
             expect(error).to.beNil();
             expect(success).to.beTruthy();
-            expect(receivedNotifications).to.beKindOf(NSArray.class);
-            expect(receivedNotifications).to.haveACountOf(1);
-            expect(receivedNotifications.firstObject).to.beAnInstanceOf(notificationSubclass.class);
+
+            presentationOption = [[stubCenter presentNotification:[notificationSuperclass asStubNotification]]
+                asynchronousFirstOrDefault:nil success:&success error:&error];
+
+            expect(presentationOption).to.equal(DefaultPresentationOptions);
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
+
+            let receivedNotification = [[receivedSubclasses take:1] asynchronousFirstOrDefault:nil success:&success error:&error];
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
+            expect(receivedNotification).to.beAnInstanceOf(notificationSubclass.class);
         });
+    });
+});
 
-        it(@"should receive notifications from an application launch", ^{
-            RACSignal *receivedNotifications = [[viewModel receivedNotificationsOfClass:AUTTestRootRemoteUserNotification.class]
-                replay];
+describe(@"addPresentationOverride:", ^{
+    it(@"should override presentation options while the handler is added", ^{
+        Class notificationSubclass = AUTTestChildRemoteUserNotification.class;
+        Class notificationSuperclass = AUTTestRootRemoteUserNotification.class;
 
-            [NSNotificationCenter.defaultCenter postNotificationName:UIApplicationDidFinishLaunchingNotification object:nil userInfo:@{
-                UIApplicationLaunchOptionsRemoteNotificationKey: [AUTTestRootRemoteUserNotification asRemoteJSONDictionary],
+        var presentationOption = [[stubCenter presentNotification:[notificationSubclass asStubNotification]]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(presentationOption).to.equal(DefaultPresentationOptions);
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+
+        let overridePresentationOptions = UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound;
+
+        [viewModel addPresentationOverride:^(__kindof AUTUserNotification *notification) {
+            return [notification isKindOfClass:notificationSubclass] ? @(overridePresentationOptions) : nil;
+        }];
+
+        presentationOption = [[stubCenter presentNotification:[notificationSuperclass asStubNotification]]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(presentationOption).to.equal(DefaultPresentationOptions);
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+
+        presentationOption = [[stubCenter presentNotification:[notificationSubclass asStubNotification]]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(presentationOption).to.equal(overridePresentationOptions);
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+    });
+
+    it(@"should remove the override when the returned disposable is disposed", ^{
+        it(@"should override presentation options while the handler is added", ^{
+            Class notificationClass = AUTRemoteUserNotification.class;
+
+            let overridePresentationOptions = UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge | UNNotificationPresentationOptionSound;
+
+            let disposable = [viewModel addPresentationOverride:^(__kindof AUTUserNotification *notification) {
+                return [notification isKindOfClass:notificationClass] ? @(overridePresentationOptions) : nil;
             }];
 
-            AUTTestRootRemoteUserNotification *receivedNotification = [receivedNotifications asynchronousFirstOrDefault:nil success:&success error:&error];
+            var presentationOption = [[stubCenter presentNotification:[notificationClass asStubNotification]]
+                asynchronousFirstOrDefault:nil success:&success error:&error];
+
+            expect(presentationOption).to.equal(overridePresentationOptions);
             expect(error).to.beNil();
             expect(success).to.beTruthy();
-            expect(receivedNotification).to.beAnInstanceOf(AUTTestRootRemoteUserNotification.class);
+
+            [disposable dispose];
+
+            presentationOption = [[stubCenter presentNotification:[notificationClass asStubNotification]]
+                asynchronousFirstOrDefault:nil success:&success error:&error];
+
+            expect(presentationOption).to.equal(DefaultPresentationOptions);
+            expect(error).to.beNil();
+            expect(success).to.beTruthy();
         });
     });
 });
 
 describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
-    __block void (^completionHandler)(UIBackgroundFetchResult) = nil;
-    __block RACSubject *fetchResult;
     __block AUTStubRemoteNotificationFetchHandler *stubFetchHandler;
 
     beforeEach(^{
-        fetchResult = [RACSubject subject];
-        completionHandler = ^(UIBackgroundFetchResult result) {
-            [fetchResult sendNext:@(result)];
-            [fetchResult sendCompleted];
-        };
         stubFetchHandler = [[AUTStubRemoteNotificationFetchHandler alloc] init];
     });
 
     it(@"should indicate that no data was fetched when no fetch handlers are registered", ^{
-        RACSignal *replayedFetchResult = [fetchResult replay];
+        let notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
+        let fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
-
-        NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+        let systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
         expect(error).to.beNil();
         expect(success).to.beTruthy();
         expect(systemResult).notTo.beNil();
@@ -230,17 +322,15 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
     });
 
     it(@"should execute the completion handler with the result of the fetch handler", ^{
-        UIBackgroundFetchResult fetchHandlerResult = UIBackgroundFetchResultNewData;
+        let fetchHandlerResult = UIBackgroundFetchResultNewData;
         stubFetchHandler.fetchHandler = [RACSignal return:@(fetchHandlerResult)];
 
         [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
 
-        RACSignal *replayedFetchResult = [fetchResult replay];
+        let notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
+        let fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
-
-        NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+        let systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
         expect(error).to.beNil();
         expect(success).to.beTruthy();
         expect(systemResult).notTo.beNil();
@@ -272,12 +362,10 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
         expect(success).to.beTruthy();
         expect(error).to.beNil();
 
-        RACSignal *replayedFetchResult = [fetchResult replay];
+        let notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
+        let fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
-
-        NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+        let systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
         expect(error).to.beNil();
         expect(success).to.beTruthy();
         expect(systemResult).notTo.beNil();
@@ -285,42 +373,35 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
     });
 
     it(@"should remove the handler upon disposal", ^{
-        __block NSInteger invocations = 0;
-        stubFetchHandler.fetchHandler = [[RACSignal return:@(UIBackgroundFetchResultNoData)] doNext:^(id _) {
-            invocations++;
-        }];
+        stubFetchHandler.fetchHandler = [RACSignal return:@(UIBackgroundFetchResultNoData)];
 
-        RACDisposable *disposable = [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
+        let disposable = [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
         [disposable dispose];
 
-        RACSignal *replayedFetchResult = [fetchResult replay];
+        let notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
+        let fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
-
-        NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+        let systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
         expect(error).to.beNil();
         expect(success).to.beTruthy();
         expect(systemResult).notTo.beNil();
 
-        expect(invocations).to.equal(0);
+        expect(stubFetchHandler.notification).to.beNil();
     });
 
     it(@"should allow removing a specific class when a handler is registered for multiple classes", ^{
-        UIBackgroundFetchResult fetchHandlerResult = UIBackgroundFetchResultNoData;
+        let fetchHandlerResult = UIBackgroundFetchResultNoData;
         stubFetchHandler.fetchHandler = [RACSignal return:@(fetchHandlerResult)];
 
-        RACDisposable *childDisposable = [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
+        let childDisposable = [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
         [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTAnotherTestChildRemoteUserNotification.class];
-
-        RACSignal *replayedFetchResult = [fetchResult replay];
 
         [childDisposable dispose];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
+        var notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
+        var fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-        NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+        var systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
         expect(error).to.beNil();
         expect(success).to.beTruthy();
         expect(systemResult).notTo.beNil();
@@ -328,12 +409,10 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
         expect(stubFetchHandler.notification).to.beNil();
 
-        replayedFetchResult = [fetchResult replay];
-
         notification = [AUTAnotherTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
+        fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-        systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+        systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
         expect(error).to.beNil();
         expect(success).to.beTruthy();
         expect(systemResult).notTo.beNil();
@@ -343,18 +422,16 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
     });
 
     it(@"should invoke one handler registered for multiple notifications", ^{
-        UIBackgroundFetchResult fetchHandlerResult = UIBackgroundFetchResultNoData;
+        let fetchHandlerResult = UIBackgroundFetchResultNoData;
         stubFetchHandler.fetchHandler = [RACSignal return:@(fetchHandlerResult)];
 
         [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
         [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTAnotherTestChildRemoteUserNotification.class];
 
-        RACSignal *replayedFetchResult = [fetchResult replay];
+        var notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
+        var fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
-
-        NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+        var systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
         expect(error).to.beNil();
         expect(success).to.beTruthy();
         expect(systemResult).notTo.beNil();
@@ -362,12 +439,10 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 
         expect(stubFetchHandler.notification).to.beAnInstanceOf(AUTTestChildRemoteUserNotification.class);
 
-        replayedFetchResult = [fetchResult replay];
-
         notification = [AUTAnotherTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
+        fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-        systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+        systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
         expect(error).to.beNil();
         expect(success).to.beTruthy();
         expect(systemResult).notTo.beNil();
@@ -384,22 +459,20 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
         });
 
         it(@"should execute the completion handler with the worst handler result", ^{
-            UIBackgroundFetchResult fetchHandlerResult = UIBackgroundFetchResultNoData;
+            let fetchHandlerResult = UIBackgroundFetchResultNoData;
             stubFetchHandler.fetchHandler = [RACSignal return:@(fetchHandlerResult)];
 
             // Failure is worse than "no data".
-            UIBackgroundFetchResult anotherFetchHandlerResult = UIBackgroundFetchResultFailed;
+            let anotherFetchHandlerResult = UIBackgroundFetchResultFailed;
             anotherStubFetchHandler.fetchHandler = [RACSignal return:@(anotherFetchHandlerResult)];
 
             [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
             [viewModel registerFetchHandler:anotherStubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
 
-            RACSignal *replayedFetchResult = [fetchResult replay];
+            let notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
+            let fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-            NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-            [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
-
-            NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+            let systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
             expect(error).to.beNil();
             expect(success).to.beTruthy();
             expect(systemResult).notTo.beNil();
@@ -410,28 +483,19 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
         });
 
         it(@"should subscribe to the returned fetch handler signal for each registered handler", ^{
-            __block NSInteger invocations = 0;
-            RACSignal *fetchHandler = [[RACSignal return:@(UIBackgroundFetchResultNoData)] doNext:^(id _) {
-                invocations++;
-            }];
-
-            stubFetchHandler.fetchHandler = fetchHandler;
-            anotherStubFetchHandler.fetchHandler = fetchHandler;
+            stubFetchHandler.fetchHandler = [RACSignal return:@(UIBackgroundFetchResultNoData)];
+            anotherStubFetchHandler.fetchHandler = [RACSignal return:@(UIBackgroundFetchResultNoData)];
 
             [viewModel registerFetchHandler:stubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
             [viewModel registerFetchHandler:anotherStubFetchHandler forRemoteUserNotificationsOfClass:AUTTestChildRemoteUserNotification.class];
 
-            RACSignal *replayedFetchResult = [fetchResult replay];
+            let notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
+            let fetchResult = [stubApplication sendSilentRemoteNotification:notification];
 
-            NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-            [stubNotifier sendSilentRemoteNotification:notification fetchCompletionHandler:completionHandler];
-
-            NSNumber *systemResult = [replayedFetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
+            let systemResult = [fetchResult asynchronousFirstOrDefault:nil success:&success error:&error];
             expect(error).to.beNil();
             expect(success).to.beTruthy();
             expect(systemResult).notTo.beNil();
-
-            expect(invocations).to.equal(2);
 
             expect(stubFetchHandler.notification).to.beAnInstanceOf(AUTTestChildRemoteUserNotification.class);
             expect(anotherStubFetchHandler.notification).to.beAnInstanceOf(AUTTestChildRemoteUserNotification.class);
@@ -440,66 +504,50 @@ describe(@"-registerFetchHandler:forRemoteUserNotificationsOfClass:", ^{
 });
 
 describe(@"registerActionHandler:forNotificationsOfClass:", ^{
-    __block void (^completionHandler)() = nil;
-    __block RACSubject *actionCompleted;
     __block AUTStubUserNotificationActionHandler *stubActionHandler;
 
-    NSString * const actionIdentifier = @"an action";
+    let actionIdentifier = @"an action";
 
     beforeEach(^{
-        actionCompleted = [RACSubject subject];
-        completionHandler = ^() {
-            [actionCompleted sendCompleted];
-        };
         stubActionHandler = [[AUTStubUserNotificationActionHandler alloc] init];
     });
 
     it(@"should invoke the action completion handler when no action handlers are registered", ^{
-        RACSignal *replayedActionCompleted = [actionCompleted replay];
+        let response = [AUTTestChildRemoteUserNotification asStubResponseWithActionIdentifier:actionIdentifier];
+        let actionCompleted = [stubCenter receiveNotification:response];
 
-        NSString *actionIdentifier = @"an action";
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:notification completionHandler:completionHandler];
-
-        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
     });
 
     it(@"should invoke the action completion handler after invoking the registered action handler for a remote notification", ^{
-        stubActionHandler.actionHandler = [RACSignal empty];
-
-        Class notificationClass = AUTTestChildRemoteUserNotification.class;
+        let notificationClass = AUTTestChildRemoteUserNotification.class;
         [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:notificationClass];
 
-        RACSignal *replayedActionCompleted = [actionCompleted replay];
-
-        NSDictionary *notification = [notificationClass asSilentJSONDictionary];
-        [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:notification completionHandler:completionHandler];
-
-        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        let response = [notificationClass asStubResponseWithActionIdentifier:actionIdentifier];
+        let actionCompleted = [stubCenter receiveNotification:response];
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
         expect(stubActionHandler.notification).to.beAnInstanceOf(notificationClass);
-        expect(stubActionHandler.notification.actionIdentifier).to.equal(actionIdentifier);
+        expect(stubActionHandler.notification.response).to.beIdenticalTo(response);
     });
 
     it(@"should invoke the action completion handler after invoking the registered action handler for a local notification", ^{
-        stubActionHandler.actionHandler = [RACSignal empty];
-
         Class notificationClass = AUTTestLocalUserNotification.class;
         [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:notificationClass];
 
-        RACSignal *replayedActionCompleted = [actionCompleted replay];
+        AUTTestLocalUserNotification *localNotification = [[notificationClass alloc] init];
+        let request = [localNotification createNotificationRequest];
+        let notification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:request];
+        let response = [[AUTStubUNNotificationResponse alloc] initWithNotification:notification actionIdentifier:actionIdentifier];
 
-        AUTTestLocalUserNotification *notification = [[notificationClass alloc] init];
-        UILocalNotification *systemNotification = [notification createSystemNotification];
-        [stubNotifier performActionWithIdentifier:actionIdentifier forLocalNotification:systemNotification completionHandler:completionHandler];
-
-        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        let actionCompleted = [stubCenter receiveNotification:response];
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
-        expect(stubActionHandler.notification).to.beAnInstanceOf(notificationClass.class);
-        expect(stubActionHandler.notification.actionIdentifier).to.equal(actionIdentifier);
+        expect(stubActionHandler.notification).to.beAnInstanceOf(notificationClass);
+        expect(stubActionHandler.notification.response).to.beIdenticalTo(response);
     });
 
     it(@"should not retain handlers", ^{
@@ -517,42 +565,40 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
     it(@"should invoke one handler registered for multiple notifications", ^{
         stubActionHandler.actionHandler = [RACSignal empty];
 
-        Class remoteNotificationClass = AUTTestChildRemoteUserNotification.class;
+        let remoteNotificationClass = AUTTestChildRemoteUserNotification.class;
         [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:remoteNotificationClass];
 
-        Class localNotificationClass = AUTTestLocalUserNotification.class;
+        let localNotificationClass = AUTTestLocalUserNotification.class;
         [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:localNotificationClass];
 
-        RACSignal *replayedActionCompleted = [actionCompleted replay];
+        var response = [remoteNotificationClass asStubResponseWithActionIdentifier:actionIdentifier];
+        var actionCompleted = [stubCenter receiveNotification:response];
 
-        NSDictionary *remoteNotification = [remoteNotificationClass asSilentJSONDictionary];
-        [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:remoteNotification completionHandler:completionHandler];
-
-        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
         expect(stubActionHandler.notification).to.beAnInstanceOf(remoteNotificationClass);
-        expect(stubActionHandler.notification.actionIdentifier).to.equal(actionIdentifier);
-
-        replayedActionCompleted = [actionCompleted replay];
+        expect(stubActionHandler.notification.response).to.beIdenticalTo(response);
 
         AUTTestLocalUserNotification *localNotification = [[localNotificationClass alloc] init];
-        UILocalNotification *systemNotification = [localNotification createSystemNotification];
-        [stubNotifier performActionWithIdentifier:actionIdentifier forLocalNotification:systemNotification completionHandler:completionHandler];
+        let request = [localNotification createNotificationRequest];
+        let notification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:request];
+        response = [[AUTStubUNNotificationResponse alloc] initWithNotification:notification actionIdentifier:actionIdentifier];
+        actionCompleted = [stubCenter receiveNotification:response];
 
-        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
         expect(stubActionHandler.notification).to.beAnInstanceOf(localNotificationClass);
-        expect(stubActionHandler.notification.actionIdentifier).to.equal(actionIdentifier);
+        expect(stubActionHandler.notification.response).to.beIdenticalTo(response);
     });
 
     it(@"should gracefully fail when receiving notifications with handlers that have been deallocated", ^{
-        Class notificationClass = AUTTestLocalUserNotification.class;
+        let notificationClass = AUTTestLocalUserNotification.class;
 
         RACSignal *willDealloc;
         @autoreleasepool {
-            AUTStubUserNotificationActionHandler *stubActionHandler = [[AUTStubUserNotificationActionHandler alloc] init];
+            let stubActionHandler = [[AUTStubUserNotificationActionHandler alloc] init];
             [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:notificationClass];
             willDealloc = stubActionHandler.rac_willDeallocSignal;
         }
@@ -560,68 +606,62 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
         expect(success).to.beTruthy();
         expect(error).to.beNil();
 
-        RACSignal *replayedActionCompleted = [actionCompleted replay];
+        AUTTestLocalUserNotification *localNotification = [[notificationClass alloc] init];
+        let request = [localNotification createNotificationRequest];
+        let notification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:request];
+        let response = [[AUTStubUNNotificationResponse alloc] initWithNotification:notification actionIdentifier:actionIdentifier];
+        let actionCompleted = [stubCenter receiveNotification:response];
 
-        AUTTestLocalUserNotification *notification = [[notificationClass alloc] init];
-        UILocalNotification *systemNotification = [notification createSystemNotification];
-        [stubNotifier performActionWithIdentifier:actionIdentifier forLocalNotification:systemNotification completionHandler:completionHandler];
-
-        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
     });
 
     it(@"should remove the handler upon disposal", ^{
-        __block NSInteger invocations = 0;
-        stubActionHandler.actionHandler = [[RACSignal empty] doCompleted:^{
-            invocations++;
-        }];
+        stubActionHandler.actionHandler = [RACSignal empty];
 
-        RACDisposable *disposable = [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:AUTUserNotification.class];
+        let disposable = [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:AUTUserNotification.class];
         [disposable dispose];
 
-        RACSignal *replayedActionCompleted = [actionCompleted replay];
-
-        NSDictionary *notification = [AUTTestChildRemoteUserNotification asSilentJSONDictionary];
-        [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:notification completionHandler:completionHandler];
-
-        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        let response = [AUTTestChildRemoteUserNotification asStubResponseWithActionIdentifier:actionIdentifier];
+        let actionCompleted = [stubCenter receiveNotification:response];
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
-        expect(invocations).to.equal(0);
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect(error).to.beNil();
+
+        expect(stubActionHandler.notification).to.beNil();
     });
 
     it(@"should allow removing a specific class when a handler is registered for multiple classes", ^{
         stubActionHandler.actionHandler = [RACSignal empty];
 
-        Class remoteNotificationClass = AUTTestChildRemoteUserNotification.class;
-        RACDisposable *remoteNotificationClassDisposable = [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:remoteNotificationClass];
+        let remoteNotificationClass = AUTTestChildRemoteUserNotification.class;
+        let remoteNotificationClassDisposable = [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:remoteNotificationClass];
 
-        Class localNotificationClass = AUTTestLocalUserNotification.class;
+        let localNotificationClass = AUTTestLocalUserNotification.class;
         [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:localNotificationClass];
-
-        RACSignal *replayedActionCompleted = [actionCompleted replay];
 
         [remoteNotificationClassDisposable dispose];
 
-        NSDictionary *remoteNotification = [remoteNotificationClass asSilentJSONDictionary];
-        [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:remoteNotification completionHandler:completionHandler];
-
-        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        var response = [remoteNotificationClass asStubResponseWithActionIdentifier:actionIdentifier];
+        var actionCompleted = [stubCenter receiveNotification:response];
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
         expect(stubActionHandler.notification).to.beNil();
 
-        replayedActionCompleted = [actionCompleted replay];
-
         AUTTestLocalUserNotification *localNotification = [[localNotificationClass alloc] init];
-        UILocalNotification *systemNotification = [localNotification createSystemNotification];
-        [stubNotifier performActionWithIdentifier:actionIdentifier forLocalNotification:systemNotification completionHandler:completionHandler];
+        let request = [localNotification createNotificationRequest];
+        let notification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:request];
+        response = [[AUTStubUNNotificationResponse alloc] initWithNotification:notification actionIdentifier:actionIdentifier];
+        actionCompleted = [stubCenter receiveNotification:response];
 
-        expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
         expect(stubActionHandler.notification).to.beAnInstanceOf(localNotificationClass);
-        expect(stubActionHandler.notification.actionIdentifier).to.equal(actionIdentifier);
+        expect(stubActionHandler.notification.request).to.beIdenticalTo(request);
     });
 
     describe(@"multiple handlers", ^{
@@ -632,54 +672,34 @@ describe(@"registerActionHandler:forNotificationsOfClass:", ^{
         });
 
         it(@"should subscribe to the returned action handler signal for each registered handler", ^{
-            __block NSInteger invocations = 0;
-            RACSignal *actionHandler = [[RACSignal empty] doCompleted:^{
-                invocations++;
-            }];
-
-            stubActionHandler.actionHandler = actionHandler;
-            anotherStubActionHandler.actionHandler = actionHandler;
+            stubActionHandler.actionHandler = [RACSignal empty];
+            anotherStubActionHandler.actionHandler = [RACSignal empty];
 
             Class notificationClass = AUTTestChildRemoteUserNotification.class;
             [viewModel registerActionHandler:stubActionHandler forNotificationsOfClass:notificationClass];
             [viewModel registerActionHandler:anotherStubActionHandler forNotificationsOfClass:notificationClass];
 
-            RACSignal *replayedActionCompleted = [actionCompleted replay];
-
-            NSDictionary *notification = [notificationClass asSilentJSONDictionary];
-            [stubNotifier performActionWithIdentifier:actionIdentifier forRemoteNotification:notification completionHandler:completionHandler];
-
-            expect([replayedActionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+            let response = [notificationClass asStubResponseWithActionIdentifier:actionIdentifier];
+            let actionCompleted = [stubCenter receiveNotification:response];
+            expect([actionCompleted asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
             expect(error).to.beNil();
 
-            expect(invocations).to.equal(2);
-            
             expect(stubActionHandler.notification).to.beAnInstanceOf(notificationClass.class);
-            expect(stubActionHandler.notification.actionIdentifier).to.equal(actionIdentifier);
+            expect(stubActionHandler.notification.response).to.beIdenticalTo(response);
+
             expect(anotherStubActionHandler.notification).to.beAnInstanceOf(notificationClass.class);
-            expect(anotherStubActionHandler.notification.actionIdentifier).to.equal(actionIdentifier);
+            expect(anotherStubActionHandler.notification.response).to.beIdenticalTo(response);
         });
     });
 });
 
 describe(@"-scheduledLocalNotifications", ^{
-    beforeEach(^{
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
-
-        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
-        expect(registeredSettings).to.beIdenticalTo(settings);
-        expect(error).to.beNil();
-        expect(success).to.beTruthy();
-
-        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
-    });
-
     it(@"should send all scheduled notifications", ^{
-        AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
-        AUTTestLocalUserNotification *anotherNotification = [[AUTTestLocalUserNotification alloc] init];
+        let notification = [[AUTTestLocalUserNotification alloc] init];
+        let anotherNotification = [[AUTTestLocalUserNotification alloc] init];
 
-        notification.fireDate = [NSDate distantFuture];
-        anotherNotification.fireDate = [NSDate distantFuture];
+        notification.triggerTimeInterval = 10.0;
+        anotherNotification.triggerTimeInterval = 10.0;
 
         expect([[viewModel scheduleLocalNotification:notification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
@@ -687,7 +707,7 @@ describe(@"-scheduledLocalNotifications", ^{
         expect([[viewModel scheduleLocalNotification:anotherNotification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
-        NSArray *scheduledNotifications = [[[viewModel scheduledLocalNotifications]
+        let scheduledNotifications = [[[viewModel scheduledLocalNotifications]
             collect]
             asynchronousFirstOrDefault:nil success:&success error:&error];
 
@@ -700,23 +720,12 @@ describe(@"-scheduledLocalNotifications", ^{
 });
 
 describe(@"-scheduledLocalNotificationsOfClass:", ^{
-    beforeEach(^{
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
-
-        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
-        expect(registeredSettings).to.beIdenticalTo(settings);
-        expect(error).to.beNil();
-        expect(success).to.beTruthy();
-
-        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
-    });
-
     it(@"should send only the scheduled notifications of the specified class", ^{
-        AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
-        AUTTestLocalUserNotificationSubclass *anotherNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
+        let notification = [[AUTTestLocalUserNotification alloc] init];
+        let anotherNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
 
-        notification.fireDate = [NSDate distantFuture];
-        anotherNotification.fireDate = [NSDate distantFuture];
+        notification.triggerTimeInterval = 10.0;
+        anotherNotification.triggerTimeInterval = 10.0;
 
         expect([[viewModel scheduleLocalNotification:notification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
@@ -724,7 +733,7 @@ describe(@"-scheduledLocalNotificationsOfClass:", ^{
         expect([[viewModel scheduleLocalNotification:anotherNotification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
-        NSArray *scheduledNotifications = [[[viewModel scheduledLocalNotificationsOfClass:AUTTestLocalUserNotificationSubclass.class]
+        let scheduledNotifications = [[[viewModel scheduledLocalNotificationsOfClass:AUTTestLocalUserNotificationSubclass.class]
             collect]
             asynchronousFirstOrDefault:nil success:&success error:&error];
 
@@ -737,27 +746,16 @@ describe(@"-scheduledLocalNotificationsOfClass:", ^{
 });
 
 describe(@"-scheduleLocalNotification:", ^{
-    beforeEach(^{
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
-
-        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
-        expect(registeredSettings).to.beIdenticalTo(settings);
-        expect(error).to.beNil();
-        expect(success).to.beTruthy();
-
-        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
-    });
-
     it(@"should schedule a local notification", ^{
-        AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
+        let notification = [[AUTTestLocalUserNotification alloc] init];
 
-        RACSignal *receivedNotifications = [[viewModel receivedNotificationsOfClass:AUTLocalUserNotification.class]
+        let presentedNotifications = [[viewModel presentedNotificationsOfClass:AUTLocalUserNotification.class]
             replay];
 
         expect([[viewModel scheduleLocalNotification:notification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
-        AUTTestLocalUserNotification *receivedNotification = [receivedNotifications asynchronousFirstOrDefault:nil success:&success error:&error];
+        let receivedNotification = [presentedNotifications asynchronousFirstOrDefault:nil success:&success error:&error];
 
         expect(error).to.beNil();
         expect(success).to.beTruthy();
@@ -767,24 +765,13 @@ describe(@"-scheduleLocalNotification:", ^{
     });
 });
 
-describe(@"-cancelLocalNotificationsOfClass:", ^{
-    beforeEach(^{
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
-
-        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
-        expect(registeredSettings).to.beIdenticalTo(settings);
-        expect(error).to.beNil();
-        expect(success).to.beTruthy();
-
-        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
-    });
-
+describe(@"-unscheduleLocalNotificationsOfClass:", ^{
     it(@"should only cancel scheduled notifications of the specified class", ^{
-        AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
-        AUTTestLocalUserNotificationSubclass *anotherNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
+        let notification = [[AUTTestLocalUserNotification alloc] init];
+        let anotherNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
 
-        notification.fireDate = [NSDate distantFuture];
-        anotherNotification.fireDate = [NSDate distantFuture];
+        notification.triggerTimeInterval = 10.0;
+        anotherNotification.triggerTimeInterval = 10.0;
 
         expect([[viewModel scheduleLocalNotification:notification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
@@ -792,10 +779,10 @@ describe(@"-cancelLocalNotificationsOfClass:", ^{
         expect([[viewModel scheduleLocalNotification:anotherNotification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
-        expect([[viewModel cancelLocalNotificationsOfClass:AUTTestLocalUserNotificationSubclass.class] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect([[viewModel unscheduleLocalNotificationsOfClass:AUTTestLocalUserNotificationSubclass.class] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
-        NSArray *scheduledNotifications = [[[viewModel scheduledLocalNotifications]
+        let scheduledNotifications = [[[viewModel scheduledLocalNotifications]
             collect]
             asynchronousFirstOrDefault:nil success:&success error:&error];
 
@@ -807,27 +794,16 @@ describe(@"-cancelLocalNotificationsOfClass:", ^{
     });
 });
 
-describe(@"-cancelScheduledLocalNotificationsOfClass:passingTest:", ^{
-    beforeEach(^{
-        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:UIUserNotificationTypeAlert categories:nil];
+describe(@"-unscheduleLocalNotificationsOfClass:passingTest:", ^{
+    it(@"should only cancel scheduled notifications of the specified class that pass the given test", ^{
+        let notification = [[AUTTestLocalUserNotification alloc] init];
+        notification.triggerTimeInterval = 10.0;
 
-        UIUserNotificationSettings *registeredSettings = [[viewModel.registerSettingsCommand execute:settings] asynchronousFirstOrDefault:nil success:&success error:&error];
-        expect(registeredSettings).to.beIdenticalTo(settings);
-        expect(error).to.beNil();
-        expect(success).to.beTruthy();
-
-        expect(stubNotifier.currentUserNotificationSettings).to.beIdenticalTo(settings);
-    });
-
-    it(@"should only cancel scheduled notifications of the specified class", ^{
-        AUTTestLocalUserNotification *notification = [[AUTTestLocalUserNotification alloc] init];
-        notification.fireDate = [NSDate distantFuture];
-
-        AUTTestLocalUserNotificationSubclass *distantFutureNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
-        distantFutureNotification.fireDate = [NSDate distantFuture];
+        let distantFutureNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
+        distantFutureNotification.triggerTimeInterval = 1000.0;
 
         AUTTestLocalUserNotificationSubclass *nearFutureNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
-        nearFutureNotification.fireDate = [[NSDate date] dateByAddingTimeInterval:10.0];
+        nearFutureNotification.triggerTimeInterval = 10.0;
 
         expect([[viewModel scheduleLocalNotification:notification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
@@ -838,13 +814,13 @@ describe(@"-cancelScheduledLocalNotificationsOfClass:passingTest:", ^{
         expect([[viewModel scheduleLocalNotification:nearFutureNotification] asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
-        RACSignal *cancelNearFutureNotifications = [viewModel
-            cancelLocalNotificationsOfClass:AUTTestLocalUserNotificationSubclass.class
+        let unscheduleNearFutureNotifications = [viewModel
+            unscheduleLocalNotificationsOfClass:AUTTestLocalUserNotificationSubclass.class
             passingTest:^ BOOL (AUTTestLocalUserNotificationSubclass * notification) {
-                return notification.fireDate.timeIntervalSinceNow < 100.0;
+                return ((UNTimeIntervalNotificationTrigger *)notification.request.trigger).timeInterval < 100.0;
             }];
 
-        expect([cancelNearFutureNotifications asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect([unscheduleNearFutureNotifications asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
         expect(error).to.beNil();
 
         NSArray *scheduledNotifications = [[[viewModel scheduledLocalNotifications]
@@ -860,5 +836,121 @@ describe(@"-cancelScheduledLocalNotificationsOfClass:passingTest:", ^{
     });
 });
 
+describe(@"-deliveredNotifications", ^{
+    it(@"should send all delivered notifications", ^{
+        let localNotification = [[AUTTestLocalUserNotification alloc] init];
+        let stubRequest = [localNotification createNotificationRequest];
+        let stubLocalNotification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:stubRequest];
+
+        let remoteNotification = [[AUTTestRootRemoteUserNotification alloc] init];
+        var stubRemoteNotification = [AUTTestRootRemoteUserNotification asStubNotification];
+
+        stubCenter.deliveredNotifications = [@[ stubLocalNotification, stubRemoteNotification ] mutableCopy];
+
+        let deliveredNotifications = [[[viewModel deliveredNotifications]
+            collect]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+        expect(deliveredNotifications).to.haveACountOf(2);
+        expect(deliveredNotifications).to.contain(localNotification);
+        expect(deliveredNotifications).to.contain(remoteNotification);
+    });
+});
+
+describe(@"-deliveredNotificationsOfClass:", ^{
+    it(@"should send only the delivered notifications of the specified class", ^{
+        let localNotification = [[AUTTestLocalUserNotification alloc] init];
+        let stubRequest = [localNotification createNotificationRequest];
+        let stubLocalNotification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:stubRequest];
+
+        let remoteNotification = [[AUTTestRootRemoteUserNotification alloc] init];
+        var stubRemoteNotification = [AUTTestRootRemoteUserNotification asStubNotification];
+
+        stubCenter.deliveredNotifications = [@[ stubLocalNotification, stubRemoteNotification ] mutableCopy];
+
+        let deliveredNotifications = [[[viewModel deliveredNotificationsOfClass:AUTTestRootRemoteUserNotification.class]
+            collect]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+        expect(deliveredNotifications).to.haveACountOf(1);
+        expect(deliveredNotifications).notTo.contain(localNotification);
+        expect(deliveredNotifications).to.contain(remoteNotification);
+    });
+});
+
+describe(@"-removeDeliveredNotificationsOfClass:", ^{
+    it(@"should only remove delivered notifications of the specified class", ^{
+        let localNotification = [[AUTTestLocalUserNotification alloc] init];
+        let stubRequest = [localNotification createNotificationRequest];
+        let stubLocalNotification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:stubRequest];
+
+        let remoteNotification = [[AUTTestRootRemoteUserNotification alloc] init];
+        let stubRemoteNotification = [AUTTestRootRemoteUserNotification asStubNotification];
+
+        let anotherRemoteNotification = [[AUTTestChildRemoteUserNotification alloc] init];
+        let anotherStubRemoteNotification = [AUTTestChildRemoteUserNotification asStubNotification];
+
+        stubCenter.deliveredNotifications = [@[ stubLocalNotification, stubRemoteNotification, anotherStubRemoteNotification ] mutableCopy];
+
+        success = [[viewModel removeDeliveredNotificationsOfClass:AUTTestChildRemoteUserNotification.class]
+            asynchronouslyWaitUntilCompleted:&error];
+
+        let deliveredNotifications = [[[viewModel deliveredNotifications]
+            collect]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+        expect(deliveredNotifications).to.haveACountOf(2);
+        expect(deliveredNotifications).to.contain(localNotification);
+        expect(deliveredNotifications).to.contain(remoteNotification);
+        expect(deliveredNotifications).notTo.contain(anotherRemoteNotification);
+    });
+});
+
+describe(@"-removeDelvieredNotificationsOfClass:passingTest:", ^{
+    it(@"should only remove delivered notifications of the specified class that pass the given test", ^{
+        let notification = [[AUTTestLocalUserNotification alloc] init];
+        notification.triggerTimeInterval = 10.0;
+        let stubRequest = [notification createNotificationRequest];
+        let stubNotification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:stubRequest];
+
+        let distantFutureNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
+        distantFutureNotification.triggerTimeInterval = 1000.0;
+        let distantFutureRequest = [distantFutureNotification createNotificationRequest];
+        let stubDistantFutureNotification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:distantFutureRequest];
+
+        let nearFutureNotification = [[AUTTestLocalUserNotificationSubclass alloc] init];
+        nearFutureNotification.triggerTimeInterval = 10.0;
+        let nearFutureRequest = [nearFutureNotification createNotificationRequest];
+        let stubNearFutureNotification = [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:nearFutureRequest];
+
+        stubCenter.deliveredNotifications = [@[ stubNotification, stubDistantFutureNotification, stubNearFutureNotification ] mutableCopy];
+
+        let removeNearFutureNotifications = [viewModel
+            removeDeliveredNotificationsOfClass:AUTTestLocalUserNotificationSubclass.class
+            passingTest:^ BOOL (AUTTestLocalUserNotificationSubclass * notification) {
+                return ((UNTimeIntervalNotificationTrigger *)notification.request.trigger).timeInterval < 100.0;
+            }];
+
+        expect([removeNearFutureNotifications asynchronouslyWaitUntilCompleted:&error]).to.beTruthy();
+        expect(error).to.beNil();
+
+        let deliveredNotifications = [[[viewModel deliveredNotifications]
+            collect]
+            asynchronousFirstOrDefault:nil success:&success error:&error];
+
+        expect(error).to.beNil();
+        expect(success).to.beTruthy();
+        expect(deliveredNotifications).to.haveACountOf(2);
+        expect(deliveredNotifications).to.contain(notification);
+        expect(deliveredNotifications).to.contain(distantFutureNotification);
+        expect(deliveredNotifications).notTo.contain(nearFutureNotification);
+    });
+});
 
 SpecEnd

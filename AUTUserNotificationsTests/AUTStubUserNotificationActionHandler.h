@@ -13,10 +13,10 @@ NS_ASSUME_NONNULL_BEGIN
 @interface AUTStubUserNotificationActionHandler : NSObject <AUTUserNotificationActionHandler>
 
 /// The handler for the fetch. Completes immediately by default.
-@property (readwrite, nonatomic, strong) RACSignal *actionHandler;
+@property (readwrite, nonatomic, nullable) RACSignal *actionHandler;
 
 /// The notification that a fetch was performed for.
-@property (readonly, nonatomic, strong) AUTUserNotification *notification;
+@property (readonly, nonatomic, nullable) AUTUserNotification *notification;
 
 @end
 

@@ -1,3 +1,4 @@
+github "automatic/AUTExtObjC" "6fa9ec9c077b0349763bc4720519db1aa95ef657"
 github "CocoaLumberjack/CocoaLumberjack" "2.4.0"
 github "Mantle/Mantle" "2.1.0"
 github "luisobo/Nocilla" "0.10.0"

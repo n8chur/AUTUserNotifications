@@ -12,11 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AUTTestLocalUserNotification : AUTLocalUserNotification
 
-/// The fire date that the notification that is created by the receiver.
-///
-/// Default value of nil, which means the notification is scheduled for
-/// immediate display.
-@property (readwrite, nonatomic, copy, nullable) NSDate *fireDate;
+/// The time interval for the notification that is created by the receiver.
+@property (nonatomic) NSTimeInterval triggerTimeInterval;
 
 @end
 

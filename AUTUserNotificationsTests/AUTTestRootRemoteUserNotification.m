@@ -6,12 +6,23 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
+#import <AUTUserNotifications/AUTStubUserNotificationCenter.h>
+
 #import "AUTTestChildRemoteUserNotification.h"
 #import "AUTAnotherTestChildRemoteUserNotification.h"
+#import "AUTExtObjC.h"
 
 #import "AUTTestRootRemoteUserNotification.h"
 
+@import ObjectiveC;
+
 NS_ASSUME_NONNULL_BEGIN
+
+@interface UNPushNotificationTrigger (Private)
+
+- (instancetype)_initWithContentAvailable:contentAvailable mutableContent:mutableContent;
+
+@end
 
 @implementation AUTTestRootRemoteUserNotification
 
@@ -52,6 +63,23 @@ NS_ASSUME_NONNULL_BEGIN
             @"category": self.systemCategoryIdentifier,
         }
     };
+}
+
++ (AUTStubUNNotification *)asStubNotification {
+    let content = [[UNMutableNotificationContent alloc] init];
+    content.userInfo = [self asRemoteJSONDictionary];
+
+    let request = [UNNotificationRequest
+        requestWithIdentifier:self.systemCategoryIdentifier
+        content:content
+        trigger:[[UNPushNotificationTrigger alloc] _initWithContentAvailable:nil mutableContent:nil]];
+
+    return [[AUTStubUNNotification alloc] initWithDate:[NSDate date] request:request];
+}
+
++ (AUTStubUNNotificationResponse *)asStubResponseWithActionIdentifier:(NSString *)actionIdentifier {
+    let notification = [self asStubNotification];
+    return [[AUTStubUNNotificationResponse alloc] initWithNotification:notification actionIdentifier:actionIdentifier];
 }
 
 @end

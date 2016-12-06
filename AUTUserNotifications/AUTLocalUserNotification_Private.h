@@ -1,38 +1,36 @@
 //
 //  AUTLocalUserNotification_Private.h
-//  Automatic
+//  AUTUserNotifications
 //
-//  Created by Eric Horacek on 9/24/15.
-//  Copyright © 2015 Automatic Labs. All rights reserved.
+//  Created by Eric Horacek on 12/1/16.
+//  Copyright © 2016 Automatic Labs. All rights reserved.
 //
-
-@import UIKit;
 
 #import <AUTUserNotifications/AUTLocalUserNotification.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
+/// The key used to store an NSKeyedArchiver NSData representation of an
+/// AUTLocalUserNotification within the userInfo of a UILocalNotification.
+extern NSString * const AUTLocalUserNotificationKey;
+
 @interface AUTLocalUserNotification ()
 
-/// The notification that the receiver was created from, if there was one.
+/// Attempts to restore a local notification from the provided request.
 ///
-/// Typically populated in the case of the receiver being restored from a
-/// received or enqueued notification.
-///
-/// Nil if the receiver was not created from a system notification.
-@property (readwrite, atomic, strong, nullable) UILocalNotification *systemNotification;
+/// @return The successfully restored notification, otherwise nil if
+///         unsuccessful.
++ (nullable __kindof AUTLocalUserNotification *)notificationRestoredFromRequest:(UNNotificationRequest *)request;
 
-/// Creates a local notification from a received system notification.
+/// Creates a local notification request representing the receiver to be sent to
+/// the system.
 ///
-/// @param actionIdentifier The action identifier for the notification, if there
-///        is one.
+/// The returned notification request should be considered a copy. Its
+/// attributes will not be updated in sync with the receiver following its
+/// creation.
 ///
-/// @param systemActionCompletionHandler The action completion handler for the
-///        notification, if there is one.
-///
-/// @return nil if a notification should not be created from the specified
-///         system local notification.
-+ (nullable instancetype)notificationRestoredFromSystemNotification:(UILocalNotification *)systemNotification withActionIdentifier:(nullable NSString *)actionIdentifier systemActionCompletionHandler:(nullable void (^)())systemActionCompletionHandler;
+/// If a notification request could not be created, returns nil.
+- (nullable UNNotificationRequest *)createNotificationRequest;
 
 @end
 

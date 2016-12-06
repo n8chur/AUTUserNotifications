@@ -6,12 +6,10 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
-@import Mantle;
-@import ReactiveObjC;
-
+#import "AUTExtObjC.h"
 #import "AUTLog.h"
-
 #import "AUTUserNotification_Private.h"
+
 #import "AUTLocalUserNotification_Private.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -20,21 +18,45 @@ NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification";
 
 @implementation AUTLocalUserNotification
 
-@dynamic badgeCount, sound, category, localizedTitle, localizedBody, localizedAction, launchImageFilename;
+#pragma mark - AUTLocalUserNotification
 
-#pragma mark - Lifecycle
+#pragma mark Public
 
-+ (nullable instancetype)notificationRestoredFromSystemNotification:(UILocalNotification *)systemNotification withActionIdentifier:(nullable NSString *)actionIdentifier systemActionCompletionHandler:(nullable void (^)())systemActionCompletionHandler {
-    NSParameterAssert(systemNotification != nil);
+- (nullable UNMutableNotificationContent *)createNotificationContent {
+    let content = [[UNMutableNotificationContent alloc] init];
 
-    if (systemNotification.userInfo == nil) {
-        AUTLogLocalUserNotificationInfo(@"Notification has no userInfo, skipping unarchiving of AUTLocalUserNotification: %@", systemNotification);
+    let archive = [NSKeyedArchiver archivedDataWithRootObject:self];
+    content.userInfo = @{ AUTLocalUserNotificationKey: archive };
+
+    content.categoryIdentifier = [self.class systemCategoryIdentifier];
+
+    return content;
+}
+
+- (nullable UNNotificationTrigger *)createNotificationTrigger {
+    // 0.0s causes an exception to be thrown.
+    return [UNTimeIntervalNotificationTrigger triggerWithTimeInterval:0.01 repeats:NO];
+}
+
+- (nullable NSString *)createNotificationIdentifier {
+    return [NSUUID UUID].UUIDString;
+}
+
+#pragma mark Private
+
++ (nullable __kindof AUTLocalUserNotification *)notificationRestoredFromRequest:(UNNotificationRequest *)request {
+    AUTAssertNotNil(request);
+
+    let userInfo = request.content.userInfo;
+
+    if (userInfo == nil) {
+        AUTLogUserNotificationInfo(@"Notification has no userInfo, skipping unarchiving of AUTLocalUserNotification from request %@", request);
         return nil;
     }
 
-    NSData *encodedSelf = systemNotification.userInfo[AUTLocalUserNotificationKey];
-    if (encodedSelf == nil) {
-        AUTLogLocalUserNotificationInfo(@"Notification userInfo has no %@ key, skipping unarchiving of AUTLocalUserNotification: %@", AUTLocalUserNotificationKey, systemNotification);
+    let encodedSelf = (NSData *)userInfo[AUTLocalUserNotificationKey];
+    if (encodedSelf == nil || ![encodedSelf isKindOfClass:NSData.class]) {
+        AUTLogUserNotificationInfo(@"Notification userInfo has no data for %@, skipping unarchiving of AUTLocalUserNotification from request %@ with userInfo %@", AUTLocalUserNotificationKey, request, userInfo);
         return nil;
     }
 
@@ -43,90 +65,32 @@ NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification";
     @try {
         notification = [NSKeyedUnarchiver unarchiveObjectWithData:encodedSelf];
     } @catch (NSException* exception) {
-        AUTLogLocalUserNotificationError(@"Caught exception while attempting to unarchive an AUTLocalUserNotification encoded within system notification: %@, exception: %@", systemNotification, exception);
+        AUTLogUserNotificationError(@"Caught exception while attempting to unarchive an AUTLocalUserNotification encoded from request %@ userInfo %@, exception: %@", request, userInfo, exception);
         return nil;
     }
 
     if (notification == nil || ![notification isKindOfClass:AUTLocalUserNotification.class]) {
-        AUTLogLocalUserNotificationError(@"Failed to unarchive an AUTLocalUserNotification encoded within system notification: %@", systemNotification);
+        AUTLogUserNotificationError(@"Failed to unarchive an AUTLocalUserNotification from request %@ userInfo %@, instead found %@", request, userInfo, notification);
         return nil;
     }
 
-    notification.systemNotification = systemNotification;
-    notification.actionIdentifier = actionIdentifier;
-    notification.systemActionCompletionHandler = systemActionCompletionHandler;
-
-    if (![notification restoreFromSystemNotification:systemNotification]) return nil;
+    notification.request = request;
 
     return notification;
 }
 
-#pragma mark - MTLModel
+- (nullable UNNotificationRequest *)createNotificationRequest {
 
-+ (MTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
-    if ([propertyKey isEqualToString:@keypath(AUTLocalUserNotification.new, systemNotification)]) {
-        return MTLPropertyStorageTransitory;
-    }
+    let identifier = [self createNotificationIdentifier];
+    if (identifier == nil) return nil;
 
-    return [super storageBehaviorForPropertyWithKey:propertyKey];
-}
+    let trigger = [self createNotificationTrigger];
+    if (trigger == nil) return nil;
 
-+ (NSDictionary *)encodingBehaviorsByPropertyKey {
-    return [[super encodingBehaviorsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
-        @keypath(AUTLocalUserNotification.new, systemNotification): @(MTLModelEncodingBehaviorExcluded),
-    }];
-}
+    let content = [self createNotificationContent];
+    if (content == nil) return nil;
 
-#pragma mark - AUTLocalUserNotification
-
-- (nullable UILocalNotification *)createSystemNotification {
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
-
-    // TODO: Restore some information from self.systemNotification, if needed?
-
-    // Store self within the notification's user info, for later restoration
-    // upon a subsequent launch.
-    notification.userInfo = @{
-        AUTLocalUserNotificationKey: [NSKeyedArchiver archivedDataWithRootObject:self],
-    };
-
-    notification.category = [self.class systemCategoryIdentifier];
-
-    return notification;
-}
-
-- (BOOL)restoreFromSystemNotification:(UILocalNotification *)notification {
-    return YES;
-}
-
-#pragma mark - AUTUserNotificationAlertDisplayable
-
-- (nullable NSString *)localizedBody {
-    return self.systemNotification.alertBody;
-}
-
-- (nullable NSString *)localizedTitle {
-    return self.systemNotification.alertTitle;
-}
-
-- (nullable NSString *)localizedAction {
-    return self.systemNotification.alertAction;
-}
-
-- (nullable NSString *)sound {
-    return self.systemNotification.soundName;
-}
-
-- (nullable NSString *)launchImageFilename {
-    return self.systemNotification.alertLaunchImage;
-}
-
-- (nullable NSString *)category {
-    return self.systemNotification.category;
-}
-
-- (nullable NSNumber *)badgeCount {
-    return @(self.systemNotification.applicationIconBadgeNumber);
+    return [UNNotificationRequest requestWithIdentifier:identifier content:content trigger:trigger];
 }
 
 @end

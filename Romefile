@@ -3,3 +3,4 @@
 
 [IgnoreMap]
     xcconfigs = xcconfigs
+    AUTExtObjC = AUTExtObjC

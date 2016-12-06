@@ -1,2 +1,3 @@
 github "jspahrsummers/xcconfigs"
 github "Automatic/AUTTestKit" ~> 1.0
+github "automatic/AUTExtObjC" "master"
