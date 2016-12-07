@@ -25,8 +25,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nonatomic) BOOL authorizationGranted;
 @property (nonatomic, nullable) NSError *authorizationError;
 
-@property (nonatomic, copy) NSMutableArray<UNNotificationRequest *> *notificationsRequests;
-@property (nonatomic, copy) NSMutableArray<AUTStubUNNotification *> *deliveredNotifications;
+@property (nonatomic, copy) NSArray<UNNotificationRequest *> *notificationsRequests;
+@property (nonatomic, copy) NSArray<AUTStubUNNotification *> *deliveredNotifications;
 
 /// Sends the presentation options for the given notification and completes.
 - (RACSignal<NSNumber *> *)presentNotification:(AUTStubUNNotification *)notification;

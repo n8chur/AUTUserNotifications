@@ -24,8 +24,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init {
     self = [super init];
 
-    _notificationsRequests = [NSMutableArray array];
-    _deliveredNotifications = [NSMutableArray array];
+    _notificationsRequests = [NSArray array];
+    _deliveredNotifications = [NSArray array];
 
     return self;
 }
@@ -47,7 +47,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)addNotificationRequest:(UNNotificationRequest *)request withCompletionHandler:(nullable void(^)(NSError * _Nullable error))completionHandler {
-    [self.notificationsRequests addObject:request];
+    self.notificationsRequests = [self.notificationsRequests arrayByAddingObject:request];
 
     if ([request.trigger isKindOfClass:UNTimeIntervalNotificationTrigger.class]) {
         let trigger = (UNTimeIntervalNotificationTrigger *)request.trigger;
@@ -68,16 +68,15 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)removePendingNotificationRequestsWithIdentifiers:(NSArray<NSString *> *)identifiers {
-    self.notificationsRequests = [[[self.notificationsRequests.rac_sequence
+    self.notificationsRequests = [[self.notificationsRequests.rac_sequence
         filter:^ BOOL (UNNotificationRequest *request) {
             return ![identifiers containsObject:request.identifier];
         }]
-        array]
-        mutableCopy];
+        array];
 }
 
 - (void)removeAllPendingNotificationRequests {
-    [self.notificationsRequests removeAllObjects];
+    self.notificationsRequests = @[];
 }
 
 - (void)getDeliveredNotificationsWithCompletionHandler:(void (^)(NSArray<UNNotification *> *notifications))completionHandler {
@@ -85,16 +84,15 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)removeDeliveredNotificationsWithIdentifiers:(NSArray<NSString *> *)identifiers {
-    self.deliveredNotifications = [[[self.deliveredNotifications.rac_sequence
+    self.deliveredNotifications = [[self.deliveredNotifications.rac_sequence
         filter:^ BOOL (AUTStubUNNotification *notification) {
             return ![identifiers containsObject:notification.request.identifier];
         }]
-        array]
-        mutableCopy];
+        array];
 }
 
 - (void)removeAllDeliveredNotifications {
-    [self.deliveredNotifications removeAllObjects];
+    self.deliveredNotifications = @[];
 }
 
 - (RACSignal<NSNumber *> *)presentNotification:(AUTStubUNNotification *)notification {
