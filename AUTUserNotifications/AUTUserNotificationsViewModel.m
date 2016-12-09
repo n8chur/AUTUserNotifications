@@ -248,7 +248,10 @@ NS_ASSUME_NONNULL_BEGIN
 
     @weakify(self);
 
-    return [[[registrar registerDeviceToken:token]
+    let registerDeviceToken = [registrar registerDeviceToken:token];
+    NSAssert(registerDeviceToken != nil, @"%@ %@ must return a signal", registrar, NSStringFromSelector(@selector(registerDeviceToken:)));
+
+    return [[registerDeviceToken
         initially:^{
             AUTLogUserNotificationInfo(@"%@ registering token %@ with registrar %@...", self_weak_, token, registrar);
         }]
@@ -397,7 +400,10 @@ NS_ASSUME_NONNULL_BEGIN
     __block BOOL didSendValidValue = NO;
     @weakify(handler);
 
-    return [[[[handler performFetchForNotification:notification]
+    let performFetch = [handler performFetchForNotification:notification];
+    NSAssert(performFetch != nil, @"%@ %@ must return a signal", handler, NSStringFromSelector(@selector(performFetchForNotification:)));
+
+    return [[[performFetch
         doNext:^(NSNumber *refreshResult) {
             NSCAssert(!didSendValidValue, @"%@ -performFetchForNotification: %@ must only send one next value, instead received: %@", handler_weak_, notification, refreshResult);
             NSCAssert([refreshResult isKindOfClass:NSNumber.class], @"%@ -performFetchForNotification: %@ must send an NSNumber, instead received: %@", handler_weak_, notification, refreshResult);
@@ -573,8 +579,10 @@ NS_ASSUME_NONNULL_BEGIN
 
     @weakify(self, handler);
 
-    return [[[handler performActionForNotification:notification]
-        ignoreValues]
+    let performAction = [handler performActionForNotification:notification];
+    NSAssert(performAction != nil, @"%@ %@ must return a signal", handler, NSStringFromSelector(@selector(performActionForNotification:)));
+
+    return [[performAction ignoreValues]
         doError:^(NSError *error) {
             let reason = [NSString stringWithFormat:@"%@ %@ -performActionForNotification: errored due to programmer error: %@", self_weak_, handler_weak_, error];
             @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];
