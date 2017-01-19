@@ -36,19 +36,22 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - Remote Notification Registration
 
 - (void)registerForRemoteNotifications {
-    if (self.remoteNotificationRegistrationError != nil) {
+    let error = self.remoteNotificationRegistrationError;
+    let token = self.remoteNotificationRegistrationDeviceToken;
+
+    if (error != nil) {
         self.isRegisteredForRemoteNotifications = NO;
 
         [self.delegate
             application:(UIApplication *)NSObject.new
-            didFailToRegisterForRemoteNotificationsWithError:self.remoteNotificationRegistrationError];
+            didFailToRegisterForRemoteNotificationsWithError:error];
 
-    } else if (self.remoteNotificationRegistrationDeviceToken != nil) {
+    } else if (token != nil) {
         self.isRegisteredForRemoteNotifications = YES;
 
         [self.delegate
             application:(UIApplication *)NSObject.new
-            didRegisterForRemoteNotificationsWithDeviceToken:self.remoteNotificationRegistrationDeviceToken];
+            didRegisterForRemoteNotificationsWithDeviceToken:token];
     } else {
         let reason = @"You must either set an error or token before registering for remote notifications";
         @throw [NSException exceptionWithName:NSInternalInconsistencyException reason:reason userInfo:nil];

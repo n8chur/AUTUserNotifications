@@ -6,6 +6,8 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
+#import "AUTExtObjC.h"
+
 #import "AUTStubUserNotificationActionHandler.h"
 
 NS_ASSUME_NONNULL_BEGIN
@@ -29,7 +31,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (RACSignal *)performActionForNotification:(AUTUserNotification *)notification {
     self.notification = notification;
 
-    return self.actionHandler;
+    return AUTNotNil(self.actionHandler ?: [RACSignal empty]);
 }
 
 @end

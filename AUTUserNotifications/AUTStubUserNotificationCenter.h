@@ -17,9 +17,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AUTStubUserNotificationCenter : NSObject <AUTUserNotificationCenter>
 
-@property (nonatomic, copy, nullable) NSSet<UNNotificationCategory *> *notificationCategories;
+@property (nonatomic, copy) NSSet<UNNotificationCategory *> *notificationCategories;
 
-@property (nonatomic, nullable) UNNotificationSettings *settings;
+@property (nonatomic) UNNotificationSettings *settings;
 
 @property (nonatomic) UNAuthorizationOptions requestedAuthorizationOptions;
 @property (nonatomic) BOOL authorizationGranted;

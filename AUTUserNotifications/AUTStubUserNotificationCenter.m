@@ -26,6 +26,8 @@ NS_ASSUME_NONNULL_BEGIN
 
     _notificationsRequests = [NSArray array];
     _deliveredNotifications = [NSArray array];
+    _notificationCategories = [NSSet set];
+    _settings = (UNNotificationSettings *)NSObject.new;
 
     return self;
 }

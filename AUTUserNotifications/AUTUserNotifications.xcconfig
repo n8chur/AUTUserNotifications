@@ -47,14 +47,3 @@ DYLIB_COMPATIBILITY_VERSION = 1
 // that are not available to app extensions and to disallow linking to
 // frameworks that have not been built with this setting enabled.
 APPLICATION_EXTENSION_API_ONLY = NO
-
-// Activating this setting indicates that the target or project should generate
-// bitcode during compilation for platforms and architectures which support it.
-// For Archive builds, bitcode will be generated in the linked binary for
-// submission to the app store.  For other builds, the compiler and linker will
-// check whether the code complies with the requirements for bitcode generation,
-// but will not generate actual bitcode.
-//
-// Temporarily disabled until we can use Reactive Cocoa 4.0, which will have
-// Bitcode support enabled in the precompiled binary
-ENABLE_BITCODE = NO
