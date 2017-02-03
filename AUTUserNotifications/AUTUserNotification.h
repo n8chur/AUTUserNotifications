@@ -36,7 +36,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (BOOL)restoreFromResponse:(UNNotificationResponse *)response;
 
 /// The request that the receiver restored from, or else nil if the receiver
-/// was not restored from a response.
+/// was not restored from a request.
 ///
 /// This property is not considered for equality checks nor included if the
 /// receiver is archived.
