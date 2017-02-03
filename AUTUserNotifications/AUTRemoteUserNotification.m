@@ -58,6 +58,24 @@ NS_ASSUME_NONNULL_BEGIN
     return category;
 }
 
+#pragma mark - MTLModel
+
++ (MTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
+    // Any state related to restoration should not be persisted.
+    BOOL isNotStored = [propertyKey isEqualToString:@keypath(AUTRemoteUserNotification.new, systemFetchCompletionHandler)];
+
+    if (isNotStored) return MTLPropertyStorageNone;
+
+    return [super storageBehaviorForPropertyWithKey:propertyKey];
+}
+
++ (NSDictionary *)encodingBehaviorsByPropertyKey {
+    return [super.encodingBehaviorsByPropertyKey mtl_dictionaryByAddingEntriesFromDictionary:@{
+        // Any state related to restoration should not be persisted.
+        @keypath(AUTRemoteUserNotification.new, systemFetchCompletionHandler): @(MTLModelEncodingBehaviorExcluded),
+    }];
+}
+
 @end
 
 NS_ASSUME_NONNULL_END

@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 ///
 /// AUTUserNotificationsViewModel sets this property to nil following its 
 /// execution.
+///
+/// This property is not considered for equality checks nor included if the
+/// receiver is archived.
 @property (readwrite, atomic, copy, nullable) void (^systemFetchCompletionHandler)(UIBackgroundFetchResult);
 
 @end

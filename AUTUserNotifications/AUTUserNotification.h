@@ -21,6 +21,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 /// The response that the receiver restored from, or else nil if the
 /// notification has yet to be received.
+///
+/// This property is not considered for equality checks nor included if the
+/// receiver is archived.
 @property (readonly, nonatomic, nullable) UNNotificationResponse *response;
 
 /// Restores attributes on the receiver from a notification response.
@@ -32,7 +35,11 @@ NS_ASSUME_NONNULL_BEGIN
 ///         response, otherwise YES.
 - (BOOL)restoreFromResponse:(UNNotificationResponse *)response;
 
-/// The request that the receiver restored from, or else nil.
+/// The request that the receiver restored from, or else nil if the receiver
+/// was not restored from a response.
+///
+/// This property is not considered for equality checks nor included if the
+/// receiver is archived.
 @property (readonly, nonatomic, nullable) UNNotificationRequest *request;
 
 /// Restores attributes on the receiver from a notification request.

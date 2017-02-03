@@ -101,26 +101,24 @@ NS_ASSUME_NONNULL_BEGIN
 #pragma mark - MTLModel
 
 + (MTLPropertyStorage)storageBehaviorForPropertyWithKey:(NSString *)propertyKey {
-    if ([propertyKey isEqualToString:@keypath(AUTUserNotification.new, responseCompletionHandler)]) {
-        return MTLPropertyStorageNone;
-    }
+    // Any state related to restoration should not be persisted.
+    BOOL isNotStored = (
+        [propertyKey isEqualToString:@keypath(AUTUserNotification.new, responseCompletionHandler)] ||
+        [propertyKey isEqualToString:@keypath(AUTUserNotification.new, request)] ||
+        [propertyKey isEqualToString:@keypath(AUTUserNotification.new, response)]
+    );
 
-    if ([propertyKey isEqualToString:@keypath(AUTUserNotification.new, response)]) {
-        return MTLPropertyStorageNone;
-    }
-
-    if ([propertyKey isEqualToString:@keypath(AUTUserNotification.new, request)]) {
-        return MTLPropertyStorageNone;
-    }
+    if (isNotStored) return MTLPropertyStorageNone;
 
     return [super storageBehaviorForPropertyWithKey:propertyKey];
 }
 
 + (NSDictionary *)encodingBehaviorsByPropertyKey {
-    return [[super encodingBehaviorsByPropertyKey] mtl_dictionaryByAddingEntriesFromDictionary:@{
-        @keypath(AUTLocalUserNotification.new, responseCompletionHandler): @(MTLModelEncodingBehaviorExcluded),
-        @keypath(AUTLocalUserNotification.new, response): @(MTLModelEncodingBehaviorExcluded),
-        @keypath(AUTLocalUserNotification.new, request): @(MTLModelEncodingBehaviorExcluded),
+    return [super.encodingBehaviorsByPropertyKey mtl_dictionaryByAddingEntriesFromDictionary:@{
+        // Any state related to restoration should not be persisted.
+        @keypath(AUTUserNotification.new, responseCompletionHandler): @(MTLModelEncodingBehaviorExcluded),
+        @keypath(AUTUserNotification.new, request): @(MTLModelEncodingBehaviorExcluded),
+        @keypath(AUTUserNotification.new, response): @(MTLModelEncodingBehaviorExcluded),
     }];
 }
 
