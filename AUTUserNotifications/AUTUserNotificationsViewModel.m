@@ -646,6 +646,7 @@ NS_ASSUME_NONNULL_BEGIN
         }
     }
 }
+
 #pragma mark - Presented Notifications
 
 - (RACSignal<AUTUserNotification *> *)presentedNotificationsOfClass:(Class)notificationClass {

@@ -17,12 +17,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readwrite, nonatomic, nullable) UNNotificationResponse *response;
 @property (readwrite, nonatomic, nullable) UNNotificationRequest *request;
 
-/// Attempts to restore a notification from the provided request.
-///
-/// @return The successfully restored notification, otherwise nil if
-///         unsuccessful.
-+ (nullable __kindof AUTUserNotification *)notificationRestoredFromRequest:(UNNotificationRequest *)request rootRemoteNotificationClass:(Class)rootRemoteNotificationClass;
-
 /// Attempts to restore a notification from the provided response.
 ///
 /// @return The successfully restored notification, otherwise nil if

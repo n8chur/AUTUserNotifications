@@ -76,6 +76,7 @@
 		3AEB33D31BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.h in Headers */ = {isa = PBXBuildFile; fileRef = 3AEB33CF1BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		3AEB33D41BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.m */; };
 		3AF00C171D4737CB00FE37CF /* AUTAnotherTestChildRemoteUserNotification.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AF00C161D4737CB00FE37CF /* AUTAnotherTestChildRemoteUserNotification.m */; };
+		3AF419601E5E453A00515CCF /* AUTUserNotificationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AF4195F1E5E453A00515CCF /* AUTUserNotificationSpec.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -198,6 +199,7 @@
 		3AEB33D01BBCBD6A0088AE62 /* AUTStubUserNotificationCenter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTStubUserNotificationCenter.m; sourceTree = "<group>"; };
 		3AF00C151D4737CB00FE37CF /* AUTAnotherTestChildRemoteUserNotification.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTAnotherTestChildRemoteUserNotification.h; sourceTree = "<group>"; };
 		3AF00C161D4737CB00FE37CF /* AUTAnotherTestChildRemoteUserNotification.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTAnotherTestChildRemoteUserNotification.m; sourceTree = "<group>"; };
+		3AF4195F1E5E453A00515CCF /* AUTUserNotificationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTUserNotificationSpec.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -248,9 +250,10 @@
 		3A2F60E91BBB019400BE420C /* Specs */ = {
 			isa = PBXGroup;
 			children = (
-				3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */,
-				3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */,
 				3A4261311D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m */,
+				3A2F60EA1BBB019A00BE420C /* AUTRemoteUserNotificationSpec.m */,
+				3AF4195F1E5E453A00515CCF /* AUTUserNotificationSpec.m */,
+				3A2F60E71BBB019100BE420C /* AUTUserNotificationViewModelSpec.m */,
 			);
 			name = Specs;
 			sourceTree = "<group>";
@@ -651,6 +654,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3AF419601E5E453A00515CCF /* AUTUserNotificationSpec.m in Sources */,
 				3A2F60E81BBB019100BE420C /* AUTUserNotificationViewModelSpec.m in Sources */,
 				3AF00C171D4737CB00FE37CF /* AUTAnotherTestChildRemoteUserNotification.m in Sources */,
 				3A4261321D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m in Sources */,

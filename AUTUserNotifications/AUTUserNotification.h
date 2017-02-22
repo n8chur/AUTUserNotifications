@@ -91,6 +91,17 @@ NS_ASSUME_NONNULL_BEGIN
 /// @see -[UNNotificationCategory intentIdentifiers];
 @property (readonly, nonatomic, copy, class) NSArray<NSString *> *systemCategoryIntentIdentifiers;
 
+/// Attempts to restore a notification from the provided request.
+///
+/// Should be invoked to build a user notification in cases where a
+/// UNNotificationRequest is delivered outside of the context of a
+/// UNUserNotificationCenter, e.g. in a notification content or notification
+/// service extension.
+///
+/// @return The successfully restored notification, otherwise nil if
+///         unsuccessful.
++ (nullable __kindof AUTUserNotification *)notificationRestoredFromRequest:(UNNotificationRequest *)request rootRemoteNotificationClass:(Class)rootRemoteNotificationClass;
+
 @end
 
 NS_ASSUME_NONNULL_END

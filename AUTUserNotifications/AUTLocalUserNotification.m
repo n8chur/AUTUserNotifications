@@ -49,11 +49,6 @@ NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification";
 
     let userInfo = request.content.userInfo;
 
-    if (userInfo == nil) {
-        AUTLogUserNotificationInfo(@"Notification has no userInfo, skipping unarchiving of AUTLocalUserNotification from request %@", request);
-        return nil;
-    }
-
     let encodedSelf = (NSData *)userInfo[AUTLocalUserNotificationKey];
     if (encodedSelf == nil || ![encodedSelf isKindOfClass:NSData.class]) {
         AUTLogUserNotificationInfo(@"Notification userInfo has no data for %@, skipping unarchiving of AUTLocalUserNotification from request %@ with userInfo %@", AUTLocalUserNotificationKey, request, userInfo);
@@ -80,7 +75,6 @@ NSString * const AUTLocalUserNotificationKey = @"AUTLocalUserNotification";
 }
 
 - (nullable UNNotificationRequest *)createNotificationRequest {
-
     let identifier = [self createNotificationIdentifier];
     if (identifier == nil) return nil;
 

@@ -8,8 +8,7 @@
 
 @import Specta;
 @import Expecta;
-#import <AUTUserNotifications/AUTUserNotifications.h>
-#import <AUTUserNotifications/AUTUserNotification_Private.h>
+@import AUTUserNotifications;
 #import <AUTUserNotifications/AUTLocalUserNotification_Private.h>
 
 #import "AUTExtObjC.h"

@@ -6,9 +6,9 @@
 //  Copyright © 2015 Automatic Labs. All rights reserved.
 //
 
-#import <Specta/Specta.h>
-#import <Expecta/Expecta.h>
-#import <AUTUserNotifications/AUTUserNotifications.h>
+@import Specta;
+@import Expecta;
+@import AUTUserNotifications;
 #import <AUTUserNotifications/AUTLocalUserNotification_Private.h>
 #import <AUTUserNotifications/AUTUserNotificationsViewModel+Stubs.h>
 
