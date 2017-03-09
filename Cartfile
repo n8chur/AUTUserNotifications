@@ -1,5 +1,5 @@
 # Internal
-github "automatic/AUTLogKit" ~> 5.0
+github "automatic/AUTLogKit" ~> 6.0
 
 # External
 github "ReactiveCocoa/ReactiveObjC" ~> 2.1

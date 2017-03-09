@@ -11,3 +11,4 @@
 #import "AUTStrongifyOr.h"
 #import "AUTUnavailableDesignatedInitializer.h"
 #import "AUTAutoType.h"
+#import "AUTLocalizationNotNeeded.h"
