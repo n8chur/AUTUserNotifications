@@ -98,7 +98,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (RACSignal<NSNumber *> *)presentNotification:(AUTStubUNNotification *)notification {
-    RACSubject *subject = [RACReplaySubject subject];
+    RACSubject<NSNumber *> *subject = [RACReplaySubject subject];
 
     [self.delegate userNotificationCenter:(UNUserNotificationCenter *)self willPresentNotification:(UNNotification *)notification withCompletionHandler:^(UNNotificationPresentationOptions options) {
         [subject sendNext:@(options)];
@@ -109,7 +109,7 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (RACSignal *)receiveNotification:(AUTStubUNNotificationResponse *)response {
-    RACSubject *subject = [RACReplaySubject subject];
+    let subject = [RACReplaySubject subject];
 
     [self.delegate userNotificationCenter:(UNUserNotificationCenter *)self didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:^{
         [subject sendCompleted];

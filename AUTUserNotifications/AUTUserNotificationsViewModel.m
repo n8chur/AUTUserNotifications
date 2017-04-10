@@ -29,9 +29,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AUTUserNotificationsViewModel () <UNUserNotificationCenterDelegate> {
-    RACSubject *_respondedNotifications;
-    RACSubject *_presentedNotifications;
-    RACSubject *_receivedSilentRemoteNotifications;
+    RACSubject<__kindof AUTUserNotification *> *_respondedNotifications;
+    RACSubject<__kindof AUTUserNotification *> *_presentedNotifications;
+    RACSubject<__kindof AUTRemoteUserNotification *> *_receivedSilentRemoteNotifications;
 
     /// Should only be mutated while synchronized on self.
     NSMutableArray<AUTUserNotificationPresentationOverride> *_presentationOverrides;
@@ -58,7 +58,6 @@ NS_ASSUME_NONNULL_BEGIN
 @property (readonly, nonatomic) NSObject<AUTUserNotificationsApplication> *application;
 @property (readonly, nonatomic) NSObject<AUTUserNotificationsAppDelegate> *appDelegate;
 @property (readonly, nonatomic) UNNotificationPresentationOptions defaultPresentationOptions;
-
 
 @end
 
