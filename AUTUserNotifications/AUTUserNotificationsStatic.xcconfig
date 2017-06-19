@@ -1,0 +1,13 @@
+//
+//  AUTUserNotificationsStatic.xcconfig
+//  AUTUserNotifications
+//
+//  Created by Eric Horacek on 6/16/17.
+//  Copyright © 2017 Automatic Labs. All rights reserved.
+//
+
+#include "AUTUserNotifications.xcconfig"
+
+// This setting determines the format of the produced binary and how it can be
+// linked when building other binaries.
+MACH_O_TYPE = staticlib

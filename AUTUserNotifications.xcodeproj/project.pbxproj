@@ -23,6 +23,13 @@
 		3A2F610B1BBB096800BE420C /* AUTLog.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A2F61091BBB096800BE420C /* AUTLog.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		3A2F610C1BBB096800BE420C /* AUTLog.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A2F610A1BBB096800BE420C /* AUTLog.m */; };
 		3A4261321D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4261311D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m */; };
+		3A4466DE1EF4A7370004C01C /* Mantle.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAEA71BBAF80F002870D9 /* Mantle.framework */; };
+		3A4466DF1EF4A73E0004C01C /* AUTLogKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE691BBAED56002870D9 /* AUTLogKit.framework */; };
+		3A4466E01EF4A7440004C01C /* CocoaLumberjack.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE6B1BBAED57002870D9 /* CocoaLumberjack.framework */; };
+		3A4466E11EF4A7460004C01C /* ReactiveObjC.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3AB916A81DDE3E200064BA34 /* ReactiveObjC.framework */; };
+		3A4466E21EF4A74D0004C01C /* Expecta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE711BBAED88002870D9 /* Expecta.framework */; };
+		3A4466E31EF4A7500004C01C /* Specta.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE731BBAED88002870D9 /* Specta.framework */; };
+		3A4466E51EF4A80D0004C01C /* Nocilla.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3ADDAE721BBAED88002870D9 /* Nocilla.framework */; };
 		3A6A06ED1DF09D5A00A875D2 /* AUTAssertNotNil.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06E61DF09D5A00A875D2 /* AUTAssertNotNil.h */; };
 		3A6A06EE1DF09D5A00A875D2 /* AUTAutoType.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06E71DF09D5A00A875D2 /* AUTAutoType.h */; };
 		3A6A06EF1DF09D5A00A875D2 /* AUTExtObjC.h in Headers */ = {isa = PBXBuildFile; fileRef = 3A6A06E81DF09D5A00A875D2 /* AUTExtObjC.h */; };
@@ -133,6 +140,8 @@
 		3A2F61091BBB096800BE420C /* AUTLog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTLog.h; sourceTree = "<group>"; };
 		3A2F610A1BBB096800BE420C /* AUTLog.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTLog.m; sourceTree = "<group>"; };
 		3A4261311D1B9CDC00A7EBA4 /* AUTLocalUserNotificationSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AUTLocalUserNotificationSpec.m; sourceTree = "<group>"; };
+		3A4466C81EF49B1B0004C01C /* AUTUserNotificationsStatic.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = AUTUserNotificationsStatic.xcconfig; path = AUTUserNotifications/AUTUserNotificationsStatic.xcconfig; sourceTree = "<group>"; };
+		3A4466E41EF4A77C0004C01C /* AUTUserNotificationTestsStatic.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; name = AUTUserNotificationTestsStatic.xcconfig; path = AUTUserNotificationsTests/AUTUserNotificationTestsStatic.xcconfig; sourceTree = "<group>"; };
 		3A6A06E61DF09D5A00A875D2 /* AUTAssertNotNil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTAssertNotNil.h; sourceTree = "<group>"; };
 		3A6A06E71DF09D5A00A875D2 /* AUTAutoType.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTAutoType.h; sourceTree = "<group>"; };
 		3A6A06E81DF09D5A00A875D2 /* AUTExtObjC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AUTExtObjC.h; sourceTree = "<group>"; };
@@ -220,6 +229,13 @@
 			files = (
 				3ADDAE741BBAED88002870D9 /* AUTTestKit.framework in Frameworks */,
 				3ADDAE421BBAEA63002870D9 /* AUTUserNotifications.framework in Frameworks */,
+				3A4466DF1EF4A73E0004C01C /* AUTLogKit.framework in Frameworks */,
+				3A4466E01EF4A7440004C01C /* CocoaLumberjack.framework in Frameworks */,
+				3A4466E11EF4A7460004C01C /* ReactiveObjC.framework in Frameworks */,
+				3A4466E21EF4A74D0004C01C /* Expecta.framework in Frameworks */,
+				3A4466DE1EF4A7370004C01C /* Mantle.framework in Frameworks */,
+				3A4466E51EF4A80D0004C01C /* Nocilla.framework in Frameworks */,
+				3A4466E31EF4A7500004C01C /* Specta.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -404,7 +420,9 @@
 			isa = PBXGroup;
 			children = (
 				3ADDAE621BBAECC4002870D9 /* AUTUserNotifications.xcconfig */,
+				3A4466C81EF49B1B0004C01C /* AUTUserNotificationsStatic.xcconfig */,
 				3ADDAE631BBAECE3002870D9 /* AUTUserNotificationTests.xcconfig */,
+				3A4466E41EF4A77C0004C01C /* AUTUserNotificationTestsStatic.xcconfig */,
 				3ADDAE511BBAEC87002870D9 /* Base */,
 				3ADDAE5C1BBAEC87002870D9 /* iOS */,
 			);
@@ -679,6 +697,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		3A0F5CFC1EF83EFD00FC51B0 /* Release Static */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ADDAE561BBAEC87002870D9 /* Release.xcconfig */;
+			buildSettings = {
+			};
+			name = "Release Static";
+		};
+		3A0F5CFD1EF83EFD00FC51B0 /* Release Static */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A4466C81EF49B1B0004C01C /* AUTUserNotificationsStatic.xcconfig */;
+			buildSettings = {
+			};
+			name = "Release Static";
+		};
+		3A0F5CFE1EF83EFD00FC51B0 /* Release Static */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A4466E41EF4A77C0004C01C /* AUTUserNotificationTestsStatic.xcconfig */;
+			buildSettings = {
+			};
+			name = "Release Static";
+		};
+		3A4466C91EF49B2A0004C01C /* Debug Static */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3ADDAE541BBAEC87002870D9 /* Debug.xcconfig */;
+			buildSettings = {
+			};
+			name = "Debug Static";
+		};
+		3A4466CA1EF49B2A0004C01C /* Debug Static */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A4466C81EF49B1B0004C01C /* AUTUserNotificationsStatic.xcconfig */;
+			buildSettings = {
+			};
+			name = "Debug Static";
+		};
+		3A4466CB1EF49B2A0004C01C /* Debug Static */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 3A4466E41EF4A77C0004C01C /* AUTUserNotificationTestsStatic.xcconfig */;
+			buildSettings = {
+			};
+			name = "Debug Static";
+		};
 		3ADDAE491BBAEA63002870D9 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 3ADDAE541BBAEC87002870D9 /* Debug.xcconfig */;
@@ -728,7 +788,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3ADDAE491BBAEA63002870D9 /* Debug */,
+				3A4466C91EF49B2A0004C01C /* Debug Static */,
 				3ADDAE4A1BBAEA63002870D9 /* Release */,
+				3A0F5CFC1EF83EFD00FC51B0 /* Release Static */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -737,7 +799,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3ADDAE4C1BBAEA63002870D9 /* Debug */,
+				3A4466CA1EF49B2A0004C01C /* Debug Static */,
 				3ADDAE4D1BBAEA63002870D9 /* Release */,
+				3A0F5CFD1EF83EFD00FC51B0 /* Release Static */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
@@ -746,7 +810,9 @@
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				3ADDAE4F1BBAEA63002870D9 /* Debug */,
+				3A4466CB1EF49B2A0004C01C /* Debug Static */,
 				3ADDAE501BBAEA63002870D9 /* Release */,
+				3A0F5CFE1EF83EFD00FC51B0 /* Release Static */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
