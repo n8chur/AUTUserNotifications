@@ -71,8 +71,7 @@ BUILD_TOOL = 'xcodebuild'
 
 BUILD_FLAGS_TEST =
     "-scheme #{LIBRARY_NAME} "\
-    "-destination 'platform=iOS Simulator,name=iPhone 5' "\
-    "-destination 'platform=iOS Simulator,name=iPhone 6' "\
+    "-destination 'platform=iOS Simulator,name=iPhone 8' "\
     "-enableCodeCoverage YES "\
     "-sdk #{TEST_SDK}"
 

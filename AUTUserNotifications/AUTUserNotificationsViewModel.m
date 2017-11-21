@@ -723,7 +723,7 @@ NS_ASSUME_NONNULL_BEGIN
     }];
 }
 
-- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)())completionHandler {
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void(^)(void))completionHandler {
     let notification = [AUTUserNotification
         notificationRestoredFromResponse:response
         rootRemoteNotificationClass:self.rootRemoteNotificationClass
