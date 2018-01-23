@@ -729,6 +729,10 @@ NS_ASSUME_NONNULL_BEGIN
         rootRemoteNotificationClass:self.rootRemoteNotificationClass
         completionHandler:completionHandler];
 
+    // No need to log here since any errors attempting to parse the notification
+    // would have already been logged.
+    if (notification == nil) return;
+
     [_respondedNotifications sendNext:notification];
 }
 
