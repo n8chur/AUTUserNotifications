@@ -306,7 +306,9 @@ NS_ASSUME_NONNULL_BEGIN
             let notification = [self.rootRemoteNotificationClass notificationRestoredFromDictionary:dictionary];
             if (notification == nil) {
                 AUTLogUserNotificationInfo(@"%@ unable to create remote notification, calling completion handler", self_weak_);
-                fetchCompletionHandler(UIBackgroundFetchResultNoData);
+                if (fetchCompletionHandler != nil) {
+                    fetchCompletionHandler(UIBackgroundFetchResultNoData);
+                }
                 return nil;
             }
 
@@ -329,7 +331,12 @@ NS_ASSUME_NONNULL_BEGIN
         flattenMap:^(__kindof AUTRemoteUserNotification *notification) {
             @strongifyOr(self) return [RACSignal empty];
 
-            NSCAssert(notification.systemFetchCompletionHandler != nil, @"Silent remote notifications must have a fetch completion handler: %@", notification);
+            // We have observed instances of a nil systemFetchCompletionHandler
+            // in our application. If this occurs, ignore the notification.
+            if (notification.systemFetchCompletionHandler == nil) {
+                AUTLogUserNotificationError(@"%@ attempted to handle a notification with a nil systemFetchCompletionHandler: <%@: %p>", self_weak_, notification.class, notification);
+                return [RACSignal empty];
+            }
 
             return [[[self combinedFetchHandlerSignalsForSilentRemoteNotification:notification]
                 initially:^{
